@@ -7,6 +7,23 @@
     "owner": "burgatshow",
     "category": "General",
     "imageUrl": "https://raw.githubusercontent.com/burgatshow/indexjelly/main/assets/thumb.png",
-    "versions": []
+    "versions": [
+      {
+        "version": "0.2.1.0",
+        "changelog": "#### Changed\n- The page refreshes every 2 seconds while something is being indexed (setting: *while indexing*) and at the normal interval otherwise. Elapsed times and the \"counted … ago\" line tick every second in the browser.\n- The library counts are recounted right after an indexing task or library scan finishes, and at most every minute while one runs (longer only if counting itself is slow), instead of every 5 minutes.\n- *Other activity* is now called *Outside scheduled tasks*, with a short explanation (manual refresh, real-time monitoring of new files, other ffmpeg work).\n- The library cards are only rebuilt when they change, so they no longer flicker on every refresh.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/burgatshow/indexjelly/releases/download/v0.2.1/indexjelly_0.2.1.0.zip",
+        "checksum": "49d4fe494d6cb416a5648790c9dc15f2",
+        "timestamp": "2026-11-07T14:20:57.0000000Z"
+      },
+	{
+        "version": "0.2.0.0",
+        "changelog": "#### Added\n- Job details, Plex style: under every running task, the items it is working on right now, with a thumbnail, a clickable title that opens the item's page, what is being done (reading media info, generating trickplay images, extracting an image, extracting keyframes, measuring loudness…) and the elapsed time. Folders being scanned (e.g. a series) show their own progress.\n- *Other activity*: work that does not belong to a running task, e.g. a manual metadata refresh.\n- *Recently processed* feed: the last items added, refreshed, updated or removed, with links.\n- API: `activity` in `GET /IndexJelly/Status` (`refreshing`, `processes`, `recent`).\n\n#### Notes\n- The current items come from Jellyfin's refresh and library events (attached at server start, so restart once after installing) and from the running ffmpeg / ffprobe processes, matched to library items by file path. Reading the processes works on Linux (Docker) only. Playback transcodes are left out.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/burgatshow/indexjelly/releases/download/v0.2.0/indexjelly_0.2.0.0.zip",
+        "checksum": "fd67814409e649928c72151bfd7e67ae",
+        "timestamp": "2026-11-07T14:24:58.0000000Z"
+      }
+    ]
   }
 ]
