@@ -1,0 +1,18 @@
+{
+  "category": "General",
+  "changelog": "0.2.1.0 – Faster refresh while indexing",
+  "description": "Shows the indexing state of every library: running scans, media info, metadata, images, trickplay and chapter images, with the items still missing them.",
+  "guid": "8485ee41-9157-4fba-887d-25c21ccee84c",
+  "name": "IndexJelly",
+  "overview": "How far your Jellyfin server is with indexing",
+  "owner": "burgatshow",
+  "targetAbi": "12.4.0.0",
+  "timestamp": "2026-11-07T00:00:00.0000000Z",
+  "version": "0.2.1.0",
+  "status": "Active",
+  "autoUpdate": true,
+  "imagePath": "thumb.png",
+  "assemblies": [
+    "Jellyfin.Plugin.IndexJelly.dll"
+  ]
+}

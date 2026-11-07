@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>IndexJelly</title>
+</head>
+<body>
+<div id="IndexJellyPage" data-role="page" class="page type-interior pluginConfigurationPage" data-title="IndexJelly">
+<style>
+#IndexJellyPage {
+    --ij-text: #eceef1;
+    --ij-muted: #9198a1;
+    --ij-faint: rgba(255,255,255,.07);
+    --ij-line: rgba(255,255,255,.10);
+    --ij-surface: rgba(255,255,255,.035);
+    --ij-done: #3fd68f;
+    --ij-near: #5aa9ff;
+    --ij-partial: #ffb23f;
+    --ij-low: #ff6f61;
+    --ij-brand: #2ec4c4;
+}
+#IndexJellyPage .ij { max-width: 1280px; margin: 0 auto; padding: 1.6em 1.6em 4em; color: var(--ij-text); font-variant-numeric: tabular-nums; }
+#IndexJellyPage .ij * { box-sizing: border-box; }
+
+/* ---------- top bar ---------- */
+#IndexJellyPage .ij-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.2em 2.5em; margin-bottom: 2em; }
+#IndexJellyPage .ij-bar h1 { font-size: 1.9em; font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.1; }
+#IndexJellyPage .ij-sub { color: var(--ij-muted); font-size: .9em; margin-top: .35em; }
+#IndexJellyPage .ij-sub .busy { color: var(--ij-brand); }
+#IndexJellyPage .ij-totals { display: flex; gap: 2.2em; margin-left: auto; }
+#IndexJellyPage .ij-total b { display: block; font-size: 1.6em; font-weight: 650; line-height: 1.1; }
+#IndexJellyPage .ij-total span { color: var(--ij-muted); font-size: .82em; }
+#IndexJellyPage .ij-actions { display: flex; gap: .5em; flex-wrap: wrap; }
+#IndexJellyPage .ij-btn { background: none; border: 1px solid var(--ij-line); color: var(--ij-muted); border-radius: 8px; padding: .45em .8em; cursor: pointer; font: inherit; font-size: .85em; white-space: nowrap; }
+#IndexJellyPage .ij-btn:hover, #IndexJellyPage .ij-btn[aria-expanded="true"] { color: var(--ij-text); border-color: rgba(255,255,255,.25); }
+#IndexJellyPage .ij-btn:disabled { opacity: .5; cursor: default; }
+#IndexJellyPage .ij-btn.primary { background: var(--ij-brand); border-color: var(--ij-brand); color: #06201f; font-weight: 650; }
+#IndexJellyPage .ij-settings { display: none; flex-wrap: wrap; gap: 1em 1.6em; align-items: center; padding: 1em 1.2em; margin: -1em 0 2em; border: 1px solid var(--ij-line); border-radius: 10px; font-size: .9em; }
+#IndexJellyPage .ij-settings.open { display: flex; }
+#IndexJellyPage .ij-settings label { display: flex; gap: .45em; align-items: center; color: var(--ij-muted); }
+#IndexJellyPage .ij-settings input[type=number] { width: 4.6em; background: var(--ij-faint); border: 1px solid var(--ij-line); color: var(--ij-text); border-radius: 6px; padding: .3em .4em; font: inherit; }
+#IndexJellyPage .ij-settings .ij-btn.primary { margin-left: auto; }
+
+/* ---------- activity ---------- */
+#IndexJellyPage .ij-section { margin-bottom: 2.2em; }
+#IndexJellyPage .ij-section > h2 { font-size: 1.05em; font-weight: 650; margin: 0 0 .8em; display: flex; align-items: baseline; gap: .7em; }
+#IndexJellyPage .ij-section > h2 small { font-weight: 400; color: var(--ij-muted); font-size: .85em; }
+#IndexJellyPage .ij-activity { border: 1px solid var(--ij-line); border-radius: 14px; background: var(--ij-surface); overflow: hidden; }
+#IndexJellyPage .ij-run { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 2fr) 4.5em; gap: 1em; align-items: center; padding: .85em 1.2em; border-top: 1px solid var(--ij-faint); }
+#IndexJellyPage .ij-run:first-child { border-top: 0; }
+#IndexJellyPage .ij-run .n { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#IndexJellyPage .ij-run .n small { display: block; font-weight: 400; color: var(--ij-muted); font-size: .8em; }
+#IndexJellyPage .ij-run .p { text-align: right; font-weight: 650; color: var(--ij-brand); }
+#IndexJellyPage .ij-idle { padding: 1em 1.2em; color: var(--ij-muted); font-size: .9em; }
+#IndexJellyPage .ij-idle b { color: var(--ij-text); font-weight: 600; }
+#IndexJellyPage details.ij-tasks > summary { list-style: none; cursor: pointer; padding: .8em 1.2em; color: var(--ij-muted); font-size: .86em; border-top: 1px solid var(--ij-line); user-select: none; }
+#IndexJellyPage details.ij-tasks > summary::-webkit-details-marker { display: none; }
+#IndexJellyPage details.ij-tasks > summary::before, #IndexJellyPage .ij-miss-toggle::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s; }
+#IndexJellyPage details.ij-tasks[open] > summary::before { transform: rotate(90deg); }
+#IndexJellyPage details.ij-tasks > summary:hover { color: var(--ij-text); }
+#IndexJellyPage .ij-task { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 1em; align-items: center; padding: .55em 1.2em; border-top: 1px solid var(--ij-faint); font-size: .88em; }
+#IndexJellyPage .ij-task .r { color: var(--ij-muted); font-size: .92em; text-align: right; }
+#IndexJellyPage .ij-task .r.Failed, #IndexJellyPage .ij-task .r.Aborted { color: var(--ij-low); }
+#IndexJellyPage .ij-task .r.Cancelled { color: var(--ij-partial); }
+
+/* ---------- current items of a job (Plex-like) ---------- */
+#IndexJellyPage .ij-now-list { padding: 0 1.2em .9em; display: grid; gap: .15em; margin-top: -.35em; }
+#IndexJellyPage .ij-now { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: .8em; align-items: center; padding: .4em .5em; border-radius: 8px; }
+#IndexJellyPage .ij-now:hover { background: rgba(255,255,255,.04); }
+#IndexJellyPage .ij-thumb { width: 34px; aspect-ratio: 2/3; border-radius: 4px; background: var(--ij-faint) center/cover; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+#IndexJellyPage .ij-thumb.sq { aspect-ratio: 1; }
+#IndexJellyPage .ij-now-main { min-width: 0; }
+#IndexJellyPage .ij-now-main .t { display: block; font-weight: 600; font-size: .92em; color: var(--ij-text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#IndexJellyPage .ij-now-main a.t:hover { color: var(--ij-brand); text-decoration: underline; }
+#IndexJellyPage .ij-now-main .s { color: var(--ij-muted); font-size: .8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#IndexJellyPage .ij-now-main .s .op { color: #a8e9e3; }
+#IndexJellyPage .ij-now-main .ij-track { height: 3px; margin-top: .35em; max-width: 340px; }
+#IndexJellyPage .ij-now-time { color: var(--ij-muted); font-size: .8em; text-align: right; white-space: nowrap; }
+#IndexJellyPage .ij-now-more { color: var(--ij-muted); font-size: .8em; padding: .2em .5em 0 calc(34px + 1.3em); }
+#IndexJellyPage .ij-act { display: inline-block; font-size: .72em; font-weight: 700; padding: .1em .55em; border-radius: 999px; border: 1.5px solid currentColor; margin-right: .5em; vertical-align: 1px; }
+#IndexJellyPage .ij-act.Added { color: var(--ij-done); }
+#IndexJellyPage .ij-act.Refreshed { color: var(--ij-near); }
+#IndexJellyPage .ij-act.Updated { color: var(--ij-muted); }
+#IndexJellyPage .ij-act.Removed { color: var(--ij-low); }
+#IndexJellyPage details.ij-tasks .ij-now-list { padding-top: .6em; margin-top: 0; }
+
+/* ---------- bars ---------- */
+#IndexJellyPage .ij-track { position: relative; height: 6px; border-radius: 6px; background: rgba(255,255,255,.09); overflow: hidden; }
+#IndexJellyPage .ij-track b { position: absolute; inset: 0 auto 0 0; border-radius: 6px; background: var(--c, var(--ij-brand)); transition: width .4s ease; }
+#IndexJellyPage .ij-track.live b { background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,.25) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: ij-shine 1.6s linear infinite; background-color: var(--ij-brand); }
+@keyframes ij-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { #IndexJellyPage .ij-track.live b { animation: none; } }
+
+/* ---------- libraries ---------- */
+#IndexJellyPage .ij-libs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); gap: 1.1em; align-items: start; }
+#IndexJellyPage .ij-lib { border-radius: 16px; overflow: hidden; background: var(--ij-surface); border: 1px solid var(--ij-line); }
+#IndexJellyPage .ij-lib.wide { grid-column: 1 / -1; }
+#IndexJellyPage .ij-lib-head { position: relative; display: flex; gap: 1em; align-items: flex-start; padding: 1.2em 1.2em 1em; isolation: isolate; }
+#IndexJellyPage .ij-lib-bg { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center; opacity: .22; }
+#IndexJellyPage .ij-lib-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(16,18,22,.96) 0%, rgba(16,18,22,.6) 100%); }
+#IndexJellyPage .ij-ring { flex: none; width: 58px; height: 58px; }
+#IndexJellyPage .ij-ring circle { fill: none; stroke-width: 6; }
+#IndexJellyPage .ij-ring .bg { stroke: rgba(255,255,255,.1); }
+#IndexJellyPage .ij-ring .fg { stroke: var(--c); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset .5s ease; }
+#IndexJellyPage .ij-ring text { fill: var(--ij-text); font-size: 15px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+#IndexJellyPage .ij-lib-title { flex: 1; min-width: 0; }
+#IndexJellyPage .ij-lib-title h3 { margin: 0; font-size: 1.2em; font-weight: 700; line-height: 1.2; }
+#IndexJellyPage .ij-lib-title .meta { color: var(--ij-muted); font-size: .82em; margin-top: .3em; }
+#IndexJellyPage .ij-lib-title .meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--ij-muted); vertical-align: middle; margin: 0 .55em; }
+#IndexJellyPage .ij-lib-title .new { color: var(--ij-done); }
+#IndexJellyPage .ij-lib-scan { margin-top: .7em; display: flex; align-items: center; gap: .7em; font-size: .82em; color: var(--ij-brand); }
+#IndexJellyPage .ij-lib-scan .ij-track { flex: 1; min-width: 80px; }
+#IndexJellyPage .ij-lib-head .ij-btn { flex: none; }
+#IndexJellyPage .ij-checks { padding: .3em 1.2em 1em; }
+#IndexJellyPage .ij-check { border-top: 1px solid var(--ij-faint); }
+#IndexJellyPage .ij-check-row { display: grid; grid-template-columns: minmax(8em, 1.1fr) minmax(80px, 1.6fr) 7.5em; gap: .9em; align-items: center; padding: .6em 0; font-size: .9em; }
+#IndexJellyPage .ij-check-row .k { color: #c9ced4; }
+#IndexJellyPage .ij-check-row .k small { display: block; color: var(--ij-muted); font-size: .82em; }
+#IndexJellyPage .ij-check-row .v { text-align: right; white-space: nowrap; }
+#IndexJellyPage .ij-check-row .v b { font-weight: 650; }
+#IndexJellyPage .ij-check-row .v span { color: var(--ij-muted); font-size: .85em; }
+#IndexJellyPage .ij-check.off .ij-check-row { opacity: .45; }
+#IndexJellyPage .ij-miss-toggle { background: none; border: 0; padding: 0 0 .6em; color: var(--ij-partial); font: inherit; font-size: .82em; cursor: pointer; }
+#IndexJellyPage .ij-miss-toggle:hover { text-decoration: underline; }
+#IndexJellyPage .ij-miss-toggle[aria-expanded="true"]::before { transform: rotate(90deg); }
+#IndexJellyPage .ij-missing { padding: 0 0 1em; }
+#IndexJellyPage .ij-table-wrap { overflow-x: auto; max-height: 420px; overflow-y: auto; border-radius: 8px; background: rgba(0,0,0,.18); }
+#IndexJellyPage table { width: 100%; border-collapse: collapse; font-size: .84em; }
+#IndexJellyPage th { position: sticky; top: 0; background: #1b1e23; text-align: left; font-weight: 600; color: var(--ij-muted); padding: .45em .7em; border-bottom: 1px solid var(--ij-line); }
+#IndexJellyPage td { padding: .45em .7em; border-bottom: 1px solid var(--ij-faint); vertical-align: top; }
+#IndexJellyPage td a { color: var(--ij-text); text-decoration: none; }
+#IndexJellyPage td a:hover { color: var(--ij-brand); text-decoration: underline; }
+#IndexJellyPage td.path { color: var(--ij-muted); word-break: break-all; font-size: .92em; }
+#IndexJellyPage .ij-note { color: var(--ij-muted); font-size: .8em; padding-top: .5em; }
+#IndexJellyPage .ij-placeholder { padding: 1.4em 1.2em; color: var(--ij-muted); font-size: .9em; }
+
+#IndexJellyPage .ij-empty { text-align: center; padding: 5em 1em; color: var(--ij-muted); }
+#IndexJellyPage .ij-empty b { display: block; color: var(--ij-text); font-size: 1.2em; margin-bottom: .4em; }
+#IndexJellyPage .ij-error { padding: 1em 1.2em; border-radius: 10px; background: rgba(255,111,97,.12); color: #ffb3aa; margin-bottom: 1.5em; }
+#IndexJellyPage .ij-warn { padding: .8em 1.2em; border-radius: 10px; background: rgba(255,178,63,.1); color: #ffd08a; margin-bottom: 1.5em; font-size: .88em; }
+#IndexJellyPage button:focus-visible, #IndexJellyPage summary:focus-visible, #IndexJellyPage input:focus-visible, #IndexJellyPage a:focus-visible { outline: 2px solid var(--ij-brand); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+    #IndexJellyPage .ij { padding: 1em .8em 3em; }
+    #IndexJellyPage .ij-totals { margin-left: 0; gap: 1.6em; }
+    #IndexJellyPage .ij-run { grid-template-columns: 1fr 3.5em; }
+    #IndexJellyPage .ij-run .ij-track { grid-column: 1 / -1; grid-row: 2; }
+    #IndexJellyPage .ij-check-row { grid-template-columns: 1fr auto; }
+    #IndexJellyPage .ij-check-row .ij-track { grid-column: 1 / -1; grid-row: 2; }
+    #IndexJellyPage .ij-task { grid-template-columns: 1fr auto; }
+    #IndexJellyPage .ij-task .r { grid-column: 1; text-align: left; }
+}
+</style>
+
+<div data-role="content">
+<div class="content-primary ij">
+
+    <header class="ij-bar">
+        <div>
+            <h1>IndexJelly</h1>
+            <div class="ij-sub" id="ijStatus" data-i18n="loading">Loading…</div>
+        </div>
+        <div class="ij-totals" id="ijTotals"></div>
+        <div class="ij-actions">
+            <button type="button" class="ij-btn" id="ijRecount" data-i18n="recount">Recount</button>
+            <button type="button" class="ij-btn" id="ijScanAll" data-i18n="scan_all">Scan all libraries</button>
+            <button type="button" class="ij-btn" id="ijGear" aria-expanded="false" aria-controls="ijSettings" data-i18n="settings">Settings</button>
+        </div>
+    </header>
+
+    <div class="ij-settings" id="ijSettings">
+        <label><input type="checkbox" id="ijAuto" checked> <span data-i18n="auto_refresh">Auto refresh</span></label>
+        <label><span data-i18n="interval">Every</span> <input type="number" id="ijInterval" min="2" max="120" value="5"> <span data-i18n="sec">s</span></label>
+        <label><span data-i18n="active_interval">while indexing</span> <input type="number" id="ijActiveInterval" min="1" max="30" value="2"> <span data-i18n="sec">s</span></label>
+        <label><span data-i18n="cache">Recount after</span> <input type="number" id="ijCache" min="1" max="1440" value="5"> <span data-i18n="min">min</span></label>
+        <label><span data-i18n="limit">List at most</span> <input type="number" id="ijLimit" min="10" max="10000" value="500"> <span data-i18n="items_per_check">items per check</span></label>
+        <label><input type="checkbox" id="ijShowPaths"> <span data-i18n="show_paths">Show file paths</span></label>
+        <label><input type="checkbox" id="ijTrickplay"> <span data-i18n="check_trickplay">Check trickplay</span></label>
+        <label><input type="checkbox" id="ijChapters"> <span data-i18n="check_chapters">Check chapter images</span></label>
+        <button type="button" class="ij-btn primary" id="ijSave" data-i18n="save">Save</button>
+    </div>
+
+    <div id="ijError"></div>
+
+    <section class="ij-section">
+        <h2><span data-i18n="activity">Activity</span></h2>
+        <div class="ij-activity" id="ijActivity"></div>
+    </section>
+
+    <section class="ij-section">
+        <h2><span data-i18n="libraries">Libraries</span> <small id="ijLibNote"></small></h2>
+        <div class="ij-libs" id="ijLibs"></div>
+    </section>
+</div>
+</div>
+
+<script type="text/javascript">
+(function () {
+    var pluginId = '8485ee41-9157-4fba-887d-25c21ccee84c';
+    var page = document.getElementById('IndexJellyPage');
+    var timer = null;
+    var last = null;
+    var open = {};        // 'libId|check' -> true
+    var missing = {};     // 'libId|check' -> { loading, data, error, statsAt }
+    var tasksOpen = false;
+    var recentOpen = false;
+    var ticker = null;
+    var lastLibHtml = null;
+
+    /* ---------- language: follows the Jellyfin UI language (Hungarian, otherwise English) ---------- */
+    var LANG = (function () {
+        var l = (document.documentElement.getAttribute('lang') || navigator.language || 'en').toLowerCase();
+        return l.indexOf('hu') === 0 ? 'hu' : 'en';
+    })();
+    var DEC = LANG === 'hu' ? ',' : '.';
+    var I18N = {
+        en: {
+            loading: 'Loading…', settings: 'Settings', recount: 'Recount', recounting: 'Counting…', scan_all: 'Scan all libraries', scan: 'Scan', scan_started: 'Scan started',
+            auto_refresh: 'Auto refresh', interval: 'Every', active_interval: 'while indexing', sec: 's', min: 'min', cache: 'Recount after', limit: 'List at most', items_per_check: 'items per check',
+            show_paths: 'Show file paths', check_trickplay: 'Check trickplay', check_chapters: 'Check chapter images', save: 'Save', saved: 'Saved',
+            activity: 'Activity', libraries: 'Libraries',
+            tot_indexed: 'indexed', tot_items: 'items', tot_missing: 'to do',
+            status: 'Jellyfin {v}', counted: 'counted {ago} ago in {dur}', counting_first: 'counting the libraries…', counting: 'recounting…',
+            idle: 'Nothing is running.', last_scan: 'Last library scan: {ago} ago, {res}.', never_scanned: 'The library scan has not run yet.',
+            scanning: 'Scanning', queued: 'queued', library_tasks: 'Library tasks ({n})', run: 'Run', running: 'running',
+            never: 'never run', ago: '{x} ago',
+            res: { Completed: 'completed', Failed: 'failed', Cancelled: 'cancelled', Aborted: 'aborted' },
+            items_n: '{n} items', added_24h: '+{n} in 24 h', last_added: 'last added {ago} ago',
+            not_counted: 'Not counted yet.', no_items: 'No items in this library.',
+            missing_n: '{n} missing', show_missing: 'Show the {n} items', hide_missing: 'Hide the list',
+            truncated: 'Showing the first {n} of {total}. Raise the limit in the settings to see more.',
+            th_name: 'Item', th_type: 'Type', th_added: 'Added', th_path: 'Path',
+            off_lib: 'off in the library settings', off_plugin: 'off in IndexJelly settings', off_api: 'not readable in this Jellyfin version',
+            stale_list: 'The list is from the previous count.',
+            empty_title: 'No libraries yet', empty_text: 'Add a library in the dashboard; its indexing state will show up here.',
+            error: 'Could not load the data ({e}). Check that you are signed in as an administrator and that the plugin is active.',
+            stats_error: 'The last count failed: {e}',
+            episode: 'S{s}E{e}', h: 'h', d: 'd',
+            rstate: { Active: 'running', Queued: 'queued', Cancelled: 'cancelled' },
+            other_activity: 'Outside scheduled tasks', other_note: 'manual refresh, real-time monitoring of new files, other ffmpeg work', more_n: '+{n} more', recent: 'Recently processed ({n})', season_n: 'Season {n}',
+            op: {
+                probe: 'reading media info (ffprobe)', keyframes: 'extracting keyframes', trickplay: 'generating trickplay images',
+                imageExtraction: 'extracting an image', audioNormalization: 'measuring loudness', segments: 'detecting media segments',
+                subtitleExtraction: 'extracting subtitles', ffmpeg: 'ffmpeg', refresh: 'refreshing metadata', folder: 'scanning'
+            },
+            act: { Added: 'added', Refreshed: 'refreshed', Updated: 'updated', Removed: 'removed' },
+            check: {
+                refreshed: ['Metadata refresh', 'went through a refresh at least once'],
+                mediaInfo: ['Media info', 'ffprobe: streams, codecs, run time'],
+                primaryImage: ['Primary image', 'poster, cover or thumbnail'],
+                overview: ['Overview', 'plot / description'],
+                providerIds: ['Identified', 'has a TMDb, TVDb, IMDb… id'],
+                trickplay: ['Trickplay', 'seek preview images'],
+                chapterImages: ['Chapter images', 'for items with chapters']
+            },
+            ctype: { movies: 'Movies', tvshows: 'Shows', music: 'Music', musicvideos: 'Music videos', homevideos: 'Home videos', books: 'Books', boxsets: 'Collections', mixed: 'Mixed' },
+            kind: { Movie: 'movie', Episode: 'episode', Series: 'series', Audio: 'track', MusicAlbum: 'album', MusicVideo: 'music video', Video: 'video' },
+            kinds: { Movie: 'movies', Episode: 'episodes', Series: 'series', Audio: 'tracks', MusicAlbum: 'albums', MusicVideo: 'music videos', Video: 'videos' }
+        },
+        hu: {
+            loading: 'Betöltés…', settings: 'Beállítások', recount: 'Újraszámolás', recounting: 'Számolás…', scan_all: 'Összes könyvtár szkennelése', scan: 'Szkennelés', scan_started: 'Szkennelés elindítva',
+            auto_refresh: 'Automatikus frissítés', interval: 'Gyakoriság', active_interval: 'indexelés közben', sec: 'mp', min: 'perc', cache: 'Újraszámolás', limit: 'Legfeljebb', items_per_check: 'elem ellenőrzésenként',
+            show_paths: 'Fájlútvonalak mutatása', check_trickplay: 'Trickplay ellenőrzése', check_chapters: 'Fejezetképek ellenőrzése', save: 'Mentés', saved: 'Mentve',
+            activity: 'Folyamatban', libraries: 'Könyvtárak',
+            tot_indexed: 'indexelve', tot_items: 'elem', tot_missing: 'hátravan',
+            status: 'Jellyfin {v}', counted: 'számolva {ago} ezelőtt, {dur} alatt', counting_first: 'a könyvtárak számolása folyik…', counting: 'újraszámolás…',
+            idle: 'Most semmi nem fut.', last_scan: 'Utolsó könyvtárszkennelés: {ago} ezelőtt, {res}.', never_scanned: 'A könyvtárszkennelés még nem futott.',
+            scanning: 'Szkennelés', queued: 'sorban áll', library_tasks: 'Könyvtári feladatok ({n})', run: 'Futtatás', running: 'fut',
+            never: 'még nem futott', ago: '{x} ezelőtt',
+            res: { Completed: 'sikeres', Failed: 'hibás', Cancelled: 'megszakítva', Aborted: 'félbeszakadt' },
+            items_n: '{n} elem', added_24h: '+{n} az elmúlt 24 órában', last_added: 'utoljára {ago} ezelőtt bővült',
+            not_counted: 'Még nincs megszámolva.', no_items: 'Ebben a könyvtárban nincs elem.',
+            missing_n: '{n} hiányzik', show_missing: 'A {n} elem mutatása', hide_missing: 'Lista elrejtése',
+            truncated: 'Az első {n} látszik a {total} közül. A beállításokban emelheted a limitet.',
+            th_name: 'Elem', th_type: 'Típus', th_added: 'Hozzáadva', th_path: 'Útvonal',
+            off_lib: 'a könyvtár beállításaiban ki van kapcsolva', off_plugin: 'az IndexJelly beállításaiban ki van kapcsolva', off_api: 'ebben a Jellyfin verzióban nem olvasható',
+            stale_list: 'A lista az előző számolásból való.',
+            empty_title: 'Még nincs könyvtár', empty_text: 'Adj hozzá egy könyvtárat a vezérlőpulton, és itt látod az indexelés állapotát.',
+            error: 'Nem sikerült lekérni az adatokat ({e}). Ellenőrizd, hogy rendszergazdaként vagy-e bejelentkezve, és hogy a plugin aktív-e.',
+            stats_error: 'Az utolsó számolás hibával állt le: {e}',
+            episode: '{s}. évad {e}. rész', h: 'óra', d: 'nap',
+            rstate: { Active: 'fut', Queued: 'sorban áll', Cancelled: 'megszakítva' },
+            other_activity: 'Feladaton kívüli munka', other_note: 'kézi frissítés, új fájlok valós idejű figyelése, egyéb ffmpeg munka', more_n: '+{n} további', recent: 'Nemrég feldolgozva ({n})', season_n: '{n}. évad',
+            op: {
+                probe: 'mediainfó olvasása (ffprobe)', keyframes: 'keyframe-ek kinyerése', trickplay: 'trickplay képek készítése',
+                imageExtraction: 'kép kinyerése', audioNormalization: 'hangerő mérése', segments: 'médiaszegmensek keresése',
+                subtitleExtraction: 'felirat kinyerése', ffmpeg: 'ffmpeg', refresh: 'metaadatok frissítése', folder: 'szkennelés'
+            },
+            act: { Added: 'új', Refreshed: 'frissítve', Updated: 'módosítva', Removed: 'törölve' },
+            check: {
+                refreshed: ['Metaadat-frissítés', 'legalább egyszer frissült'],
+                mediaInfo: ['Mediainfó', 'ffprobe: stream-ek, kodekek, hossz'],
+                primaryImage: ['Elsődleges kép', 'poszter, borító vagy bélyegkép'],
+                overview: ['Leírás', 'cselekmény / ismertető'],
+                providerIds: ['Azonosítva', 'van TMDb, TVDb, IMDb… azonosítója'],
+                trickplay: ['Trickplay', 'tekerési előnézet képek'],
+                chapterImages: ['Fejezetképek', 'fejezetekkel rendelkező elemeknél']
+            },
+            ctype: { movies: 'Filmek', tvshows: 'Sorozatok', music: 'Zene', musicvideos: 'Zenei videók', homevideos: 'Otthoni videók', books: 'Könyvek', boxsets: 'Gyűjtemények', mixed: 'Vegyes' },
+            kind: { Movie: 'film', Episode: 'epizód', Series: 'sorozat', Audio: 'szám', MusicAlbum: 'album', MusicVideo: 'zenei videó', Video: 'videó' },
+            kinds: { Movie: 'film', Episode: 'epizód', Series: 'sorozat', Audio: 'szám', MusicAlbum: 'album', MusicVideo: 'zenei videó', Video: 'videó' }
+        }
+    };
+    /** Translated text; `{name}` placeholders are filled from `args`. Falls back to English. */
+    function t(key, args) {
+        var v = I18N[LANG][key] !== undefined ? I18N[LANG][key] : I18N.en[key];
+        if (typeof v === 'string' && args) {
+            Object.keys(args).forEach(function (k) { v = v.replace('{' + k + '}', args[k]); });
+        }
+        return v;
+    }
+
+    /* ---------- formatting ---------- */
+    function esc(v) {
+        if (v === null || v === undefined) return '';
+        return String(v).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+    function num(n) { return (n || 0).toLocaleString(LANG === 'hu' ? 'hu-HU' : 'en-US'); }
+    function pct(done, all) {
+        if (!all) return null;
+        var p = 100 * done / all;
+        // never show 100 % while something is still missing
+        return done < all ? Math.min(p, 99.9) : 100;
+    }
+    function fmtPct(p) {
+        if (p === null) return '–';
+        if (p >= 100 || p === 0) return p.toFixed(0) + ' %';
+        // 99.6 % must not round up to "100 %" while items are still missing
+        if (p >= 99.5) return (Math.floor(p * 10) / 10).toFixed(1).replace('.', DEC) + ' %';
+        return p.toFixed(p >= 10 ? 0 : 1).replace('.', DEC) + ' %';
+    }
+    function color(p) {
+        if (p === null) return 'var(--ij-muted)';
+        if (p >= 100) return 'var(--ij-done)';
+        if (p >= 90) return 'var(--ij-near)';
+        if (p >= 50) return 'var(--ij-partial)';
+        return 'var(--ij-low)';
+    }
+    function ago(date) {
+        if (!date) return '';
+        var s = Math.max(0, Math.round((Date.now() - new Date(date).getTime()) / 1000));
+        if (s < 60) return s + ' ' + t('sec');
+        if (s < 3600) return Math.round(s / 60) + ' ' + t('min');
+        if (s < 86400 * 2) return Math.round(s / 3600) + ' ' + t('h');
+        return Math.round(s / 86400) + ' ' + t('d');
+    }
+    function duration(ms) {
+        if (ms === null || ms === undefined) return '';
+        return ms < 1000 ? ms + ' ms' : (ms / 1000).toFixed(ms < 10000 ? 1 : 0).replace('.', DEC) + ' ' + t('sec');
+    }
+    function shortDate(d) {
+        if (!d) return '';
+        return new Date(d).toLocaleDateString(LANG === 'hu' ? 'hu-HU' : undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+    function bar(p, live) {
+        return '<div class="ij-track' + (live ? ' live' : '') + '" style="--c:' + color(p) + '"><b style="width:' + (p === null ? 0 : Math.max(p, p > 0 ? 1 : 0)).toFixed(1) + '%"></b></div>';
+    }
+    function ring(p) {
+        var r = 24, c = 2 * Math.PI * r, off = c * (1 - (p || 0) / 100);
+        return '<svg class="ij-ring" viewBox="0 0 58 58" style="--c:' + color(p) + '" aria-hidden="true">'
+            + '<circle class="bg" cx="29" cy="29" r="' + r + '"></circle>'
+            + '<circle class="fg" cx="29" cy="29" r="' + r + '" stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="' + off.toFixed(2) + '"></circle>'
+            + '<text x="29" y="29">' + (p === null ? '–' : Math.floor(p)) + '</text></svg>';
+    }
+    function activeChecks(lib) { return (lib.checks || []).filter(function (c) { return !c.disabled && c.applicable > 0; }); }
+    function libPct(lib) {
+        var a = 0, d = 0;
+        activeChecks(lib).forEach(function (c) { a += c.applicable; d += c.done; });
+        return pct(d, a);
+    }
+
+    /* ---------- header ---------- */
+    function totals(data) {
+        var a = 0, d = 0, items = 0;
+        (data.libraries || []).forEach(function (l) {
+            items += l.items || 0;
+            activeChecks(l).forEach(function (c) { a += c.applicable; d += c.done; });
+        });
+        if (!data.statsComputedAtUtc) return '';
+        var p = pct(d, a);
+        return '<div class="ij-total"><b style="color:' + color(p) + '">' + fmtPct(p) + '</b><span>' + esc(t('tot_indexed')) + '</span></div>'
+            + '<div class="ij-total"><b>' + num(items) + '</b><span>' + esc(t('tot_items')) + '</span></div>'
+            + '<div class="ij-total"><b>' + num(a - d) + '</b><span>' + esc(t('tot_missing')) + '</span></div>';
+    }
+    function statusLine(data) {
+        var parts = [esc(t('status', { v: data.serverVersion || '' }))];
+        if (data.statsComputedAtUtc) parts.push(esc(t('counted', { ago: ago(data.statsComputedAtUtc), dur: duration(data.statsDurationMs) })));
+        if (data.statsComputing) parts.push('<span class="busy">' + esc(t(data.statsComputedAtUtc ? 'counting' : 'counting_first')) + '</span>');
+        return parts.join(', ');
+    }
+
+    /* ---------- current items of the jobs ---------- */
+    // Which scheduled task a kind of ffmpeg / ffprobe work belongs to; the first running one wins.
+    // During a library scan Jellyfin may do all of these itself, so RefreshLibrary is the fallback.
+    var KIND_TASKS = {
+        probe: ['RefreshLibrary'],
+        keyframes: ['KeyframeExtraction', 'ExtractKeyframes', 'RefreshLibrary'],
+        trickplay: ['RefreshTrickplayImages', 'RefreshLibrary'],
+        imageExtraction: ['RefreshChapterImages', 'RefreshLibrary'],
+        audioNormalization: ['AudioNormalization'],
+        segments: ['MediaSegmentExtract', 'RefreshMediaSegments', 'RefreshLibrary'],
+        subtitleExtraction: ['RefreshLibrary'],
+        ffmpeg: []
+    };
+    var NOW_LIMIT = 6;
+
+    function elapsed(startUtc) {
+        if (!startUtc) return '';
+        var s = Math.max(0, Math.round((Date.now() - new Date(startUtc).getTime()) / 1000));
+        var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+        return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(ss).padStart(2, '0');
+    }
+    function itemLink(it) {
+        return it && it.id ? '#/details?id=' + encodeURIComponent(it.id) + '&serverId=' + encodeURIComponent(ApiClient.serverId()) : '';
+    }
+    function thumb(it) {
+        var square = it && (it.type === 'Audio' || it.type === 'MusicAlbum' || it.type === 'MusicArtist' || it.type === 'CollectionFolder');
+        var img = it && it.imageItemId ? ApiClient.getUrl('Items/' + it.imageItemId + '/Images/Primary', { maxHeight: 102, quality: 80 }) : '';
+        return '<div class="ij-thumb' + (square ? ' sq' : '') + '"' + (img ? ' style="background-image:url(\'' + img + '\')"' : '') + '></div>';
+    }
+    /** Title and subtitle of an item, Plex style: the series is the title, season / episode below. */
+    function describe(it) {
+        if (!it) return { t: '', s: '' };
+        if (it.type === 'Episode') {
+            var ep = it.seasonNumber !== undefined && it.seasonNumber !== null && it.episodeNumber !== undefined && it.episodeNumber !== null
+                ? t('episode', { s: it.seasonNumber, e: it.episodeNumber }) : '';
+            return { t: it.seriesName || it.name, s: [ep, it.seriesName ? it.name : ''].filter(Boolean).join(' · ') };
+        }
+        if (it.type === 'Season') return { t: it.seriesName || it.name, s: it.seasonNumber !== undefined && it.seasonNumber !== null ? t('season_n', { n: it.seasonNumber }) : it.name };
+        return { t: it.name + (it.productionYear && !it.isFolder ? ' (' + it.productionYear + ')' : ''), s: t('kind')[it.type] || '' };
+    }
+    /** One row: thumbnail, clickable title, what happens to it, elapsed time or progress. */
+    function nowRow(it, fileName, op, startUtc, progress, badge, rightText) {
+        var d = it ? describe(it) : { t: fileName || '?', s: '' };
+        var link = itemLink(it);
+        var title = link ? '<a class="t" href="' + link + '">' + esc(d.t) + '</a>' : '<span class="t">' + esc(d.t) + '</span>';
+        var sub = (badge || '') + [d.s ? esc(d.s) : '', op ? '<span class="op">' + esc(op) + '</span>' : ''].filter(Boolean).join(' · ');
+        var hasProgress = progress !== null && progress !== undefined;
+        var right = rightText || (hasProgress ? fmtPct(progress) : (startUtc ? elapsed(startUtc) : ''));
+        // elapsed time ticks every second in the browser, between two server polls
+        var tick = !rightText && !hasProgress && startUtc ? ' data-start="' + esc(startUtc) + '"' : '';
+        return '<div class="ij-now">' + thumb(it) + '<div class="ij-now-main">' + title
+            + (sub ? '<div class="s">' + sub + '</div>' : '')
+            + (hasProgress ? bar(progress, true) : '')
+            + '</div><div class="ij-now-time"' + tick + (it && it.path ? ' title="' + esc(it.path) + '"' : (fileName ? ' title="' + esc(fileName) + '"' : '')) + '>' + esc(right) + '</div></div>';
+    }
+    function nowList(rows) {
+        if (!rows.length) return '';
+        var shown = rows.slice(0, NOW_LIMIT).join('');
+        return '<div class="ij-now-list">' + shown + (rows.length > NOW_LIMIT ? '<div class="ij-now-more">' + esc(t('more_n', { n: rows.length - NOW_LIMIT })) + '</div>' : '') + '</div>';
+    }
+    /** Sorts the current items into the running tasks (by task id) or 'other'. */
+    function bucketActivity(data, running) {
+        var act = data.activity || {}, buckets = { other: [] };
+        function taskFor(keys) {
+            for (var i = 0; i < keys.length; i++) {
+                var hit = running.filter(function (x) { return x.key === keys[i]; })[0];
+                if (hit) return hit.id;
+            }
+            return 'other';
+        }
+        function push(id, row) { (buckets[id] = buckets[id] || []).push(row); }
+        (act.refreshing || []).forEach(function (r) {
+            // library roots already have their own scan row
+            if (r.item && r.item.type === 'CollectionFolder') return;
+            var folder = r.item && r.item.isFolder;
+            push(taskFor(['RefreshLibrary']), nowRow(r.item, null, t('op')[folder ? 'folder' : 'refresh'], r.startedUtc, folder ? r.progress : null));
+        });
+        (act.processes || []).forEach(function (p) {
+            push(taskFor(KIND_TASKS[p.kind] || []), nowRow(p.item, p.fileName, t('op')[p.kind] || p.kind, p.startedUtc, null));
+        });
+        return buckets;
+    }
+    function recentFeed(data) {
+        var rec = (data.activity || {}).recent || [];
+        if (!rec.length) return '';
+        var rows = rec.slice(0, 25).map(function (r) {
+            // a removed item has no page any more, so it gets no link
+            var it = r.action === 'Removed' ? Object.assign({}, r.item, { id: null }) : r.item;
+            return nowRow(it, null, '', null, null, '<span class="ij-act ' + esc(r.action) + '">' + esc(t('act')[r.action] || r.action) + '</span>', ago(r.atUtc));
+        });
+        return '<details class="ij-tasks ij-recent"' + (recentOpen ? ' open' : '') + '><summary>' + esc(t('recent', { n: rec.length })) + '</summary>'
+            + '<div class="ij-now-list">' + rows.join('') + '</div></details>';
+    }
+
+    /* ---------- activity ---------- */
+    function activity(data) {
+        var tasks = data.tasks || [];
+        var running = tasks.filter(function (x) { return x.state !== 'Idle'; });
+        var scans = (data.libraries || []).filter(function (l) { return l.refreshStatus && l.refreshStatus !== 'Idle'; });
+        var buckets = bucketActivity(data, running);
+        var h = '';
+        running.forEach(function (x) {
+            var p = x.progress === null || x.progress === undefined ? null : x.progress;
+            h += '<div class="ij-run"><div class="n">' + esc(x.name) + '<small>' + esc(x.category || '') + (x.state === 'Cancelling' ? ' · ' + esc(x.state) : '') + '</small></div>'
+                + bar(p === null ? 0 : p, true) + '<div class="p">' + (p === null ? '…' : fmtPct(p)) + '</div></div>'
+                + nowList(buckets[x.id] || []);
+        });
+        scans.forEach(function (l) {
+            var p = l.refreshProgress;
+            h += '<div class="ij-run"><div class="n">' + esc(t('scanning')) + ': ' + esc(l.name) + '<small>' + esc(t('rstate')[l.refreshStatus] || l.refreshStatus) + '</small></div>'
+                + bar(p || 0, true) + '<div class="p">' + (p === null || p === undefined ? '…' : fmtPct(p)) + '</div></div>';
+        });
+        if (buckets.other.length) {
+            h += '<div class="ij-run"><div class="n">' + esc(t('other_activity')) + '<small>' + esc(t('other_note')) + '</small></div><div></div><div class="p"></div></div>' + nowList(buckets.other);
+        }
+        if (!h) {
+            var scan = tasks.filter(function (x) { return x.key === 'RefreshLibrary'; })[0];
+            var res = scan && scan.lastStatus ? (t('res')[scan.lastStatus] || scan.lastStatus) : '';
+            h = '<div class="ij-idle"><b>' + esc(t('idle')) + '</b> '
+                + esc(scan && scan.lastEndUtc ? t('last_scan', { ago: ago(scan.lastEndUtc), res: res }) : t('never_scanned')) + '</div>';
+        }
+        if (tasks.length) {
+            h += '<details class="ij-tasks"' + (tasksOpen ? ' open' : '') + '><summary>' + esc(t('library_tasks', { n: tasks.length })) + '</summary>';
+            tasks.forEach(function (x) {
+                var r = x.state !== 'Idle' ? t('running') : (x.lastEndUtc ? t('ago', { x: ago(x.lastEndUtc) }) + ' · ' + (t('res')[x.lastStatus] || x.lastStatus || '') : t('never'));
+                h += '<div class="ij-task"><div>' + esc(x.name) + '</div><div class="r ' + esc(x.lastStatus || '') + '"' + (x.lastError ? ' title="' + esc(x.lastError) + '"' : '') + '>' + esc(r) + '</div>'
+                    + '<button type="button" class="ij-btn" data-run="' + esc(x.id) + '"' + (x.state !== 'Idle' ? ' disabled' : '') + '>' + esc(t('run')) + '</button></div>';
+            });
+            h += '</details>';
+        }
+        return h + recentFeed(data);
+    }
+
+    /* ---------- libraries ---------- */
+    function typeSummary(lib) {
+        var kinds = t('kinds');
+        var order = ['Movie', 'Series', 'Episode', 'MusicAlbum', 'Audio', 'MusicVideo', 'Video'];
+        return order.filter(function (k) { return lib.itemTypes && lib.itemTypes[k]; })
+            .map(function (k) { return num(lib.itemTypes[k]) + ' ' + (kinds[k] || k); }).join(', ');
+    }
+    function offReason(lib, c, data) {
+        if (c.key === 'trickplay') return !lib.trickplayEnabled ? t('off_lib') : (!data.trickplayAvailable && data.statsComputedAtUtc ? t('off_api') : t('off_plugin'));
+        if (c.key === 'chapterImages') return !lib.chapterImagesEnabled ? t('off_lib') : (!data.chaptersAvailable && data.statsComputedAtUtc ? t('off_api') : t('off_plugin'));
+        return '';
+    }
+    function library(lib, data) {
+        // trickplay and chapter images only make sense in libraries with videos
+        var hasVideo = ['Movie', 'Episode', 'MusicVideo', 'Video'].some(function (k) { return lib.itemTypes && lib.itemTypes[k]; });
+        var checks = (lib.checks || []).filter(function (c) { return c.applicable > 0 || (c.disabled && hasVideo); });
+        var p = libPct(lib);
+        var scanning = lib.refreshStatus && lib.refreshStatus !== 'Idle';
+        var labels = t('check');
+        var h = '<article class="ij-lib">';
+        h += '<div class="ij-lib-head"><div class="ij-lib-bg" style="background-image:url(\'' + ApiClient.getUrl('Items/' + lib.id + '/Images/Primary', { maxWidth: 700, quality: 70 }) + '\')"></div>';
+        h += ring(data.statsComputedAtUtc && lib.items ? p : null);
+        h += '<div class="ij-lib-title"><h3>' + esc(lib.name) + '</h3><div class="meta">'
+            + '<span>' + esc((t('ctype')[lib.collectionType] || lib.collectionType || '')) + '</span>'
+            + (lib.items ? '<span>' + esc(typeSummary(lib) || t('items_n', { n: num(lib.items) })) + '</span>' : '')
+            + (lib.addedLast24h ? '<span class="new">' + esc(t('added_24h', { n: num(lib.addedLast24h) })) + '</span>' : (lib.lastAddedUtc ? '<span>' + esc(t('last_added', { ago: ago(lib.lastAddedUtc) })) + '</span>' : ''))
+            + '</div>';
+        if (scanning) {
+            h += '<div class="ij-lib-scan"><span>' + esc(t('scanning')) + '</span>' + bar(lib.refreshProgress || 0, true) + '<span>' + (lib.refreshProgress === null || lib.refreshProgress === undefined ? '…' : fmtPct(lib.refreshProgress)) + '</span></div>';
+        }
+        h += '</div><button type="button" class="ij-btn" data-scan="' + esc(lib.id) + '"' + (scanning ? ' disabled' : '') + '>' + esc(t('scan')) + '</button></div>';
+
+        if (!data.statsComputedAtUtc || !lib.checks || !lib.checks.length) {
+            h += '<div class="ij-placeholder">' + esc(data.statsComputedAtUtc ? t('no_items') : t('not_counted')) + '</div>';
+        } else if (!lib.items) {
+            h += '<div class="ij-placeholder">' + esc(t('no_items')) + '</div>';
+        } else {
+            h += '<div class="ij-checks">';
+            checks.forEach(function (c) {
+                var cp = c.disabled ? null : pct(c.done, c.applicable);
+                var miss = c.applicable - c.done;
+                var key = lib.id + '|' + c.key;
+                var lab = labels[c.key] || [c.key, ''];
+                h += '<div class="ij-check' + (c.disabled ? ' off' : '') + '"><div class="ij-check-row">'
+                    + '<div class="k">' + esc(lab[0]) + '<small>' + esc(c.disabled ? offReason(lib, c, data) : lab[1]) + '</small></div>'
+                    + bar(cp)
+                    + '<div class="v">' + (c.disabled ? '<span>–</span>' : '<b>' + fmtPct(cp) + '</b><br><span>' + num(c.done) + ' / ' + num(c.applicable) + '</span>') + '</div></div>';
+                if (!c.disabled && miss > 0) {
+                    h += '<button type="button" class="ij-miss-toggle" data-miss="' + esc(key) + '" aria-expanded="' + (open[key] ? 'true' : 'false') + '">'
+                        + esc(open[key] ? t('hide_missing') : t('missing_n', { n: num(miss) })) + '</button>';
+                    if (open[key]) h += '<div class="ij-missing">' + missingList(key) + '</div>';
+                }
+                h += '</div>';
+            });
+            h += '</div>';
+        }
+        return h + '</article>';
+    }
+    function itemLabel(it) {
+        if (it.type === 'Episode') {
+            var ep = it.seasonNumber !== undefined && it.episodeNumber !== undefined ? t('episode', { s: it.seasonNumber, e: it.episodeNumber }) : '';
+            return [it.seriesName, ep, it.name].filter(Boolean).join(' · ');
+        }
+        return it.name + (it.productionYear ? ' (' + it.productionYear + ')' : '');
+    }
+    function missingList(key) {
+        var m = missing[key];
+        if (!m || m.loading) return '<div class="ij-note">' + esc(t('loading')) + '</div>';
+        if (m.error) return '<div class="ij-note">' + esc(m.error) + '</div>';
+        var d = m.data, showPath = d.items.some(function (i) { return i.path; });
+        var h = '<div class="ij-table-wrap"><table><thead><tr><th>' + esc(t('th_name')) + '</th><th>' + esc(t('th_type')) + '</th><th>' + esc(t('th_added')) + '</th>'
+            + (showPath ? '<th>' + esc(t('th_path')) + '</th>' : '') + '</tr></thead><tbody>';
+        d.items.forEach(function (it) {
+            h += '<tr><td><a href="#/details?id=' + encodeURIComponent(it.id) + '&serverId=' + encodeURIComponent(ApiClient.serverId()) + '">' + esc(itemLabel(it)) + '</a></td>'
+                + '<td>' + esc(t('kind')[it.type] || it.type) + '</td><td>' + esc(shortDate(it.dateCreatedUtc)) + '</td>'
+                + (showPath ? '<td class="path">' + esc(it.path || '') + '</td>' : '') + '</tr>';
+        });
+        h += '</tbody></table></div>';
+        if (d.truncated) h += '<div class="ij-note">' + esc(t('truncated', { n: num(d.items.length), total: num(d.total) })) + '</div>';
+        if (last && m.statsAt !== last.statsComputedAtUtc) h += '<div class="ij-note">' + esc(t('stale_list')) + '</div>';
+        return h;
+    }
+    function loadMissing(key) {
+        var parts = key.split('|');
+        missing[key] = { loading: true };
+        render();
+        ApiClient.getJSON(ApiClient.getUrl('IndexJelly/Missing', { libraryId: parts[0], check: parts[1] })).then(function (d) {
+            missing[key] = { data: d, statsAt: last && last.statsComputedAtUtc };
+            render();
+        }, function (err) {
+            missing[key] = { error: t('error', { e: err && err.status ? 'HTTP ' + err.status : String(err) }) };
+            render();
+        });
+    }
+
+    /* ---------- page ---------- */
+    function render() {
+        if (!last) return;
+        var data = last;
+        page.querySelector('#ijStatus').innerHTML = statusLine(data);
+        page.querySelector('#ijTotals').innerHTML = totals(data);
+        page.querySelector('#ijRecount').disabled = !!data.statsComputing;
+        page.querySelector('#ijRecount').textContent = data.statsComputing ? t('recounting') : t('recount');
+        page.querySelector('#ijError').innerHTML = data.statsError ? '<div class="ij-warn">' + esc(t('stats_error', { e: data.statsError })) + '</div>' : '';
+        page.querySelector('#ijActivity').innerHTML = activity(data);
+        // The library cards only change with a new count or a scan; rebuilding them on every poll
+        // would close hover states and make the images flicker.
+        var libs = data.libraries || [];
+        var libHtml = libs.length
+            ? libs.map(function (l) { return library(l, data); }).join('')
+            : '<div class="ij-empty" style="grid-column:1/-1"><b>' + esc(t('empty_title')) + '</b>' + esc(t('empty_text')) + '</div>';
+        if (libHtml !== lastLibHtml) {
+            page.querySelector('#ijLibs').innerHTML = libHtml;
+            lastLibHtml = libHtml;
+        }
+    }
+    /** Something is being indexed: poll fast. */
+    function isActive(data) {
+        var act = data.activity || {};
+        return !!data.busy || !!data.statsComputing || (act.processes || []).length > 0 || (act.refreshing || []).length > 0;
+    }
+    function load(recount) {
+        if (!document.body.contains(page)) { stop(); return; }
+        ApiClient.getJSON(ApiClient.getUrl('IndexJelly/Status', recount ? { recount: true } : {})).then(function (data) {
+            var prevAt = last && last.statsComputedAtUtc;
+            last = data;
+            // a new count finished: reload the open missing lists
+            if (prevAt && prevAt !== data.statsComputedAtUtc) {
+                Object.keys(open).forEach(function (k) { if (open[k]) loadMissing(k); });
+            }
+            render();
+            schedule();
+        }, function (err) {
+            page.querySelector('#ijError').innerHTML = '<div class="ij-error">' + esc(t('error', { e: err && err.status ? 'HTTP ' + err.status : String(err) })) + '</div>';
+            schedule();
+        });
+    }
+    /** Next poll: the short interval while something is being indexed, the normal one otherwise. */
+    function schedule() {
+        if (timer) { clearTimeout(timer); timer = null; }
+        if (!page.querySelector('#ijAuto').checked || !document.body.contains(page)) return;
+        var idle = Math.max(2, Math.min(120, parseInt(page.querySelector('#ijInterval').value, 10) || 5));
+        var active = Math.max(1, Math.min(30, parseInt(page.querySelector('#ijActiveInterval').value, 10) || 2));
+        var sec = last && isActive(last) ? Math.min(active, idle) : idle;
+        timer = setTimeout(function () { load(false); }, sec * 1000);
+    }
+    /** Every second: elapsed times and the "counted … ago" line, without asking the server. */
+    function tickClock() {
+        if (!document.body.contains(page)) { stopTicker(); return; }
+        page.querySelectorAll('[data-start]').forEach(function (el) { el.textContent = elapsed(el.getAttribute('data-start')); });
+        if (last) page.querySelector('#ijStatus').innerHTML = statusLine(last);
+    }
+    function stopTicker() { if (ticker) { clearInterval(ticker); ticker = null; } }
+    function stop() {
+        if (timer) { clearTimeout(timer); timer = null; }
+        stopTicker();
+    }
+    function start() {
+        stop();
+        load(false);
+        ticker = setInterval(tickClock, 1000);
+    }
+    function loadConfig() {
+        return ApiClient.getPluginConfiguration(pluginId).then(function (cfg) {
+            page.querySelector('#ijInterval').value = cfg.RefreshSeconds || 5;
+            page.querySelector('#ijActiveInterval').value = cfg.ActiveRefreshSeconds || 2;
+            page.querySelector('#ijCache').value = cfg.StatsCacheMinutes || 5;
+            page.querySelector('#ijLimit').value = cfg.MissingListLimit || 500;
+            page.querySelector('#ijShowPaths').checked = !!cfg.ShowPaths;
+            page.querySelector('#ijTrickplay').checked = !!cfg.CheckTrickplay;
+            page.querySelector('#ijChapters').checked = !!cfg.CheckChapterImages;
+        }, function () { });
+    }
+    function flash(btn, key, back) {
+        btn.textContent = t(key);
+        setTimeout(function () { btn.textContent = t(back); }, 1500);
+    }
+    function post(url) {
+        return ApiClient.ajax({ type: 'POST', url: ApiClient.getUrl(url) });
+    }
+
+    page.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+
+    page.querySelector('#ijGear').addEventListener('click', function () {
+        var p = page.querySelector('#ijSettings'), isOpen = !p.classList.contains('open');
+        p.classList.toggle('open', isOpen);
+        this.setAttribute('aria-expanded', isOpen);
+    });
+    page.querySelector('#ijSave').addEventListener('click', function () {
+        var btn = this;
+        ApiClient.getPluginConfiguration(pluginId).then(function (cfg) {
+            cfg.RefreshSeconds = parseInt(page.querySelector('#ijInterval').value, 10) || 5;
+            cfg.ActiveRefreshSeconds = parseInt(page.querySelector('#ijActiveInterval').value, 10) || 2;
+            cfg.StatsCacheMinutes = parseInt(page.querySelector('#ijCache').value, 10) || 5;
+            cfg.MissingListLimit = parseInt(page.querySelector('#ijLimit').value, 10) || 500;
+            cfg.ShowPaths = page.querySelector('#ijShowPaths').checked;
+            cfg.CheckTrickplay = page.querySelector('#ijTrickplay').checked;
+            cfg.CheckChapterImages = page.querySelector('#ijChapters').checked;
+            return ApiClient.updatePluginConfiguration(pluginId, cfg);
+        }).then(function () {
+            flash(btn, 'saved', 'save');
+            start();
+        });
+    });
+    page.querySelector('#ijRecount').addEventListener('click', function () { this.disabled = true; load(true); });
+    page.querySelector('#ijScanAll').addEventListener('click', function () {
+        var btn = this;
+        post('Library/Refresh').then(function () { flash(btn, 'scan_started', 'scan_all'); load(false); });
+    });
+    page.querySelector('#ijAuto').addEventListener('change', start);
+    page.querySelector('#ijInterval').addEventListener('change', start);
+    page.querySelector('#ijActiveInterval').addEventListener('change', start);
+    page.querySelector('#ijActivity').addEventListener('toggle', function (e) {
+        if (!e.target.classList) return;
+        if (e.target.classList.contains('ij-recent')) recentOpen = e.target.open;
+        else if (e.target.classList.contains('ij-tasks')) tasksOpen = e.target.open;
+    }, true);
+    page.querySelector('#ijActivity').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-run]');
+        if (!b) return;
+        b.disabled = true;
+        post('ScheduledTasks/Running/' + b.getAttribute('data-run')).then(function () { load(false); });
+    });
+    page.querySelector('#ijLibs').addEventListener('click', function (e) {
+        var s = e.target.closest('[data-scan]');
+        if (s) {
+            s.disabled = true;
+            post('Items/' + s.getAttribute('data-scan') + '/Refresh?Recursive=true&ImageRefreshMode=Default&MetadataRefreshMode=Default&ReplaceAllImages=false&ReplaceAllMetadata=false')
+                .then(function () { s.textContent = t('scan_started'); load(false); });
+            return;
+        }
+        var m = e.target.closest('[data-miss]');
+        if (!m) return;
+        var key = m.getAttribute('data-miss');
+        open[key] = !open[key];
+        if (open[key]) loadMissing(key); else render();
+    });
+
+    page.addEventListener('pageshow', function () { loadConfig().then(start); });
+    page.addEventListener('pagehide', stop);
+    page.addEventListener('viewhide', stop);
+    loadConfig().then(start);
+})();
+</script>
+</div>
+</body>
+</html>
