@@ -1,0 +1,10 @@
+.DS_Store
+bin/
+obj/
+dist/
+.DS_Store
+*.user
+.vs/
+.idea/
+release-notes.md
+streamjelly_*.zip

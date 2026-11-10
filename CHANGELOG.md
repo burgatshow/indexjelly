@@ -8,6 +8,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 
 ## English
 
+### [0.3.0] – 2026-11-10
+#### Changed
+- New look, in line with StreamJelly: Jellyfin blue, quiet colours, large posters and backdrops, chips and pill labels.
+- Every running job is a card like an expanded StreamJelly session: the item it works on in the header (backdrop, poster, clickable title, operation, elapsed time), the job's progress below, then the other items it works on in parallel as small cards. A library scan also lists the libraries being scanned.
+- Library cards: library image in the header with the indexed percentage, one row per check with a *complete* or *N missing* label (click it for the list), and the item counts at the bottom.
+- The missing lists show small posters and the season / episode under the title.
+- Library tasks and *Recently processed* are folded into one panel; task results are coloured labels.
+- On a phone the check rows are compact, and file paths are left out of the missing lists.
+
 ### [0.2.1] – 2026-11-07
 #### Changed
 - The page refreshes every 2 seconds while something is being indexed (setting: *while indexing*) and at the normal interval otherwise. Elapsed times and the "counted … ago" line tick every second in the browser.
@@ -39,6 +48,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 ---
 
 ## Magyar
+
+### [0.3.0] – 2026-11-10
+#### Változott
+- Új megjelenés a StreamJelly stílusában: Jellyfin-kék, visszafogott színek, nagy poszterek és háttérképek, chipek és pill-címkék.
+- Minden futó feladat egy kártya, mint egy kinyitott StreamJelly-munkamenet. Fent az éppen feldolgozott elem (háttérkép, poszter, kattintható cím, művelet, eltelt idő), alatta a feladat haladása, lent kis kártyákon a párhuzamosan feldolgozott elemek. A könyvtárszkennelés a szkennelt könyvtárakat is felsorolja.
+- Könyvtár-kártyák: fent a könyvtár képe és az indexeltség aránya, ellenőrzésenként egy sor *kész* vagy *N hiányzik* címkével (kattintásra lenyílik a lista), lent az elemszámok.
+- A hiánylistákban kis poszter látszik, a cím alatt az évad és a rész.
+- A könyvtári feladatok és a *Nemrég feldolgozva* lista egy összecsukható panelbe került, a feladatok eredménye színes címke.
+- Telefonon tömörebbek az ellenőrzések sorai, és a hiánylistákból kimarad a fájlútvonal.
 
 ### [0.2.1] – 2026-11-07
 #### Változott

@@ -10,129 +10,163 @@
 #IndexJellyPage {
     --ij-text: #eceef1;
     --ij-muted: #9198a1;
+    --ij-soft: #c9ced4;
     --ij-faint: rgba(255,255,255,.07);
     --ij-line: rgba(255,255,255,.10);
     --ij-surface: rgba(255,255,255,.035);
     --ij-done: #3fd68f;
-    --ij-near: #5aa9ff;
-    --ij-partial: #ffb23f;
-    --ij-low: #ff6f61;
-    --ij-brand: #2ec4c4;
+    --ij-warn: #ffb23f;
+    --ij-fail: #ff6f61;
+    --ij-op: #7fc8ff;
+    --ij-brand: #00a4dc;
+    --ij-bg: #101216;
 }
 #IndexJellyPage .ij { max-width: 1280px; margin: 0 auto; padding: 1.6em 1.6em 4em; color: var(--ij-text); font-variant-numeric: tabular-nums; }
 #IndexJellyPage .ij * { box-sizing: border-box; }
+#IndexJellyPage a { color: inherit; text-decoration: none; }
+#IndexJellyPage a:hover { color: var(--ij-brand); }
 
-/* ---------- top bar ---------- */
+/* ---------- top bar (as in StreamJelly) ---------- */
 #IndexJellyPage .ij-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.2em 2.5em; margin-bottom: 2em; }
 #IndexJellyPage .ij-bar h1 { font-size: 1.9em; font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.1; }
 #IndexJellyPage .ij-sub { color: var(--ij-muted); font-size: .9em; margin-top: .35em; }
-#IndexJellyPage .ij-sub .busy { color: var(--ij-brand); }
+#IndexJellyPage .ij-sub .busy { color: var(--ij-op); }
 #IndexJellyPage .ij-totals { display: flex; gap: 2.2em; margin-left: auto; }
 #IndexJellyPage .ij-total b { display: block; font-size: 1.6em; font-weight: 650; line-height: 1.1; }
 #IndexJellyPage .ij-total span { color: var(--ij-muted); font-size: .82em; }
+#IndexJellyPage .ij-total.done b { color: var(--ij-done); }
 #IndexJellyPage .ij-actions { display: flex; gap: .5em; flex-wrap: wrap; }
 #IndexJellyPage .ij-btn { background: none; border: 1px solid var(--ij-line); color: var(--ij-muted); border-radius: 8px; padding: .45em .8em; cursor: pointer; font: inherit; font-size: .85em; white-space: nowrap; }
 #IndexJellyPage .ij-btn:hover, #IndexJellyPage .ij-btn[aria-expanded="true"] { color: var(--ij-text); border-color: rgba(255,255,255,.25); }
 #IndexJellyPage .ij-btn:disabled { opacity: .5; cursor: default; }
-#IndexJellyPage .ij-btn.primary { background: var(--ij-brand); border-color: var(--ij-brand); color: #06201f; font-weight: 650; }
+#IndexJellyPage .ij-pillbtn { background: rgba(255,255,255,.08); border: 0; color: var(--ij-text); border-radius: 999px; padding: .35em .9em; font: inherit; font-size: .8em; cursor: pointer; white-space: nowrap; }
+#IndexJellyPage .ij-pillbtn:hover { background: rgba(255,255,255,.16); }
+#IndexJellyPage .ij-pillbtn:disabled { opacity: .55; cursor: default; }
 #IndexJellyPage .ij-settings { display: none; flex-wrap: wrap; gap: 1em 1.6em; align-items: center; padding: 1em 1.2em; margin: -1em 0 2em; border: 1px solid var(--ij-line); border-radius: 10px; font-size: .9em; }
 #IndexJellyPage .ij-settings.open { display: flex; }
 #IndexJellyPage .ij-settings label { display: flex; gap: .45em; align-items: center; color: var(--ij-muted); }
 #IndexJellyPage .ij-settings input[type=number] { width: 4.6em; background: var(--ij-faint); border: 1px solid var(--ij-line); color: var(--ij-text); border-radius: 6px; padding: .3em .4em; font: inherit; }
-#IndexJellyPage .ij-settings .ij-btn.primary { margin-left: auto; }
+#IndexJellyPage .ij-save { margin-left: auto; background: var(--ij-brand); color: #fff; border: 0; border-radius: 6px; padding: .5em 1.1em; font: inherit; font-weight: 600; cursor: pointer; }
 
-/* ---------- activity ---------- */
-#IndexJellyPage .ij-section { margin-bottom: 2.2em; }
-#IndexJellyPage .ij-section > h2 { font-size: 1.05em; font-weight: 650; margin: 0 0 .8em; display: flex; align-items: baseline; gap: .7em; }
-#IndexJellyPage .ij-section > h2 small { font-weight: 400; color: var(--ij-muted); font-size: .85em; }
-#IndexJellyPage .ij-activity { border: 1px solid var(--ij-line); border-radius: 14px; background: var(--ij-surface); overflow: hidden; }
-#IndexJellyPage .ij-run { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 2fr) 4.5em; gap: 1em; align-items: center; padding: .85em 1.2em; border-top: 1px solid var(--ij-faint); }
-#IndexJellyPage .ij-run:first-child { border-top: 0; }
-#IndexJellyPage .ij-run .n { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#IndexJellyPage .ij-run .n small { display: block; font-weight: 400; color: var(--ij-muted); font-size: .8em; }
-#IndexJellyPage .ij-run .p { text-align: right; font-weight: 650; color: var(--ij-brand); }
-#IndexJellyPage .ij-idle { padding: 1em 1.2em; color: var(--ij-muted); font-size: .9em; }
-#IndexJellyPage .ij-idle b { color: var(--ij-text); font-weight: 600; }
-#IndexJellyPage details.ij-tasks > summary { list-style: none; cursor: pointer; padding: .8em 1.2em; color: var(--ij-muted); font-size: .86em; border-top: 1px solid var(--ij-line); user-select: none; }
-#IndexJellyPage details.ij-tasks > summary::-webkit-details-marker { display: none; }
-#IndexJellyPage details.ij-tasks > summary::before, #IndexJellyPage .ij-miss-toggle::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s; }
-#IndexJellyPage details.ij-tasks[open] > summary::before { transform: rotate(90deg); }
-#IndexJellyPage details.ij-tasks > summary:hover { color: var(--ij-text); }
-#IndexJellyPage .ij-task { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 1em; align-items: center; padding: .55em 1.2em; border-top: 1px solid var(--ij-faint); font-size: .88em; }
-#IndexJellyPage .ij-task .r { color: var(--ij-muted); font-size: .92em; text-align: right; }
-#IndexJellyPage .ij-task .r.Failed, #IndexJellyPage .ij-task .r.Aborted { color: var(--ij-low); }
-#IndexJellyPage .ij-task .r.Cancelled { color: var(--ij-partial); }
+#IndexJellyPage .ij-section { margin-bottom: 2.4em; }
+#IndexJellyPage .ij-section > h2 { font-size: 1.05em; font-weight: 650; margin: 0 0 .9em; color: var(--ij-soft); }
+#IndexJellyPage .ij-stack { display: grid; gap: 1.1em; }
 
-/* ---------- current items of a job (Plex-like) ---------- */
-#IndexJellyPage .ij-now-list { padding: 0 1.2em .9em; display: grid; gap: .15em; margin-top: -.35em; }
-#IndexJellyPage .ij-now { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: .8em; align-items: center; padding: .4em .5em; border-radius: 8px; }
-#IndexJellyPage .ij-now:hover { background: rgba(255,255,255,.04); }
-#IndexJellyPage .ij-thumb { width: 34px; aspect-ratio: 2/3; border-radius: 4px; background: var(--ij-faint) center/cover; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
-#IndexJellyPage .ij-thumb.sq { aspect-ratio: 1; }
-#IndexJellyPage .ij-now-main { min-width: 0; }
-#IndexJellyPage .ij-now-main .t { display: block; font-weight: 600; font-size: .92em; color: var(--ij-text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#IndexJellyPage .ij-now-main a.t:hover { color: var(--ij-brand); text-decoration: underline; }
-#IndexJellyPage .ij-now-main .s { color: var(--ij-muted); font-size: .8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#IndexJellyPage .ij-now-main .s .op { color: #a8e9e3; }
-#IndexJellyPage .ij-now-main .ij-track { height: 3px; margin-top: .35em; max-width: 340px; }
-#IndexJellyPage .ij-now-time { color: var(--ij-muted); font-size: .8em; text-align: right; white-space: nowrap; }
-#IndexJellyPage .ij-now-more { color: var(--ij-muted); font-size: .8em; padding: .2em .5em 0 calc(34px + 1.3em); }
-#IndexJellyPage .ij-act { display: inline-block; font-size: .72em; font-weight: 700; padding: .1em .55em; border-radius: 999px; border: 1.5px solid currentColor; margin-right: .5em; vertical-align: 1px; }
-#IndexJellyPage .ij-act.Added { color: var(--ij-done); }
-#IndexJellyPage .ij-act.Refreshed { color: var(--ij-near); }
-#IndexJellyPage .ij-act.Updated { color: var(--ij-muted); }
-#IndexJellyPage .ij-act.Removed { color: var(--ij-low); }
-#IndexJellyPage details.ij-tasks .ij-now-list { padding-top: .6em; margin-top: 0; }
+/* ---------- cards ---------- */
+#IndexJellyPage .ij-panel { position: relative; border-radius: 16px; overflow: hidden; background: var(--ij-surface); border: 1px solid var(--ij-line); }
+#IndexJellyPage .ij-hero { position: relative; display: flex; gap: 1.4em; align-items: flex-end; padding: 1.6em 1.6em 1.3em; min-height: 150px; isolation: isolate; }
+#IndexJellyPage .ij-hero.short { min-height: 0; align-items: center; padding: 1.3em 1.6em; }
+#IndexJellyPage .ij-hero-bg { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 25%; opacity: .38; }
+#IndexJellyPage .ij-hero-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(16,18,22,.96) 0%, rgba(16,18,22,.75) 45%, rgba(16,18,22,.35) 100%), linear-gradient(0deg, rgba(16,18,22,1) 0%, rgba(16,18,22,0) 60%); }
+#IndexJellyPage .ij-poster { width: 92px; aspect-ratio: 2/3; border-radius: 8px; background: var(--ij-faint) center/cover; flex: none; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+#IndexJellyPage .ij-poster.sq { aspect-ratio: 1; }
+#IndexJellyPage .ij-heading { min-width: 0; flex: 1; }
+#IndexJellyPage .ij-kicker { color: var(--ij-muted); font-size: .92em; margin-bottom: .15em; }
+#IndexJellyPage .ij-name { font-size: 1.55em; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; margin: 0 0 .55em; overflow-wrap: anywhere; }
+#IndexJellyPage .ij-hero.short .ij-name { font-size: 1.2em; margin-bottom: .3em; }
+#IndexJellyPage .ij-chips { display: flex; flex-wrap: wrap; gap: .4em; }
+#IndexJellyPage .ij-chip { font-size: .8em; padding: .25em .65em; border-radius: 999px; background: rgba(255,255,255,.08); color: #d5d9de; white-space: nowrap; }
+#IndexJellyPage .ij-chip.op { color: var(--ij-op); background: rgba(0,164,220,.12); }
+#IndexJellyPage .ij-chip.new { color: var(--ij-done); background: rgba(63,214,143,.1); }
+#IndexJellyPage .ij-side { text-align: right; flex: none; align-self: flex-start; display: flex; flex-direction: column; align-items: flex-end; gap: .55em; }
+#IndexJellyPage .ij-big { font-size: 2.1em; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+#IndexJellyPage .ij-big.done { color: var(--ij-done); }
+#IndexJellyPage .ij-big-note { color: var(--ij-muted); font-size: .8em; margin-top: -.2em; }
+#IndexJellyPage .ij-pill { display: inline-block; font-weight: 700; font-size: .78em; padding: .22em .7em; border-radius: 999px; border: 1.5px solid currentColor; white-space: nowrap; background: none; font-family: inherit; }
+#IndexJellyPage .ij-pill.done { color: var(--ij-done); }
+#IndexJellyPage .ij-pill.run { color: var(--ij-op); }
+#IndexJellyPage .ij-pill.warn { color: var(--ij-warn); }
+#IndexJellyPage .ij-pill.fail { color: var(--ij-fail); }
+#IndexJellyPage .ij-pill.muted { color: var(--ij-muted); }
+#IndexJellyPage button.ij-pill { cursor: pointer; }
+#IndexJellyPage button.ij-pill:hover, #IndexJellyPage button.ij-pill[aria-expanded="true"] { background: rgba(255,178,63,.12); }
 
-/* ---------- bars ---------- */
-#IndexJellyPage .ij-track { position: relative; height: 6px; border-radius: 6px; background: rgba(255,255,255,.09); overflow: hidden; }
-#IndexJellyPage .ij-track b { position: absolute; inset: 0 auto 0 0; border-radius: 6px; background: var(--c, var(--ij-brand)); transition: width .4s ease; }
-#IndexJellyPage .ij-track.live b { background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,.25) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: ij-shine 1.6s linear infinite; background-color: var(--ij-brand); }
+/* progress */
+#IndexJellyPage .ij-time { display: flex; align-items: center; gap: .9em; padding: 0 1.6em 1.2em; font-size: .82em; color: var(--ij-muted); }
+#IndexJellyPage .ij-track { position: relative; flex: 1; height: 4px; border-radius: 4px; background: rgba(255,255,255,.1); overflow: hidden; }
+#IndexJellyPage .ij-track b { position: absolute; inset: 0 auto 0 0; background: var(--ij-brand); border-radius: 4px; transition: width .4s ease; }
+#IndexJellyPage .ij-track.done b { background: var(--ij-done); }
+#IndexJellyPage .ij-track.live b { background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 100%); background-size: 200% 100%; animation: ij-shine 1.6s linear infinite; }
+#IndexJellyPage .ij-track.indet b { width: 30% !important; animation: ij-indet 1.4s ease-in-out infinite; }
 @keyframes ij-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-@media (prefers-reduced-motion: reduce) { #IndexJellyPage .ij-track.live b { animation: none; } }
+@keyframes ij-indet { from { left: -30%; } to { left: 100%; } }
+@media (prefers-reduced-motion: reduce) { #IndexJellyPage .ij-track.live b, #IndexJellyPage .ij-track.indet b { animation: none; } }
+
+/* compact item cards */
+#IndexJellyPage .ij-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: .7em; padding: 0 1.6em 1.4em; }
+#IndexJellyPage .ij-cards-head { padding: .2em 1.6em .7em; color: var(--ij-muted); font-size: .8em; }
+#IndexJellyPage .ij-card { display: flex; gap: .85em; padding: .7em; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid var(--ij-faint); min-width: 0; }
+#IndexJellyPage .ij-card:hover { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.05); }
+#IndexJellyPage .ij-cover { width: 46px; aspect-ratio: 2/3; flex: none; border-radius: 6px; background: var(--ij-faint) center/cover; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+#IndexJellyPage .ij-cover.sq { aspect-ratio: 1; align-self: flex-start; }
+#IndexJellyPage .ij-card-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#IndexJellyPage .ij-card-top { display: flex; gap: .6em; align-items: flex-start; }
+#IndexJellyPage .ij-card-top > div { flex: 1; min-width: 0; }
+#IndexJellyPage .ij-card-title { font-weight: 650; font-size: .95em; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#IndexJellyPage .ij-card-sub { color: var(--ij-muted); font-size: .8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: .1em; }
+#IndexJellyPage .ij-card-op { color: var(--ij-op); font-size: .8em; margin-top: auto; padding-top: .45em; display: flex; justify-content: space-between; gap: .6em; }
+#IndexJellyPage .ij-card-op span:last-child { color: var(--ij-muted); white-space: nowrap; }
+#IndexJellyPage .ij-card .ij-track { flex: none; height: 3px; margin-top: .4em; }
+#IndexJellyPage .ij-card .ij-pill { font-size: .68em; }
+#IndexJellyPage .ij-more { padding: 0 1.6em 1.2em; color: var(--ij-muted); font-size: .8em; margin-top: -.6em; }
+
+/* idle */
+#IndexJellyPage .ij-idle { display: flex; align-items: center; gap: 1.2em; padding: 1.2em 1.6em; }
+#IndexJellyPage .ij-idle-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ij-done); box-shadow: 0 0 0 5px rgba(63,214,143,.12); flex: none; }
+#IndexJellyPage .ij-idle b { display: block; font-size: 1.05em; }
+#IndexJellyPage .ij-idle span { color: var(--ij-muted); font-size: .86em; }
+#IndexJellyPage .ij-idle .ij-pillbtn { margin-left: auto; }
+
+/* scanned libraries inside the scan job */
+#IndexJellyPage .ij-scanlist { padding: 0 1.6em 1.2em; display: grid; gap: .55em; }
+#IndexJellyPage .ij-scanrow { display: grid; grid-template-columns: minmax(7em, 14em) 1fr 4em; gap: .9em; align-items: center; font-size: .86em; }
+#IndexJellyPage .ij-scanrow .p { text-align: right; color: var(--ij-muted); }
+
+/* folded parts */
+#IndexJellyPage details.ij-more-d { border-top: 1px solid var(--ij-line); }
+#IndexJellyPage .ij-panel > details.ij-more-d:first-child { border-top: 0; }
+#IndexJellyPage details.ij-more-d > summary { list-style: none; cursor: pointer; padding: .85em 1.6em; color: var(--ij-muted); font-size: .88em; user-select: none; }
+#IndexJellyPage details.ij-more-d > summary::-webkit-details-marker { display: none; }
+#IndexJellyPage details.ij-more-d > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s; }
+#IndexJellyPage details.ij-more-d[open] > summary::before { transform: rotate(90deg); }
+#IndexJellyPage details.ij-more-d > summary:hover { color: var(--ij-text); }
+#IndexJellyPage .ij-task { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 1em; align-items: center; padding: .6em 1.6em; border-top: 1px solid var(--ij-faint); font-size: .9em; }
+#IndexJellyPage .ij-task .when { color: var(--ij-muted); font-size: .9em; text-align: right; }
+#IndexJellyPage details.ij-more-d .ij-cards { padding-top: .2em; }
 
 /* ---------- libraries ---------- */
-#IndexJellyPage .ij-libs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); gap: 1.1em; align-items: start; }
-#IndexJellyPage .ij-lib { border-radius: 16px; overflow: hidden; background: var(--ij-surface); border: 1px solid var(--ij-line); }
-#IndexJellyPage .ij-lib.wide { grid-column: 1 / -1; }
-#IndexJellyPage .ij-lib-head { position: relative; display: flex; gap: 1em; align-items: flex-start; padding: 1.2em 1.2em 1em; isolation: isolate; }
-#IndexJellyPage .ij-lib-bg { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center; opacity: .22; }
-#IndexJellyPage .ij-lib-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(16,18,22,.96) 0%, rgba(16,18,22,.6) 100%); }
-#IndexJellyPage .ij-ring { flex: none; width: 58px; height: 58px; }
-#IndexJellyPage .ij-ring circle { fill: none; stroke-width: 6; }
-#IndexJellyPage .ij-ring .bg { stroke: rgba(255,255,255,.1); }
-#IndexJellyPage .ij-ring .fg { stroke: var(--c); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset .5s ease; }
-#IndexJellyPage .ij-ring text { fill: var(--ij-text); font-size: 15px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
-#IndexJellyPage .ij-lib-title { flex: 1; min-width: 0; }
-#IndexJellyPage .ij-lib-title h3 { margin: 0; font-size: 1.2em; font-weight: 700; line-height: 1.2; }
-#IndexJellyPage .ij-lib-title .meta { color: var(--ij-muted); font-size: .82em; margin-top: .3em; }
-#IndexJellyPage .ij-lib-title .meta span + span::before { content: ""; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: var(--ij-muted); vertical-align: middle; margin: 0 .55em; }
-#IndexJellyPage .ij-lib-title .new { color: var(--ij-done); }
-#IndexJellyPage .ij-lib-scan { margin-top: .7em; display: flex; align-items: center; gap: .7em; font-size: .82em; color: var(--ij-brand); }
-#IndexJellyPage .ij-lib-scan .ij-track { flex: 1; min-width: 80px; }
-#IndexJellyPage .ij-lib-head .ij-btn { flex: none; }
-#IndexJellyPage .ij-checks { padding: .3em 1.2em 1em; }
-#IndexJellyPage .ij-check { border-top: 1px solid var(--ij-faint); }
-#IndexJellyPage .ij-check-row { display: grid; grid-template-columns: minmax(8em, 1.1fr) minmax(80px, 1.6fr) 7.5em; gap: .9em; align-items: center; padding: .6em 0; font-size: .9em; }
-#IndexJellyPage .ij-check-row .k { color: #c9ced4; }
-#IndexJellyPage .ij-check-row .k small { display: block; color: var(--ij-muted); font-size: .82em; }
-#IndexJellyPage .ij-check-row .v { text-align: right; white-space: nowrap; }
-#IndexJellyPage .ij-check-row .v b { font-weight: 650; }
-#IndexJellyPage .ij-check-row .v span { color: var(--ij-muted); font-size: .85em; }
-#IndexJellyPage .ij-check.off .ij-check-row { opacity: .45; }
-#IndexJellyPage .ij-miss-toggle { background: none; border: 0; padding: 0 0 .6em; color: var(--ij-partial); font: inherit; font-size: .82em; cursor: pointer; }
-#IndexJellyPage .ij-miss-toggle:hover { text-decoration: underline; }
-#IndexJellyPage .ij-miss-toggle[aria-expanded="true"]::before { transform: rotate(90deg); }
+#IndexJellyPage .ij-libs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(560px, 100%), 1fr)); gap: 1.1em; align-items: start; }
+#IndexJellyPage .ij-lanes { padding: .2em 1.6em 1.2em; }
+#IndexJellyPage .ij-lane { border-top: 1px solid var(--ij-faint); }
+#IndexJellyPage .ij-lane:first-child { border-top: 0; }
+#IndexJellyPage .ij-lane-row { display: grid; grid-template-columns: minmax(9em, 1.1fr) minmax(70px, 1.3fr) 6.2em 7.4em; gap: 1em; align-items: center; padding: .7em 0; }
+#IndexJellyPage .ij-lane .k b { display: block; font-weight: 600; font-size: .95em; }
+#IndexJellyPage .ij-lane .k span { color: var(--ij-muted); font-size: .78em; }
+#IndexJellyPage .ij-lane .v { text-align: right; }
+#IndexJellyPage .ij-lane .v b { display: block; font-weight: 650; }
+#IndexJellyPage .ij-lane .v span { color: var(--ij-muted); font-size: .76em; }
+#IndexJellyPage .ij-lane .st { text-align: right; }
+#IndexJellyPage .ij-lane.off .k, #IndexJellyPage .ij-lane.off .ij-track, #IndexJellyPage .ij-lane.off .v { opacity: .45; }
+#IndexJellyPage .ij-lib-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); border-top: 1px solid var(--ij-line); }
+#IndexJellyPage .ij-stat { padding: .9em 1.6em; border-right: 1px solid var(--ij-faint); }
+#IndexJellyPage .ij-stat:last-child { border-right: 0; }
+#IndexJellyPage .ij-stat b { display: block; font-size: 1.2em; font-weight: 650; }
+#IndexJellyPage .ij-stat span { font-size: .78em; color: var(--ij-muted); }
+#IndexJellyPage .ij-stat.new b { color: var(--ij-done); }
+#IndexJellyPage .ij-placeholder { padding: 1.2em 1.6em 1.4em; color: var(--ij-muted); font-size: .9em; }
+
+/* missing list */
 #IndexJellyPage .ij-missing { padding: 0 0 1em; }
-#IndexJellyPage .ij-table-wrap { overflow-x: auto; max-height: 420px; overflow-y: auto; border-radius: 8px; background: rgba(0,0,0,.18); }
-#IndexJellyPage table { width: 100%; border-collapse: collapse; font-size: .84em; }
-#IndexJellyPage th { position: sticky; top: 0; background: #1b1e23; text-align: left; font-weight: 600; color: var(--ij-muted); padding: .45em .7em; border-bottom: 1px solid var(--ij-line); }
-#IndexJellyPage td { padding: .45em .7em; border-bottom: 1px solid var(--ij-faint); vertical-align: top; }
-#IndexJellyPage td a { color: var(--ij-text); text-decoration: none; }
-#IndexJellyPage td a:hover { color: var(--ij-brand); text-decoration: underline; }
-#IndexJellyPage td.path { color: var(--ij-muted); word-break: break-all; font-size: .92em; }
-#IndexJellyPage .ij-note { color: var(--ij-muted); font-size: .8em; padding-top: .5em; }
-#IndexJellyPage .ij-placeholder { padding: 1.4em 1.2em; color: var(--ij-muted); font-size: .9em; }
+#IndexJellyPage .ij-table-wrap { overflow: auto; max-height: 440px; border-radius: 10px; background: rgba(0,0,0,.22); }
+#IndexJellyPage table { width: 100%; border-collapse: collapse; font-size: .85em; }
+#IndexJellyPage th { position: sticky; top: 0; z-index: 1; background: #1b1e23; text-align: left; font-weight: 600; color: var(--ij-muted); padding: .5em .8em; border-bottom: 1px solid var(--ij-line); }
+#IndexJellyPage td { padding: .45em .8em; border-bottom: 1px solid var(--ij-faint); vertical-align: middle; }
+#IndexJellyPage td.cov { width: 1%; padding-right: 0; }
+#IndexJellyPage td.cov i { display: block; width: 26px; aspect-ratio: 2/3; border-radius: 4px; background: var(--ij-faint) center/cover; }
+#IndexJellyPage td .sub { display: block; color: var(--ij-muted); font-size: .9em; }
+#IndexJellyPage td.path { color: var(--ij-muted); word-break: break-all; font-size: .9em; }
+#IndexJellyPage td.when { color: var(--ij-muted); white-space: nowrap; }
+#IndexJellyPage .ij-note { color: var(--ij-muted); font-size: .8em; padding-top: .55em; }
 
 #IndexJellyPage .ij-empty { text-align: center; padding: 5em 1em; color: var(--ij-muted); }
 #IndexJellyPage .ij-empty b { display: block; color: var(--ij-text); font-size: 1.2em; margin-bottom: .4em; }
@@ -143,12 +177,25 @@
 @media (max-width: 760px) {
     #IndexJellyPage .ij { padding: 1em .8em 3em; }
     #IndexJellyPage .ij-totals { margin-left: 0; gap: 1.6em; }
-    #IndexJellyPage .ij-run { grid-template-columns: 1fr 3.5em; }
-    #IndexJellyPage .ij-run .ij-track { grid-column: 1 / -1; grid-row: 2; }
-    #IndexJellyPage .ij-check-row { grid-template-columns: 1fr auto; }
-    #IndexJellyPage .ij-check-row .ij-track { grid-column: 1 / -1; grid-row: 2; }
-    #IndexJellyPage .ij-task { grid-template-columns: 1fr auto; }
-    #IndexJellyPage .ij-task .r { grid-column: 1; text-align: left; }
+    #IndexJellyPage .ij-hero { flex-wrap: wrap; padding: 1.2em; gap: 1em; }
+    #IndexJellyPage .ij-poster { width: 64px; }
+    #IndexJellyPage .ij-heading { flex-basis: calc(100% - 64px - 1em); }
+    #IndexJellyPage .ij-side { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; text-align: left; }
+    #IndexJellyPage .ij-time, #IndexJellyPage .ij-cards, #IndexJellyPage .ij-lanes, #IndexJellyPage .ij-scanlist, #IndexJellyPage .ij-idle, #IndexJellyPage .ij-more { padding-left: 1.2em; padding-right: 1.2em; }
+    #IndexJellyPage .ij-lane-row { grid-template-columns: 1fr auto; gap: .45em 1em; }
+    #IndexJellyPage .ij-lane-row .ij-track { grid-column: 1 / -1; grid-row: 2; }
+    #IndexJellyPage .ij-lane-row .st { grid-column: 1 / -1; grid-row: 3; text-align: left; }
+    #IndexJellyPage .ij-scanrow { grid-template-columns: 1fr 3.5em; }
+    #IndexJellyPage .ij-scanrow .ij-track { grid-column: 1 / -1; grid-row: 2; }
+    #IndexJellyPage .ij-task { grid-template-columns: 1fr auto; padding-left: 1.2em; padding-right: 1.2em; }
+    #IndexJellyPage .ij-task .when { grid-column: 1; text-align: left; }
+    #IndexJellyPage .ij-stat { padding: .8em 1.2em; }
+    #IndexJellyPage .ij-lane-row { grid-template-columns: 1fr auto auto; }
+    #IndexJellyPage .ij-lane-row .st { grid-column: auto; grid-row: auto; text-align: right; }
+    #IndexJellyPage .ij-lane-row .st .ij-pill.done { display: none; }
+    #IndexJellyPage .ij-lane .v { display: flex; gap: .5em; align-items: baseline; }
+    #IndexJellyPage .ij-lane .v span { display: none; }
+    #IndexJellyPage th.path, #IndexJellyPage td.path { display: none; }
 }
 </style>
 
@@ -177,18 +224,21 @@
         <label><input type="checkbox" id="ijShowPaths"> <span data-i18n="show_paths">Show file paths</span></label>
         <label><input type="checkbox" id="ijTrickplay"> <span data-i18n="check_trickplay">Check trickplay</span></label>
         <label><input type="checkbox" id="ijChapters"> <span data-i18n="check_chapters">Check chapter images</span></label>
-        <button type="button" class="ij-btn primary" id="ijSave" data-i18n="save">Save</button>
+        <button type="button" class="ij-save" id="ijSave" data-i18n="save">Save</button>
     </div>
 
     <div id="ijError"></div>
 
-    <section class="ij-section">
+    <section class="ij-section" id="ijActSection">
         <h2><span data-i18n="activity">Activity</span></h2>
-        <div class="ij-activity" id="ijActivity"></div>
+        <div class="ij-stack">
+            <div class="ij-stack" id="ijActivity"></div>
+            <div id="ijHistory"></div>
+        </div>
     </section>
 
     <section class="ij-section">
-        <h2><span data-i18n="libraries">Libraries</span> <small id="ijLibNote"></small></h2>
+        <h2><span data-i18n="libraries">Libraries</span></h2>
         <div class="ij-libs" id="ijLibs"></div>
     </section>
 </div>
@@ -221,7 +271,7 @@
             activity: 'Activity', libraries: 'Libraries',
             tot_indexed: 'indexed', tot_items: 'items', tot_missing: 'to do',
             status: 'Jellyfin {v}', counted: 'counted {ago} ago in {dur}', counting_first: 'counting the libraries…', counting: 'recounting…',
-            idle: 'Nothing is running.', last_scan: 'Last library scan: {ago} ago, {res}.', never_scanned: 'The library scan has not run yet.',
+            idle: 'Nothing is being indexed', last_scan: 'Last library scan: {ago} ago, {res}.', never_scanned: 'The library scan has not run yet.',
             scanning: 'Scanning', queued: 'queued', library_tasks: 'Library tasks ({n})', run: 'Run', running: 'running',
             never: 'never run', ago: '{x} ago',
             res: { Completed: 'completed', Failed: 'failed', Cancelled: 'cancelled', Aborted: 'aborted' },
@@ -244,6 +294,8 @@
                 subtitleExtraction: 'extracting subtitles', ffmpeg: 'ffmpeg', refresh: 'refreshing metadata', folder: 'scanning'
             },
             act: { Added: 'added', Refreshed: 'refreshed', Updated: 'updated', Removed: 'removed' },
+            also_running: 'Also in progress ({n})', working_n: 'working on {n} items', working_one: 'working on 1 item', no_current: 'Jellyfin does not tell which item it is on',
+            complete: 'complete', off: 'off', new_24h: 'new in 24 h', last_added_label: 'last addition',
             check: {
                 refreshed: ['Metadata refresh', 'went through a refresh at least once'],
                 mediaInfo: ['Media info', 'ffprobe: streams, codecs, run time'],
@@ -264,7 +316,7 @@
             activity: 'Folyamatban', libraries: 'Könyvtárak',
             tot_indexed: 'indexelve', tot_items: 'elem', tot_missing: 'hátravan',
             status: 'Jellyfin {v}', counted: 'számolva {ago} ezelőtt, {dur} alatt', counting_first: 'a könyvtárak számolása folyik…', counting: 'újraszámolás…',
-            idle: 'Most semmi nem fut.', last_scan: 'Utolsó könyvtárszkennelés: {ago} ezelőtt, {res}.', never_scanned: 'A könyvtárszkennelés még nem futott.',
+            idle: 'Most nem fut indexelés', last_scan: 'Utolsó könyvtárszkennelés: {ago} ezelőtt, {res}.', never_scanned: 'A könyvtárszkennelés még nem futott.',
             scanning: 'Szkennelés', queued: 'sorban áll', library_tasks: 'Könyvtári feladatok ({n})', run: 'Futtatás', running: 'fut',
             never: 'még nem futott', ago: '{x} ezelőtt',
             res: { Completed: 'sikeres', Failed: 'hibás', Cancelled: 'megszakítva', Aborted: 'félbeszakadt' },
@@ -287,6 +339,8 @@
                 subtitleExtraction: 'felirat kinyerése', ffmpeg: 'ffmpeg', refresh: 'metaadatok frissítése', folder: 'szkennelés'
             },
             act: { Added: 'új', Refreshed: 'frissítve', Updated: 'módosítva', Removed: 'törölve' },
+            also_running: 'Párhuzamosan ({n})', working_n: '{n} elem feldolgozása', working_one: '1 elem feldolgozása', no_current: 'a Jellyfin nem jelzi, melyik elemnél tart',
+            complete: 'kész', off: 'ki', new_24h: 'új 24 órán belül', last_added_label: 'legutóbbi bővülés',
             check: {
                 refreshed: ['Metaadat-frissítés', 'legalább egyszer frissült'],
                 mediaInfo: ['Mediainfó', 'ffprobe: stream-ek, kodekek, hossz'],
@@ -331,13 +385,6 @@
         if (p >= 99.5) return (Math.floor(p * 10) / 10).toFixed(1).replace('.', DEC) + ' %';
         return p.toFixed(p >= 10 ? 0 : 1).replace('.', DEC) + ' %';
     }
-    function color(p) {
-        if (p === null) return 'var(--ij-muted)';
-        if (p >= 100) return 'var(--ij-done)';
-        if (p >= 90) return 'var(--ij-near)';
-        if (p >= 50) return 'var(--ij-partial)';
-        return 'var(--ij-low)';
-    }
     function ago(date) {
         if (!date) return '';
         var s = Math.max(0, Math.round((Date.now() - new Date(date).getTime()) / 1000));
@@ -354,21 +401,32 @@
         if (!d) return '';
         return new Date(d).toLocaleDateString(LANG === 'hu' ? 'hu-HU' : undefined, { year: 'numeric', month: 'short', day: 'numeric' });
     }
-    function bar(p, live) {
-        return '<div class="ij-track' + (live ? ' live' : '') + '" style="--c:' + color(p) + '"><b style="width:' + (p === null ? 0 : Math.max(p, p > 0 ? 1 : 0)).toFixed(1) + '%"></b></div>';
-    }
-    function ring(p) {
-        var r = 24, c = 2 * Math.PI * r, off = c * (1 - (p || 0) / 100);
-        return '<svg class="ij-ring" viewBox="0 0 58 58" style="--c:' + color(p) + '" aria-hidden="true">'
-            + '<circle class="bg" cx="29" cy="29" r="' + r + '"></circle>'
-            + '<circle class="fg" cx="29" cy="29" r="' + r + '" stroke-dasharray="' + c.toFixed(2) + '" stroke-dashoffset="' + off.toFixed(2) + '"></circle>'
-            + '<text x="29" y="29">' + (p === null ? '–' : Math.floor(p)) + '</text></svg>';
+    /** Progress track; done = green, live = shimmering, indet = no known percentage. */
+    function bar(p, opts) {
+        opts = opts || {};
+        var cls = 'ij-track' + (p !== null && p >= 100 && !opts.live ? ' done' : '') + (opts.live ? ' live' : '') + (opts.indet ? ' indet' : '');
+        var w = p === null || p === undefined ? 0 : Math.max(p, p > 0 ? 1 : 0);
+        return '<div class="' + cls + '"><b style="width:' + w.toFixed(1) + '%"></b></div>';
     }
     function activeChecks(lib) { return (lib.checks || []).filter(function (c) { return !c.disabled && c.applicable > 0; }); }
     function libPct(lib) {
         var a = 0, d = 0;
         activeChecks(lib).forEach(function (c) { a += c.applicable; d += c.done; });
         return pct(d, a);
+    }
+    function bgStyle(url) { return url ? ' style="background-image:url(\'' + url + '\')"' : ''; }
+    /** Image URL; wide = limit the width (backdrops, hero backgrounds), otherwise the height (posters). */
+    function img(id, type, size, wide) {
+        if (!id) return '';
+        var q = { quality: 80 };
+        q[wide ? 'maxWidth' : 'maxHeight'] = size;
+        return ApiClient.getUrl('Items/' + id + '/Images/' + (type || 'Primary'), q);
+    }
+    /** Hero background: the backdrop of movies, series and folders, the picture itself for episodes and the rest. */
+    function heroImage(it) {
+        if (!it) return '';
+        if (it.type === 'Movie' || it.type === 'Series' || it.type === 'Season' || it.isFolder) return img(it.type === 'Season' ? it.imageItemId : it.id, 'Backdrop', 1280, true);
+        return img(it.imageItemId, 'Primary', 1280, true);
     }
 
     /* ---------- header ---------- */
@@ -380,7 +438,7 @@
         });
         if (!data.statsComputedAtUtc) return '';
         var p = pct(d, a);
-        return '<div class="ij-total"><b style="color:' + color(p) + '">' + fmtPct(p) + '</b><span>' + esc(t('tot_indexed')) + '</span></div>'
+        return '<div class="ij-total' + (p >= 100 ? ' done' : '') + '"><b>' + fmtPct(p) + '</b><span>' + esc(t('tot_indexed')) + '</span></div>'
             + '<div class="ij-total"><b>' + num(items) + '</b><span>' + esc(t('tot_items')) + '</span></div>'
             + '<div class="ij-total"><b>' + num(a - d) + '</b><span>' + esc(t('tot_missing')) + '</span></div>';
     }
@@ -404,7 +462,8 @@
         subtitleExtraction: ['RefreshLibrary'],
         ffmpeg: []
     };
-    var NOW_LIMIT = 6;
+    var CARD_LIMIT = 8;
+    var SQUARE = { Audio: 1, MusicAlbum: 1, MusicArtist: 1, CollectionFolder: 1 };
 
     function elapsed(startUtc) {
         if (!startUtc) return '';
@@ -415,43 +474,23 @@
     function itemLink(it) {
         return it && it.id ? '#/details?id=' + encodeURIComponent(it.id) + '&serverId=' + encodeURIComponent(ApiClient.serverId()) : '';
     }
-    function thumb(it) {
-        var square = it && (it.type === 'Audio' || it.type === 'MusicAlbum' || it.type === 'MusicArtist' || it.type === 'CollectionFolder');
-        var img = it && it.imageItemId ? ApiClient.getUrl('Items/' + it.imageItemId + '/Images/Primary', { maxHeight: 102, quality: 80 }) : '';
-        return '<div class="ij-thumb' + (square ? ' sq' : '') + '"' + (img ? ' style="background-image:url(\'' + img + '\')"' : '') + '></div>';
+    function linked(it, text) {
+        var href = itemLink(it);
+        return href ? '<a href="' + href + '">' + esc(text) + '</a>' : esc(text);
     }
-    /** Title and subtitle of an item, Plex style: the series is the title, season / episode below. */
+    function baseName(path) { return path ? String(path).split(/[\\/]/).pop() : '?'; }
+    function epLabel(it) {
+        return it.seasonNumber !== undefined && it.seasonNumber !== null && it.episodeNumber !== undefined && it.episodeNumber !== null
+            ? t('episode', { s: it.seasonNumber, e: it.episodeNumber }) : '';
+    }
+    /** Title and subtitle, Plex style: for an episode the series is the title, season / episode and name below. */
     function describe(it) {
         if (!it) return { t: '', s: '' };
-        if (it.type === 'Episode') {
-            var ep = it.seasonNumber !== undefined && it.seasonNumber !== null && it.episodeNumber !== undefined && it.episodeNumber !== null
-                ? t('episode', { s: it.seasonNumber, e: it.episodeNumber }) : '';
-            return { t: it.seriesName || it.name, s: [ep, it.seriesName ? it.name : ''].filter(Boolean).join(' · ') };
-        }
+        if (it.type === 'Episode') return { t: it.seriesName || it.name, s: [epLabel(it), it.seriesName ? it.name : ''].filter(Boolean).join(' · ') };
         if (it.type === 'Season') return { t: it.seriesName || it.name, s: it.seasonNumber !== undefined && it.seasonNumber !== null ? t('season_n', { n: it.seasonNumber }) : it.name };
-        return { t: it.name + (it.productionYear && !it.isFolder ? ' (' + it.productionYear + ')' : ''), s: t('kind')[it.type] || '' };
+        return { t: it.name, s: [it.productionYear && !it.isFolder ? it.productionYear : '', t('kind')[it.type] || ''].filter(Boolean).join(' · ') };
     }
-    /** One row: thumbnail, clickable title, what happens to it, elapsed time or progress. */
-    function nowRow(it, fileName, op, startUtc, progress, badge, rightText) {
-        var d = it ? describe(it) : { t: fileName || '?', s: '' };
-        var link = itemLink(it);
-        var title = link ? '<a class="t" href="' + link + '">' + esc(d.t) + '</a>' : '<span class="t">' + esc(d.t) + '</span>';
-        var sub = (badge || '') + [d.s ? esc(d.s) : '', op ? '<span class="op">' + esc(op) + '</span>' : ''].filter(Boolean).join(' · ');
-        var hasProgress = progress !== null && progress !== undefined;
-        var right = rightText || (hasProgress ? fmtPct(progress) : (startUtc ? elapsed(startUtc) : ''));
-        // elapsed time ticks every second in the browser, between two server polls
-        var tick = !rightText && !hasProgress && startUtc ? ' data-start="' + esc(startUtc) + '"' : '';
-        return '<div class="ij-now">' + thumb(it) + '<div class="ij-now-main">' + title
-            + (sub ? '<div class="s">' + sub + '</div>' : '')
-            + (hasProgress ? bar(progress, true) : '')
-            + '</div><div class="ij-now-time"' + tick + (it && it.path ? ' title="' + esc(it.path) + '"' : (fileName ? ' title="' + esc(fileName) + '"' : '')) + '>' + esc(right) + '</div></div>';
-    }
-    function nowList(rows) {
-        if (!rows.length) return '';
-        var shown = rows.slice(0, NOW_LIMIT).join('');
-        return '<div class="ij-now-list">' + shown + (rows.length > NOW_LIMIT ? '<div class="ij-now-more">' + esc(t('more_n', { n: rows.length - NOW_LIMIT })) + '</div>' : '') + '</div>';
-    }
-    /** Sorts the current items into the running tasks (by task id) or 'other'. */
+    /** What is being processed, as entries: { item, fileName, op, startUtc, progress }, sorted into the running tasks. */
     function bucketActivity(data, running) {
         var act = data.activity || {}, buckets = { other: [] };
         function taskFor(keys) {
@@ -461,28 +500,83 @@
             }
             return 'other';
         }
-        function push(id, row) { (buckets[id] = buckets[id] || []).push(row); }
-        (act.refreshing || []).forEach(function (r) {
-            // library roots already have their own scan row
+        function push(id, e) { (buckets[id] = buckets[id] || []).push(e); }
+        // real media first (ffmpeg / ffprobe on a file), then refreshed items, folders last
+        (act.processes || []).forEach(function (p) {
+            push(taskFor(KIND_TASKS[p.kind] || []), { item: p.item, fileName: p.fileName, op: t('op')[p.kind] || p.kind, startUtc: p.startedUtc });
+        });
+        (act.refreshing || []).slice().sort(function (a, b) { return (a.item && a.item.isFolder ? 1 : 0) - (b.item && b.item.isFolder ? 1 : 0); }).forEach(function (r) {
+            // library roots have their own scan row
             if (r.item && r.item.type === 'CollectionFolder') return;
             var folder = r.item && r.item.isFolder;
-            push(taskFor(['RefreshLibrary']), nowRow(r.item, null, t('op')[folder ? 'folder' : 'refresh'], r.startedUtc, folder ? r.progress : null));
-        });
-        (act.processes || []).forEach(function (p) {
-            push(taskFor(KIND_TASKS[p.kind] || []), nowRow(p.item, p.fileName, t('op')[p.kind] || p.kind, p.startedUtc, null));
+            push(taskFor(['RefreshLibrary']), { item: r.item, op: t('op')[folder ? 'folder' : 'refresh'], startUtc: r.startedUtc, progress: folder ? r.progress : null });
         });
         return buckets;
     }
-    function recentFeed(data) {
-        var rec = (data.activity || {}).recent || [];
-        if (!rec.length) return '';
-        var rows = rec.slice(0, 25).map(function (r) {
-            // a removed item has no page any more, so it gets no link
-            var it = r.action === 'Removed' ? Object.assign({}, r.item, { id: null }) : r.item;
-            return nowRow(it, null, '', null, null, '<span class="ij-act ' + esc(r.action) + '">' + esc(t('act')[r.action] || r.action) + '</span>', ago(r.atUtc));
-        });
-        return '<details class="ij-tasks ij-recent"' + (recentOpen ? ' open' : '') + '><summary>' + esc(t('recent', { n: rec.length })) + '</summary>'
-            + '<div class="ij-now-list">' + rows.join('') + '</div></details>';
+    function timeSpan(e) {
+        if (e.progress !== null && e.progress !== undefined) return '<span>' + fmtPct(e.progress) + '</span>';
+        return e.startUtc ? '<span data-start="' + esc(e.startUtc) + '">' + elapsed(e.startUtc) + '</span>' : '<span></span>';
+    }
+    /** Compact card of one item (StreamJelly's small session card). */
+    function itemCard(e, pill) {
+        var it = e.item, d = it ? describe(it) : { t: baseName(e.fileName), s: '' };
+        var cover = '<div class="ij-cover' + (it && SQUARE[it.type] ? ' sq' : '') + '"' + bgStyle(it && img(it.imageItemId, 'Primary', 140)) + '></div>';
+        var hasP = e.progress !== null && e.progress !== undefined;
+        return '<div class="ij-card"' + (it && it.path ? ' title="' + esc(it.path) + '"' : (e.fileName ? ' title="' + esc(e.fileName) + '"' : '')) + '>' + cover
+            + '<div class="ij-card-main"><div class="ij-card-top"><div>'
+            + '<div class="ij-card-title">' + (it ? linked(it, d.t) : esc(d.t)) + '</div>'
+            + (d.s ? '<div class="ij-card-sub">' + esc(d.s) + '</div>' : '')
+            + '</div>' + (pill || '') + '</div>'
+            + (e.op || e.startUtc || e.when ? '<div class="ij-card-op"><span>' + esc(e.op || '') + '</span>' + (e.when ? '<span>' + esc(e.when) + '</span>' : timeSpan(e)) + '</div>' : '')
+            + (hasP ? bar(e.progress, { live: true }) : '')
+            + '</div></div>';
+    }
+    function cardGrid(entries, skip) {
+        var rest = entries.slice(skip || 0);
+        if (!rest.length) return '';
+        var h = '<div class="ij-cards">' + rest.slice(0, CARD_LIMIT).map(function (e) { return itemCard(e); }).join('') + '</div>';
+        if (rest.length > CARD_LIMIT) h += '<div class="ij-more">' + esc(t('more_n', { n: rest.length - CARD_LIMIT })) + '</div>';
+        return h;
+    }
+    /**
+     * A running job, like an expanded StreamJelly session: the item it works on in the hero (backdrop,
+     * poster, clickable title, chips), the job's progress, then the other items it works on in parallel.
+     */
+    function jobCard(kicker, entries, opts) {
+        opts = opts || {};
+        var lead = entries[0], it = lead && lead.item;
+        var h = '<article class="ij-panel">';
+        var p = opts.progress;
+        var hasP = p !== null && p !== undefined;
+        var side = '<div class="ij-side">' + (hasP ? '<div><div class="ij-big">' + fmtPct(p) + '</div></div>' : '')
+            + (opts.pill || '') + '</div>';
+        if (lead) {
+            var d = it ? describe(it) : { t: baseName(lead.fileName), s: lead.fileName && lead.fileName !== baseName(lead.fileName) ? lead.fileName : '' };
+            h += '<div class="ij-hero"><div class="ij-hero-bg"' + bgStyle(heroImage(it)) + '></div>'
+                + '<div class="ij-poster' + (it && SQUARE[it.type] ? ' sq' : '') + '"' + bgStyle(it && img(it.imageItemId, 'Primary', 280)) + '></div>'
+                + '<div class="ij-heading"><div class="ij-kicker">' + esc(kicker) + (opts.note ? ' · ' + esc(opts.note) : '') + '</div>'
+                + '<h3 class="ij-name">' + (it ? linked(it, d.t) : esc(d.t)) + '</h3>'
+                + '<div class="ij-chips">' + (d.s ? '<span class="ij-chip">' + esc(d.s) + '</span>' : '')
+                + '<span class="ij-chip op">' + esc(lead.op) + '</span>'
+                + (lead.progress !== null && lead.progress !== undefined ? '<span class="ij-chip">' + fmtPct(lead.progress) + '</span>'
+                    : (lead.startUtc ? '<span class="ij-chip" data-start="' + esc(lead.startUtc) + '">' + elapsed(lead.startUtc) + '</span>' : ''))
+                + '</div></div>' + side + '</div>';
+        } else {
+            h += '<div class="ij-hero short"><div class="ij-heading"><div class="ij-kicker">' + esc(opts.category || '') + '</div>'
+                + '<h3 class="ij-name">' + esc(kicker) + '</h3>'
+                + (opts.note ? '<div class="ij-chips"><span class="ij-chip">' + esc(opts.note) + '</span></div>' : '') + '</div>' + side + '</div>';
+        }
+        if (opts.showTrack) {
+            h += '<div class="ij-time">' + bar(hasP ? p : 0, { live: hasP, indet: !hasP }) + '<span>' + esc(opts.trackRight || '') + '</span></div>';
+        }
+        if (opts.scans && opts.scans.length) {
+            h += '<div class="ij-scanlist">' + opts.scans.map(function (l) {
+                var sp = l.refreshProgress;
+                return '<div class="ij-scanrow"><span>' + esc(l.name) + '</span>' + bar(sp || 0, { live: true, indet: sp === null || sp === undefined }) + '<span class="p">' + (sp === null || sp === undefined ? esc(t('rstate')[l.refreshStatus] || '') : fmtPct(sp)) + '</span></div>';
+            }).join('') + '</div>';
+        }
+        if (entries.length > 1) h += '<div class="ij-cards-head">' + esc(t('also_running', { n: entries.length - 1 })) + '</div>';
+        return h + cardGrid(entries, 1) + '</article>';
     }
 
     /* ---------- activity ---------- */
@@ -491,114 +585,142 @@
         var running = tasks.filter(function (x) { return x.state !== 'Idle'; });
         var scans = (data.libraries || []).filter(function (l) { return l.refreshStatus && l.refreshStatus !== 'Idle'; });
         var buckets = bucketActivity(data, running);
+        var scanTask = running.filter(function (x) { return x.key === 'RefreshLibrary'; })[0];
         var h = '';
         running.forEach(function (x) {
             var p = x.progress === null || x.progress === undefined ? null : x.progress;
-            h += '<div class="ij-run"><div class="n">' + esc(x.name) + '<small>' + esc(x.category || '') + (x.state === 'Cancelling' ? ' · ' + esc(x.state) : '') + '</small></div>'
-                + bar(p === null ? 0 : p, true) + '<div class="p">' + (p === null ? '…' : fmtPct(p)) + '</div></div>'
-                + nowList(buckets[x.id] || []);
+            var entries = buckets[x.id] || [];
+            h += jobCard(x.name, entries, {
+                progress: p, showTrack: true, category: x.category,
+                note: x.state === 'Cancelling' ? x.state : '',
+                pill: '<span class="ij-pill run">' + esc(t('running')) + '</span>',
+                trackRight: entries.length === 1 ? t('working_one') : (entries.length ? t('working_n', { n: num(entries.length) }) : t('no_current')),
+                scans: x === scanTask ? scans : null
+            });
         });
-        scans.forEach(function (l) {
-            var p = l.refreshProgress;
-            h += '<div class="ij-run"><div class="n">' + esc(t('scanning')) + ': ' + esc(l.name) + '<small>' + esc(t('rstate')[l.refreshStatus] || l.refreshStatus) + '</small></div>'
-                + bar(p || 0, true) + '<div class="p">' + (p === null || p === undefined ? '…' : fmtPct(p)) + '</div></div>';
-        });
+        // a library scanned on its own (from its menu), without the scheduled scan task
+        if (!scanTask) {
+            scans.forEach(function (l) {
+                var sp = l.refreshProgress;
+                h += jobCard(t('scanning') + ': ' + l.name, [], { progress: sp, showTrack: true, category: t('ctype')[l.collectionType] || '', pill: '<span class="ij-pill run">' + esc(t('rstate')[l.refreshStatus] || l.refreshStatus) + '</span>' });
+            });
+        }
         if (buckets.other.length) {
-            h += '<div class="ij-run"><div class="n">' + esc(t('other_activity')) + '<small>' + esc(t('other_note')) + '</small></div><div></div><div class="p"></div></div>' + nowList(buckets.other);
+            h += jobCard(t('other_activity'), buckets.other, { note: t('other_note') });
         }
         if (!h) {
             var scan = tasks.filter(function (x) { return x.key === 'RefreshLibrary'; })[0];
             var res = scan && scan.lastStatus ? (t('res')[scan.lastStatus] || scan.lastStatus) : '';
-            h = '<div class="ij-idle"><b>' + esc(t('idle')) + '</b> '
-                + esc(scan && scan.lastEndUtc ? t('last_scan', { ago: ago(scan.lastEndUtc), res: res }) : t('never_scanned')) + '</div>';
+            h = '<article class="ij-panel"><div class="ij-idle"><div class="ij-idle-dot"></div><div><b>' + esc(t('idle')) + '</b><span>'
+                + esc(scan && scan.lastEndUtc ? t('last_scan', { ago: ago(scan.lastEndUtc), res: res }) : t('never_scanned')) + '</span></div>'
+                + (scan ? '<button type="button" class="ij-pillbtn" data-run="' + esc(scan.id) + '">' + esc(t('scan_all')) + '</button>' : '') + '</div></article>';
+        }
+        return h;
+    }
+    function resultPill(x) {
+        if (x.state !== 'Idle') return '<span class="ij-pill run">' + esc(t('running')) + '</span>';
+        if (!x.lastStatus) return '<span class="ij-pill muted">' + esc(t('never')) + '</span>';
+        var cls = x.lastStatus === 'Completed' ? 'done' : (x.lastStatus === 'Cancelled' ? 'warn' : 'fail');
+        return '<span class="ij-pill ' + cls + '"' + (x.lastError ? ' title="' + esc(x.lastError) + '"' : '') + '>' + esc(t('res')[x.lastStatus] || x.lastStatus) + '</span>';
+    }
+    /** Library tasks and the recently processed items, folded. */
+    function history(data) {
+        var tasks = data.tasks || [];
+        var rec = (data.activity || {}).recent || [];
+        if (!tasks.length && !rec.length) return '';
+        var h = '<article class="ij-panel">';
+        if (rec.length) {
+            h += '<details class="ij-more-d ij-recent"' + (recentOpen ? ' open' : '') + '><summary>' + esc(t('recent', { n: rec.length })) + '</summary><div class="ij-cards">'
+                + rec.slice(0, 24).map(function (r) {
+                    // a removed item has no page any more, so it gets no link
+                    var it = r.action === 'Removed' ? Object.assign({}, r.item, { id: null }) : r.item;
+                    var cls = { Added: 'done', Refreshed: 'run', Removed: 'fail' }[r.action] || 'muted';
+                    return itemCard({ item: it, when: t('ago', { x: ago(r.atUtc) }) }, '<span class="ij-pill ' + cls + '">' + esc(t('act')[r.action] || r.action) + '</span>');
+                }).join('') + '</div></details>';
         }
         if (tasks.length) {
-            h += '<details class="ij-tasks"' + (tasksOpen ? ' open' : '') + '><summary>' + esc(t('library_tasks', { n: tasks.length })) + '</summary>';
+            h += '<details class="ij-more-d ij-tasks"' + (tasksOpen ? ' open' : '') + '><summary>' + esc(t('library_tasks', { n: tasks.length })) + '</summary>';
             tasks.forEach(function (x) {
-                var r = x.state !== 'Idle' ? t('running') : (x.lastEndUtc ? t('ago', { x: ago(x.lastEndUtc) }) + ' · ' + (t('res')[x.lastStatus] || x.lastStatus || '') : t('never'));
-                h += '<div class="ij-task"><div>' + esc(x.name) + '</div><div class="r ' + esc(x.lastStatus || '') + '"' + (x.lastError ? ' title="' + esc(x.lastError) + '"' : '') + '>' + esc(r) + '</div>'
-                    + '<button type="button" class="ij-btn" data-run="' + esc(x.id) + '"' + (x.state !== 'Idle' ? ' disabled' : '') + '>' + esc(t('run')) + '</button></div>';
+                h += '<div class="ij-task"><div>' + esc(x.name) + '</div>'
+                    + '<div class="when">' + (x.state === 'Idle' && x.lastEndUtc ? esc(t('ago', { x: ago(x.lastEndUtc) })) + ' ' : '') + resultPill(x) + '</div>'
+                    + '<button type="button" class="ij-pillbtn" data-run="' + esc(x.id) + '"' + (x.state !== 'Idle' ? ' disabled' : '') + '>' + esc(t('run')) + '</button></div>';
             });
             h += '</details>';
         }
-        return h + recentFeed(data);
+        return h + '</article>';
     }
 
     /* ---------- libraries ---------- */
-    function typeSummary(lib) {
-        var kinds = t('kinds');
-        var order = ['Movie', 'Series', 'Episode', 'MusicAlbum', 'Audio', 'MusicVideo', 'Video'];
-        return order.filter(function (k) { return lib.itemTypes && lib.itemTypes[k]; })
-            .map(function (k) { return num(lib.itemTypes[k]) + ' ' + (kinds[k] || k); }).join(', ');
-    }
     function offReason(lib, c, data) {
         if (c.key === 'trickplay') return !lib.trickplayEnabled ? t('off_lib') : (!data.trickplayAvailable && data.statsComputedAtUtc ? t('off_api') : t('off_plugin'));
         if (c.key === 'chapterImages') return !lib.chapterImagesEnabled ? t('off_lib') : (!data.chaptersAvailable && data.statsComputedAtUtc ? t('off_api') : t('off_plugin'));
         return '';
     }
+    function libStats(lib) {
+        var order = ['Movie', 'Series', 'Episode', 'MusicAlbum', 'Audio', 'MusicVideo', 'Video'];
+        var h = order.filter(function (k) { return lib.itemTypes && lib.itemTypes[k]; }).map(function (k) {
+            return '<div class="ij-stat"><b>' + num(lib.itemTypes[k]) + '</b><span>' + esc(t('kinds')[k] || k) + '</span></div>';
+        }).join('');
+        if (lib.addedLast24h) h += '<div class="ij-stat new"><b>+' + num(lib.addedLast24h) + '</b><span>' + esc(t('new_24h')) + '</span></div>';
+        else if (lib.lastAddedUtc) h += '<div class="ij-stat"><b>' + esc(ago(lib.lastAddedUtc)) + '</b><span>' + esc(t('last_added_label')) + '</span></div>';
+        return h ? '<div class="ij-lib-stats">' + h + '</div>' : '';
+    }
+    /** A library, like an expanded StreamJelly session: hero with the library image, one lane per check, numbers below. */
     function library(lib, data) {
         // trickplay and chapter images only make sense in libraries with videos
         var hasVideo = ['Movie', 'Episode', 'MusicVideo', 'Video'].some(function (k) { return lib.itemTypes && lib.itemTypes[k]; });
         var checks = (lib.checks || []).filter(function (c) { return c.applicable > 0 || (c.disabled && hasVideo); });
-        var p = libPct(lib);
+        var counted = data.statsComputedAtUtc && lib.items;
+        var p = counted ? libPct(lib) : null;
         var scanning = lib.refreshStatus && lib.refreshStatus !== 'Idle';
         var labels = t('check');
-        var h = '<article class="ij-lib">';
-        h += '<div class="ij-lib-head"><div class="ij-lib-bg" style="background-image:url(\'' + ApiClient.getUrl('Items/' + lib.id + '/Images/Primary', { maxWidth: 700, quality: 70 }) + '\')"></div>';
-        h += ring(data.statsComputedAtUtc && lib.items ? p : null);
-        h += '<div class="ij-lib-title"><h3>' + esc(lib.name) + '</h3><div class="meta">'
-            + '<span>' + esc((t('ctype')[lib.collectionType] || lib.collectionType || '')) + '</span>'
-            + (lib.items ? '<span>' + esc(typeSummary(lib) || t('items_n', { n: num(lib.items) })) + '</span>' : '')
-            + (lib.addedLast24h ? '<span class="new">' + esc(t('added_24h', { n: num(lib.addedLast24h) })) + '</span>' : (lib.lastAddedUtc ? '<span>' + esc(t('last_added', { ago: ago(lib.lastAddedUtc) })) + '</span>' : ''))
-            + '</div>';
+        // the type is only shown when it adds something ("Movies" above a library called "Movies" does not)
+        var ctype = t('ctype')[lib.collectionType] || lib.collectionType || '';
+        var h = '<article class="ij-panel">';
+        h += '<div class="ij-hero short"><div class="ij-hero-bg"' + bgStyle(img(lib.id, 'Primary', 900, true)) + '></div>'
+            + '<div class="ij-heading"><div class="ij-kicker">' + esc(ctype && ctype !== lib.name ? ctype : '') + '</div>'
+            + '<h3 class="ij-name">' + esc(lib.name) + '</h3>'
+            + '<div class="ij-chips">' + (lib.items ? '<span class="ij-chip">' + esc(t('items_n', { n: num(lib.items) })) + '</span>' : '') + '</div></div>'
+            + '<div class="ij-side">' + (p !== null ? '<div><div class="ij-big' + (p >= 100 ? ' done' : '') + '">' + fmtPct(p) + '</div><div class="ij-big-note">' + esc(t('tot_indexed')) + '</div></div>' : '')
+            + '<button type="button" class="ij-pillbtn" data-scan="' + esc(lib.id) + '"' + (scanning ? ' disabled' : '') + '>' + esc(scanning ? t('scanning') + '…' : t('scan')) + '</button></div></div>';
         if (scanning) {
-            h += '<div class="ij-lib-scan"><span>' + esc(t('scanning')) + '</span>' + bar(lib.refreshProgress || 0, true) + '<span>' + (lib.refreshProgress === null || lib.refreshProgress === undefined ? '…' : fmtPct(lib.refreshProgress)) + '</span></div>';
+            var sp = lib.refreshProgress;
+            h += '<div class="ij-time"><span>' + esc(t('scanning')) + '</span>' + bar(sp || 0, { live: true, indet: sp === null || sp === undefined }) + '<span>' + (sp === null || sp === undefined ? '…' : fmtPct(sp)) + '</span></div>';
         }
-        h += '</div><button type="button" class="ij-btn" data-scan="' + esc(lib.id) + '"' + (scanning ? ' disabled' : '') + '>' + esc(t('scan')) + '</button></div>';
+        if (!data.statsComputedAtUtc) return h + '<div class="ij-placeholder">' + esc(t('not_counted')) + '</div></article>';
+        if (!lib.items) return h + '<div class="ij-placeholder">' + esc(t('no_items')) + '</div></article>';
 
-        if (!data.statsComputedAtUtc || !lib.checks || !lib.checks.length) {
-            h += '<div class="ij-placeholder">' + esc(data.statsComputedAtUtc ? t('no_items') : t('not_counted')) + '</div>';
-        } else if (!lib.items) {
-            h += '<div class="ij-placeholder">' + esc(t('no_items')) + '</div>';
-        } else {
-            h += '<div class="ij-checks">';
-            checks.forEach(function (c) {
-                var cp = c.disabled ? null : pct(c.done, c.applicable);
-                var miss = c.applicable - c.done;
-                var key = lib.id + '|' + c.key;
-                var lab = labels[c.key] || [c.key, ''];
-                h += '<div class="ij-check' + (c.disabled ? ' off' : '') + '"><div class="ij-check-row">'
-                    + '<div class="k">' + esc(lab[0]) + '<small>' + esc(c.disabled ? offReason(lib, c, data) : lab[1]) + '</small></div>'
-                    + bar(cp)
-                    + '<div class="v">' + (c.disabled ? '<span>–</span>' : '<b>' + fmtPct(cp) + '</b><br><span>' + num(c.done) + ' / ' + num(c.applicable) + '</span>') + '</div></div>';
-                if (!c.disabled && miss > 0) {
-                    h += '<button type="button" class="ij-miss-toggle" data-miss="' + esc(key) + '" aria-expanded="' + (open[key] ? 'true' : 'false') + '">'
-                        + esc(open[key] ? t('hide_missing') : t('missing_n', { n: num(miss) })) + '</button>';
-                    if (open[key]) h += '<div class="ij-missing">' + missingList(key) + '</div>';
-                }
-                h += '</div>';
-            });
-            h += '</div>';
-        }
-        return h + '</article>';
-    }
-    function itemLabel(it) {
-        if (it.type === 'Episode') {
-            var ep = it.seasonNumber !== undefined && it.episodeNumber !== undefined ? t('episode', { s: it.seasonNumber, e: it.episodeNumber }) : '';
-            return [it.seriesName, ep, it.name].filter(Boolean).join(' · ');
-        }
-        return it.name + (it.productionYear ? ' (' + it.productionYear + ')' : '');
+        h += '<div class="ij-lanes">';
+        checks.forEach(function (c) {
+            var cp = c.disabled ? null : pct(c.done, c.applicable);
+            var miss = c.applicable - c.done;
+            var key = lib.id + '|' + c.key;
+            var lab = labels[c.key] || [c.key, ''];
+            var st = c.disabled ? '<span class="ij-pill muted">' + esc(t('off')) + '</span>'
+                : (miss > 0 ? '<button type="button" class="ij-pill warn" data-miss="' + esc(key) + '" aria-expanded="' + (open[key] ? 'true' : 'false') + '">' + esc(t('missing_n', { n: num(miss) })) + '</button>'
+                    : '<span class="ij-pill done">' + esc(t('complete')) + '</span>');
+            h += '<div class="ij-lane' + (c.disabled ? ' off' : '') + '"><div class="ij-lane-row">'
+                + '<div class="k" title="' + esc(lab[1]) + '"><b>' + esc(lab[0]) + '</b>' + (c.disabled ? '<span>' + esc(offReason(lib, c, data)) + '</span>' : '') + '</div>'
+                + bar(cp)
+                + '<div class="v">' + (c.disabled ? '' : '<b>' + fmtPct(cp) + '</b><span>' + num(c.done) + ' / ' + num(c.applicable) + '</span>') + '</div>'
+                + '<div class="st">' + st + '</div></div>'
+                + (open[key] && !c.disabled && miss > 0 ? '<div class="ij-missing">' + missingList(key) + '</div>' : '')
+                + '</div>';
+        });
+        return h + '</div>' + libStats(lib) + '</article>';
     }
     function missingList(key) {
         var m = missing[key];
         if (!m || m.loading) return '<div class="ij-note">' + esc(t('loading')) + '</div>';
         if (m.error) return '<div class="ij-note">' + esc(m.error) + '</div>';
         var d = m.data, showPath = d.items.some(function (i) { return i.path; });
-        var h = '<div class="ij-table-wrap"><table><thead><tr><th>' + esc(t('th_name')) + '</th><th>' + esc(t('th_type')) + '</th><th>' + esc(t('th_added')) + '</th>'
-            + (showPath ? '<th>' + esc(t('th_path')) + '</th>' : '') + '</tr></thead><tbody>';
+        var h = '<div class="ij-table-wrap"><table><thead><tr><th></th><th>' + esc(t('th_name')) + '</th><th>' + esc(t('th_added')) + '</th>'
+            + (showPath ? '<th class="path">' + esc(t('th_path')) + '</th>' : '') + '</tr></thead><tbody>';
         d.items.forEach(function (it) {
-            h += '<tr><td><a href="#/details?id=' + encodeURIComponent(it.id) + '&serverId=' + encodeURIComponent(ApiClient.serverId()) + '">' + esc(itemLabel(it)) + '</a></td>'
-                + '<td>' + esc(t('kind')[it.type] || it.type) + '</td><td>' + esc(shortDate(it.dateCreatedUtc)) + '</td>'
+            var desc = describe(it);
+            h += '<tr><td class="cov"><i' + bgStyle(img(it.id, 'Primary', 80)) + '></i></td>'
+                + '<td>' + linked(it, desc.t) + (desc.s ? '<span class="sub">' + esc(desc.s) + '</span>' : '') + '</td>'
+                + '<td class="when">' + esc(shortDate(it.dateCreatedUtc)) + '</td>'
                 + (showPath ? '<td class="path">' + esc(it.path || '') + '</td>' : '') + '</tr>';
         });
         h += '</tbody></table></div>';
@@ -629,6 +751,7 @@
         page.querySelector('#ijRecount').textContent = data.statsComputing ? t('recounting') : t('recount');
         page.querySelector('#ijError').innerHTML = data.statsError ? '<div class="ij-warn">' + esc(t('stats_error', { e: data.statsError })) + '</div>' : '';
         page.querySelector('#ijActivity').innerHTML = activity(data);
+        page.querySelector('#ijHistory').innerHTML = history(data);
         // The library cards only change with a new count or a scan; rebuilding them on every poll
         // would close hover states and make the images flicker.
         var libs = data.libraries || [];
@@ -736,12 +859,12 @@
     page.querySelector('#ijAuto').addEventListener('change', start);
     page.querySelector('#ijInterval').addEventListener('change', start);
     page.querySelector('#ijActiveInterval').addEventListener('change', start);
-    page.querySelector('#ijActivity').addEventListener('toggle', function (e) {
+    page.querySelector('#ijActSection').addEventListener('toggle', function (e) {
         if (!e.target.classList) return;
         if (e.target.classList.contains('ij-recent')) recentOpen = e.target.open;
         else if (e.target.classList.contains('ij-tasks')) tasksOpen = e.target.open;
     }, true);
-    page.querySelector('#ijActivity').addEventListener('click', function (e) {
+    page.querySelector('#ijActSection').addEventListener('click', function (e) {
         var b = e.target.closest('[data-run]');
         if (!b) return;
         b.disabled = true;
