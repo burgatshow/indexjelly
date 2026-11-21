@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/burgatshow/indexjelly/main/assets/thumb.png",
     "versions": [
       {
+        "version": "0.4.0.0",
+        "changelog": "#### Changed\n- Libraries: an overview row of tiles, one per library, with its image, the indexed percentage, a small bar per check and how many are missing; a running scan shows on the tile. Clicking a tile opens that library below. The selected library is remembered in the browser.\n- The checks of the selected library are cards with an icon, a large percentage, a bar, the counts and a *complete* or *N missing* label, in a grid instead of rows.\n- The missing list opens as a framed panel under the cards, with the check's icon and name, a close button, posters, titles with season / episode, the date added and the file path.\n- Header: IndexJelly logo and icons on the buttons.\n- On a phone: two tiles and two check cards per row, more compact.\n- A job without a matching library item no longer shows an empty poster.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/burgatshow/indexjelly/releases/download/v0.4.0/indexjelly_0.4.0.0.zip",
+        "checksum": "6b44bd843ded03c3635999a678d70ba6",
+        "timestamp": "2026-11-21T20:46:46.0000000Z"
+      },
+      {
         "version": "0.3.0.0",
         "changelog": "#### Changed\n- New look, in line with StreamJelly: Jellyfin blue, quiet colours, large posters and backdrops, chips and pill labels.\n- Every running job is a card like an expanded StreamJelly session: the item it works on in the header (backdrop, poster, clickable title, operation, elapsed time), the job's progress below, then the other items it works on in parallel as small cards. A library scan also lists the libraries being scanned.\n- Library cards: library image in the header with the indexed percentage, one row per check with a *complete* or *N missing* label (click it for the list), and the item counts at the bottom.\n- The missing lists show small posters and the season / episode under the title.\n- Library tasks and *Recently processed* are folded into one panel; task results are coloured labels.\n- On a phone the check rows are compact, and file paths are left out of the missing lists.",
         "targetAbi": "12.4.0.0",
