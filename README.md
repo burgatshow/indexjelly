@@ -18,7 +18,7 @@ The page lives in the Jellyfin dashboard (left menu → *IndexJelly*). Only admi
 
 - **Activity**: running scheduled tasks (library scan, trickplay, chapter images, keyframes…) and per-library scans with live progress. When nothing is running, it shows when the last library scan finished and how. The library tasks can be started from here.
 - **Job details, Plex style**: under every running task, the items it is working on right now: thumbnail, title (click it to open the item's page), the operation (reading media info, generating trickplay images, extracting an image…) and the elapsed time. Folders being scanned (e.g. a series) show their own progress. Work that belongs to no running task, like a manual refresh, shows under *Outside scheduled tasks*. *Recently processed* lists the last items added, refreshed, updated or removed.
-- **Library cards**: an overall indexed percentage (ring), item counts by type, items added in the last 24 hours, a live scan bar, and a *Scan* button for that library.
+- **Library overview**: one tile per library with its image, the indexed percentage, a small bar per check and how many are missing; a scan in progress shows on the tile. Click a tile to open that library below: one card per check (icon, percentage, bar, *complete* or *N missing*), item counts by type, items added in the last 24 hours and a *Scan library* button. The selected library is remembered in the browser.
 - **Checks per library**, each with a progress bar and done / applicable counts:
 
 | Check | Counts | Passes when |
@@ -31,7 +31,7 @@ The page lives in the Jellyfin dashboard (left menu → *IndexJelly*). Only admi
 | Trickplay | videos, if trickplay is on for the library | trickplay images exist |
 | Chapter images | videos with chapters, if chapter image extraction is on for the library | every chapter has an image |
 
-- **Missing lists**: click *N missing* under a check to see the items, with a link to each item, the date it was added and the file path.
+- **Missing lists**: click *N missing* on a check card to see the items, with a poster, a link to each item, the date it was added and the file path.
 - **Buttons**: *Recount* starts a new count. *Scan all libraries* starts a library scan.
 
 ### How counting works
@@ -103,7 +103,7 @@ Az oldal a Jellyfin vezérlőpultján érhető el (bal oldali menü → *IndexJe
 
 - **Folyamatban**: a futó ütemezett feladatok (könyvtárszkennelés, trickplay, fejezetképek, keyframe-ek…) és a könyvtáranként futó szkennelések élő haladással. Ha semmi nem fut, azt látod, mikor és milyen eredménnyel ért véget az utolsó szkennelés. A könyvtári feladatok innen is indíthatók.
 - **Feladat-részletek a Plexhez hasonlóan**: minden futó feladat alatt látszik, mely elemeken dolgozik éppen. Mindegyiknél ott a bélyegkép, a cím (kattintásra az elem adatlapjára visz), a művelet (mediainfó olvasása, trickplay képek készítése, kép kinyerése…) és az eltelt idő. A szkennelt mappák (pl. egy sorozat) saját haladást is mutatnak. Ami nem tartozik futó feladathoz (pl. egy kézi frissítés), az a *Feladaton kívüli munka* alatt jelenik meg. A *Nemrég feldolgozva* listában az utoljára hozzáadott, frissített, módosított vagy törölt elemek látszanak.
-- **Könyvtár-kártyák**: összesített indexeltségi arány (gyűrű), elemszám típusonként, az elmúlt 24 órában hozzáadott elemek, élő szkennelési sáv és *Szkennelés* gomb az adott könyvtárhoz.
+- **Könyvtár-áttekintő**: minden könyvtárnak van egy csempéje a könyvtár képével, az indexeltségi aránnyal, ellenőrzésenként egy kis sávval és a hiányzók számával; a futó szkennelés is látszik rajta. Egy csempére kattintva alatta megnyílik a könyvtár részletes nézete: ellenőrzésenként egy kártya (ikon, arány, sáv, *kész* vagy *N hiányzik*), elemszám típusonként, az elmúlt 24 órában hozzáadott elemek és *Könyvtár szkennelése* gomb. A böngésző megjegyzi, melyik könyvtár volt kiválasztva.
 - **Ellenőrzések könyvtáranként**, mindegyik haladásjelzővel és kész / összes számmal:
 
 | Ellenőrzés | Mire vonatkozik | Mikor teljesül |
@@ -116,7 +116,7 @@ Az oldal a Jellyfin vezérlőpultján érhető el (bal oldali menü → *IndexJe
 | Trickplay | videók, ha a könyvtárban be van kapcsolva | vannak trickplay képek |
 | Fejezetképek | fejezetekkel rendelkező videók, ha a könyvtárban be van kapcsolva | minden fejezetnek van képe |
 
-- **Hiánylisták**: egy ellenőrzés alatt az *N hiányzik* feliratra kattintva megjelennek az érintett elemek: link az elemre, a hozzáadás dátuma és a fájl útvonala.
+- **Hiánylisták**: egy ellenőrzés kártyáján az *N hiányzik* címkére kattintva megjelennek az érintett elemek: poszter, link az elemre, a hozzáadás dátuma és a fájl útvonala.
 - **Gombok**: *Újraszámolás* (új számolást indít) és *Összes könyvtár szkennelése*.
 
 ### Hogyan számol

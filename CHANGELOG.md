@@ -8,6 +8,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 
 ## English
 
+### [0.4.0] – 2026-11-21
+#### Changed
+- Libraries: an overview row of tiles, one per library, with its image, the indexed percentage, a small bar per check and how many are missing; a running scan shows on the tile. Clicking a tile opens that library below. The selected library is remembered in the browser.
+- The checks of the selected library are cards with an icon, a large percentage, a bar, the counts and a *complete* or *N missing* label, in a grid instead of rows.
+- The missing list opens as a framed panel under the cards, with the check's icon and name, a close button, posters, titles with season / episode, the date added and the file path.
+- Header: IndexJelly logo and icons on the buttons.
+- On a phone: two tiles and two check cards per row, more compact.
+- A job without a matching library item no longer shows an empty poster.
+
 ### [0.3.0] – 2026-11-10
 #### Changed
 - New look, in line with StreamJelly: Jellyfin blue, quiet colours, large posters and backdrops, chips and pill labels.
@@ -48,6 +57,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 ---
 
 ## Magyar
+
+### [0.4.0] – 2026-11-21
+#### Változott
+- Könyvtárak: felül egy csempesor, könyvtáranként egy csempe a könyvtár képével, az indexeltségi aránnyal, ellenőrzésenként egy kis sávval és a hiányzók számával; a futó szkennelés is látszik rajta. Egy csempére kattintva alatta megnyílik a könyvtár. A böngésző megjegyzi, melyik könyvtár volt kiválasztva.
+- A kiválasztott könyvtár ellenőrzései kártyák rácsban, sorok helyett: ikon, nagy százalék, sáv, számok és *kész* vagy *N hiányzik* címke.
+- A hiánylista keretes panelként nyílik a kártyák alatt: az ellenőrzés ikonja és neve, bezárás gomb, poszterek, címek évaddal és résszel, a hozzáadás dátuma és a fájl útvonala.
+- Fejléc: IndexJelly logó és ikonok a gombokon.
+- Telefonon: soronként két csempe és két kártya, tömörebben.
+- Ha egy feladathoz nem tartozik könyvtárelem, nem jelenik meg üres poszter.
 
 ### [0.3.0] – 2026-11-10
 #### Változott

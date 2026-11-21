@@ -29,6 +29,10 @@
 /* ---------- top bar (as in StreamJelly) ---------- */
 #IndexJellyPage .ij-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.2em 2.5em; margin-bottom: 2em; }
 #IndexJellyPage .ij-bar h1 { font-size: 1.9em; font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.1; }
+#IndexJellyPage .ij-brand { display: flex; align-items: center; gap: .85em; }
+#IndexJellyPage .ij-logo { width: 46px; height: 46px; flex: none; filter: drop-shadow(0 4px 12px rgba(46,196,196,.25)); }
+#IndexJellyPage .ij-btn { display: inline-flex; align-items: center; gap: .45em; }
+#IndexJellyPage .ij-btn svg { width: 15px; height: 15px; flex: none; }
 #IndexJellyPage .ij-sub { color: var(--ij-muted); font-size: .9em; margin-top: .35em; }
 #IndexJellyPage .ij-sub .busy { color: var(--ij-op); }
 #IndexJellyPage .ij-totals { display: flex; gap: 2.2em; margin-left: auto; }
@@ -134,19 +138,73 @@
 #IndexJellyPage .ij-task .when { color: var(--ij-muted); font-size: .9em; text-align: right; }
 #IndexJellyPage details.ij-more-d .ij-cards { padding-top: .2em; }
 
-/* ---------- libraries ---------- */
-#IndexJellyPage .ij-libs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(560px, 100%), 1fr)); gap: 1.1em; align-items: start; }
-#IndexJellyPage .ij-lanes { padding: .2em 1.6em 1.2em; }
-#IndexJellyPage .ij-lane { border-top: 1px solid var(--ij-faint); }
-#IndexJellyPage .ij-lane:first-child { border-top: 0; }
-#IndexJellyPage .ij-lane-row { display: grid; grid-template-columns: minmax(9em, 1.1fr) minmax(70px, 1.3fr) 6.2em 7.4em; gap: 1em; align-items: center; padding: .7em 0; }
-#IndexJellyPage .ij-lane .k b { display: block; font-weight: 600; font-size: .95em; }
-#IndexJellyPage .ij-lane .k span { color: var(--ij-muted); font-size: .78em; }
-#IndexJellyPage .ij-lane .v { text-align: right; }
-#IndexJellyPage .ij-lane .v b { display: block; font-weight: 650; }
-#IndexJellyPage .ij-lane .v span { color: var(--ij-muted); font-size: .76em; }
-#IndexJellyPage .ij-lane .st { text-align: right; }
-#IndexJellyPage .ij-lane.off .k, #IndexJellyPage .ij-lane.off .ij-track, #IndexJellyPage .ij-lane.off .v { opacity: .45; }
+/* ---------- libraries: overview tiles ---------- */
+#IndexJellyPage .ij-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: .9em; margin-bottom: 1.1em; }
+#IndexJellyPage .ij-tile { position: relative; display: flex; flex-direction: column; gap: .9em; min-height: 168px; padding: 1.1em 1.2em 1em; border-radius: 16px; border: 1px solid var(--ij-line); background: var(--ij-surface); color: inherit; font: inherit; text-align: left; cursor: pointer; overflow: hidden; isolation: isolate; transition: border-color .15s, transform .15s; }
+#IndexJellyPage .ij-tile:hover { border-color: rgba(255,255,255,.22); transform: translateY(-1px); }
+#IndexJellyPage .ij-tile.sel { border-color: var(--ij-brand); box-shadow: 0 0 0 1px var(--ij-brand), 0 10px 30px rgba(0,164,220,.12); }
+#IndexJellyPage .ij-tile-bg { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center; opacity: .32; transition: opacity .2s; }
+#IndexJellyPage .ij-tile:hover .ij-tile-bg, #IndexJellyPage .ij-tile.sel .ij-tile-bg { opacity: .45; }
+#IndexJellyPage .ij-tile-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,18,22,.35) 0%, rgba(16,18,22,.92) 75%); }
+#IndexJellyPage .ij-tile-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .8em; }
+#IndexJellyPage .ij-tile-kicker { color: var(--ij-muted); font-size: .8em; }
+#IndexJellyPage .ij-tile-name { font-size: 1.15em; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+#IndexJellyPage .ij-tile-pct { font-size: 1.9em; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+#IndexJellyPage .ij-tile-pct.done { color: var(--ij-done); }
+#IndexJellyPage .ij-tile-foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: .8em; }
+#IndexJellyPage .ij-tile-sum { font-size: .8em; color: var(--ij-muted); }
+#IndexJellyPage .ij-tile-sum b { font-weight: 650; }
+#IndexJellyPage .ij-tile-sum .warn { color: var(--ij-warn); }
+#IndexJellyPage .ij-tile-sum .done { color: var(--ij-done); }
+/* one small bar per check, like an equalizer */
+#IndexJellyPage .ij-eq { display: flex; gap: 4px; align-items: flex-end; height: 30px; }
+#IndexJellyPage .ij-eq i { position: relative; width: 7px; height: 100%; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
+#IndexJellyPage .ij-eq i b { position: absolute; inset: auto 0 0 0; border-radius: 3px; background: var(--ij-brand); }
+#IndexJellyPage .ij-eq i.done b { background: var(--ij-done); }
+#IndexJellyPage .ij-tile-scan { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; }
+#IndexJellyPage .ij-tile-scan .ij-track { height: 3px; border-radius: 0; }
+
+/* ---------- libraries: detail of the selected one ---------- */
+#IndexJellyPage .ij-detail-head { display: flex; flex-wrap: wrap; align-items: center; gap: .8em 1.4em; padding: 1.3em 1.6em; border-bottom: 1px solid var(--ij-line); }
+#IndexJellyPage .ij-detail-head h3 { margin: 0; font-size: 1.3em; font-weight: 700; }
+#IndexJellyPage .ij-detail-head .ij-chips { flex: 1; }
+#IndexJellyPage .ij-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: .8em; padding: 1.2em 1.6em 1.4em; }
+#IndexJellyPage .ij-check { display: flex; flex-direction: column; gap: .7em; padding: 1em 1.05em .95em; border-radius: 14px; background: rgba(255,255,255,.03); border: 1px solid var(--ij-faint); transition: border-color .15s, background .15s; }
+#IndexJellyPage .ij-check.sel { border-color: var(--ij-warn); background: rgba(255,178,63,.05); }
+#IndexJellyPage .ij-check.off { opacity: .5; }
+#IndexJellyPage .ij-check-top { display: flex; gap: .8em; align-items: center; justify-content: space-between; }
+#IndexJellyPage .ij-ico { width: 36px; height: 36px; flex: none; border-radius: 10px; display: grid; place-items: center; background: rgba(0,164,220,.12); color: var(--ij-op); }
+#IndexJellyPage .ij-check.complete .ij-ico { background: rgba(63,214,143,.12); color: var(--ij-done); }
+#IndexJellyPage .ij-check.off .ij-ico { background: rgba(255,255,255,.06); color: var(--ij-muted); }
+#IndexJellyPage .ij-ico svg { width: 19px; height: 19px; }
+#IndexJellyPage .ij-check-name { min-width: 0; margin-top: -.15em; }
+#IndexJellyPage .ij-check-name b { display: block; font-weight: 650; font-size: .95em; line-height: 1.25; }
+#IndexJellyPage .ij-check-name span { color: var(--ij-muted); font-size: .76em; }
+#IndexJellyPage .ij-check-pct { font-size: 1.55em; font-weight: 700; letter-spacing: -.01em; line-height: 1.1; white-space: nowrap; }
+#IndexJellyPage .ij-check.complete .ij-check-pct { color: var(--ij-done); }
+#IndexJellyPage .ij-check .ij-track { flex: none; }
+#IndexJellyPage .ij-check-foot { display: flex; justify-content: space-between; align-items: center; gap: .6em; font-size: .8em; color: var(--ij-muted); min-height: 1.9em; }
+#IndexJellyPage .ij-check-foot .ij-pill { font-size: .92em; }
+
+/* missing list of the selected check */
+#IndexJellyPage .ij-missing { margin: 0 1.6em 1.6em; border-radius: 14px; border: 1px solid rgba(255,178,63,.35); background: rgba(0,0,0,.18); overflow: hidden; }
+#IndexJellyPage .ij-missing-head { display: flex; align-items: center; gap: .8em; padding: .9em 1.1em; border-bottom: 1px solid var(--ij-faint); }
+#IndexJellyPage .ij-missing-head .ij-ico { width: 30px; height: 30px; border-radius: 8px; background: rgba(255,178,63,.12); color: var(--ij-warn); }
+#IndexJellyPage .ij-missing-head .ij-ico svg { width: 16px; height: 16px; }
+#IndexJellyPage .ij-missing-head b { flex: 1; font-weight: 650; }
+#IndexJellyPage .ij-missing-head b span { color: var(--ij-muted); font-weight: 400; font-size: .85em; margin-left: .4em; }
+#IndexJellyPage .ij-x { background: none; border: 0; color: var(--ij-muted); width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 1.2em; line-height: 1; }
+#IndexJellyPage .ij-x:hover { background: rgba(255,255,255,.08); color: var(--ij-text); }
+#IndexJellyPage .ij-mlist { max-height: 460px; overflow: auto; }
+#IndexJellyPage .ij-mrow { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: .9em; align-items: center; padding: .5em 1.1em; border-bottom: 1px solid var(--ij-faint); }
+#IndexJellyPage .ij-mrow:last-child { border-bottom: 0; }
+#IndexJellyPage .ij-mrow:hover { background: rgba(255,255,255,.03); }
+#IndexJellyPage .ij-mrow i { width: 30px; aspect-ratio: 2/3; border-radius: 4px; background: var(--ij-faint) center/cover; }
+#IndexJellyPage .ij-mrow .t { font-size: .9em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#IndexJellyPage .ij-mrow .s { color: var(--ij-muted); font-size: .78em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#IndexJellyPage .ij-mrow .s.path { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .72em; opacity: .8; }
+#IndexJellyPage .ij-mrow .when { color: var(--ij-muted); font-size: .78em; white-space: nowrap; }
+#IndexJellyPage .ij-note { color: var(--ij-muted); font-size: .8em; padding: .7em 1.1em; }
 #IndexJellyPage .ij-lib-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); border-top: 1px solid var(--ij-line); }
 #IndexJellyPage .ij-stat { padding: .9em 1.6em; border-right: 1px solid var(--ij-faint); }
 #IndexJellyPage .ij-stat:last-child { border-right: 0; }
@@ -154,19 +212,6 @@
 #IndexJellyPage .ij-stat span { font-size: .78em; color: var(--ij-muted); }
 #IndexJellyPage .ij-stat.new b { color: var(--ij-done); }
 #IndexJellyPage .ij-placeholder { padding: 1.2em 1.6em 1.4em; color: var(--ij-muted); font-size: .9em; }
-
-/* missing list */
-#IndexJellyPage .ij-missing { padding: 0 0 1em; }
-#IndexJellyPage .ij-table-wrap { overflow: auto; max-height: 440px; border-radius: 10px; background: rgba(0,0,0,.22); }
-#IndexJellyPage table { width: 100%; border-collapse: collapse; font-size: .85em; }
-#IndexJellyPage th { position: sticky; top: 0; z-index: 1; background: #1b1e23; text-align: left; font-weight: 600; color: var(--ij-muted); padding: .5em .8em; border-bottom: 1px solid var(--ij-line); }
-#IndexJellyPage td { padding: .45em .8em; border-bottom: 1px solid var(--ij-faint); vertical-align: middle; }
-#IndexJellyPage td.cov { width: 1%; padding-right: 0; }
-#IndexJellyPage td.cov i { display: block; width: 26px; aspect-ratio: 2/3; border-radius: 4px; background: var(--ij-faint) center/cover; }
-#IndexJellyPage td .sub { display: block; color: var(--ij-muted); font-size: .9em; }
-#IndexJellyPage td.path { color: var(--ij-muted); word-break: break-all; font-size: .9em; }
-#IndexJellyPage td.when { color: var(--ij-muted); white-space: nowrap; }
-#IndexJellyPage .ij-note { color: var(--ij-muted); font-size: .8em; padding-top: .55em; }
 
 #IndexJellyPage .ij-empty { text-align: center; padding: 5em 1em; color: var(--ij-muted); }
 #IndexJellyPage .ij-empty b { display: block; color: var(--ij-text); font-size: 1.2em; margin-bottom: .4em; }
@@ -181,21 +226,31 @@
     #IndexJellyPage .ij-poster { width: 64px; }
     #IndexJellyPage .ij-heading { flex-basis: calc(100% - 64px - 1em); }
     #IndexJellyPage .ij-side { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; text-align: left; }
-    #IndexJellyPage .ij-time, #IndexJellyPage .ij-cards, #IndexJellyPage .ij-lanes, #IndexJellyPage .ij-scanlist, #IndexJellyPage .ij-idle, #IndexJellyPage .ij-more { padding-left: 1.2em; padding-right: 1.2em; }
-    #IndexJellyPage .ij-lane-row { grid-template-columns: 1fr auto; gap: .45em 1em; }
-    #IndexJellyPage .ij-lane-row .ij-track { grid-column: 1 / -1; grid-row: 2; }
-    #IndexJellyPage .ij-lane-row .st { grid-column: 1 / -1; grid-row: 3; text-align: left; }
+    #IndexJellyPage .ij-time, #IndexJellyPage .ij-cards, #IndexJellyPage .ij-scanlist, #IndexJellyPage .ij-idle, #IndexJellyPage .ij-more { padding-left: 1.2em; padding-right: 1.2em; }
     #IndexJellyPage .ij-scanrow { grid-template-columns: 1fr 3.5em; }
     #IndexJellyPage .ij-scanrow .ij-track { grid-column: 1 / -1; grid-row: 2; }
     #IndexJellyPage .ij-task { grid-template-columns: 1fr auto; padding-left: 1.2em; padding-right: 1.2em; }
     #IndexJellyPage .ij-task .when { grid-column: 1; text-align: left; }
     #IndexJellyPage .ij-stat { padding: .8em 1.2em; }
-    #IndexJellyPage .ij-lane-row { grid-template-columns: 1fr auto auto; }
-    #IndexJellyPage .ij-lane-row .st { grid-column: auto; grid-row: auto; text-align: right; }
-    #IndexJellyPage .ij-lane-row .st .ij-pill.done { display: none; }
-    #IndexJellyPage .ij-lane .v { display: flex; gap: .5em; align-items: baseline; }
-    #IndexJellyPage .ij-lane .v span { display: none; }
-    #IndexJellyPage th.path, #IndexJellyPage td.path { display: none; }
+    #IndexJellyPage .ij-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6em; }
+    #IndexJellyPage .ij-tile { min-height: 140px; padding: .9em; }
+    #IndexJellyPage .ij-tile-pct { font-size: 1.4em; }
+    #IndexJellyPage .ij-tile-top { flex-direction: column-reverse; gap: .4em; }
+    #IndexJellyPage .ij-eq { height: 22px; gap: 3px; }
+    #IndexJellyPage .ij-eq i { width: 5px; }
+    #IndexJellyPage .ij-detail-head, #IndexJellyPage .ij-checks { padding-left: 1.2em; padding-right: 1.2em; }
+    #IndexJellyPage .ij-missing { margin-left: 1.2em; margin-right: 1.2em; }
+    #IndexJellyPage .ij-mrow .s.path { display: none; }
+    #IndexJellyPage .ij-checks { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6em; }
+    #IndexJellyPage .ij-check { padding: .8em; gap: .55em; }
+    #IndexJellyPage .ij-check .ij-ico { width: 30px; height: 30px; border-radius: 8px; }
+    #IndexJellyPage .ij-check .ij-ico svg { width: 16px; height: 16px; }
+    #IndexJellyPage .ij-check-pct { font-size: 1.2em; }
+    #IndexJellyPage .ij-check-name b { font-size: .88em; }
+    #IndexJellyPage .ij-check-name span, #IndexJellyPage .ij-check-foot > span:first-child { display: none; }
+    #IndexJellyPage .ij-check.off .ij-check-foot > span:first-child { display: inline; }
+    #IndexJellyPage .ij-check-foot { justify-content: flex-start; }
+    #IndexJellyPage .ij-logo { width: 38px; height: 38px; }
 }
 </style>
 
@@ -203,15 +258,27 @@
 <div class="content-primary ij">
 
     <header class="ij-bar">
-        <div>
-            <h1>IndexJelly</h1>
-            <div class="ij-sub" id="ijStatus" data-i18n="loading">Loading…</div>
+        <div class="ij-brand">
+            <svg class="ij-logo" viewBox="0 0 512 512" aria-hidden="true">
+                <defs><radialGradient id="ijDome" cx="38%" cy="28%" r="78%"><stop offset="0" stop-color="#e2fffb"/><stop offset=".38" stop-color="#7fe6dc"/><stop offset=".78" stop-color="#2ec4c4"/><stop offset="1" stop-color="#1f8fb0"/></radialGradient></defs>
+                <g fill="none" stroke-linecap="round" stroke-width="30">
+                    <path stroke="#ffffff" stroke-opacity=".14" d="M196 290 V480M256 296 V490M316 290 V480"/>
+                    <path stroke="#3fd68f" d="M196 290 V480"/><path stroke="#5aa9ff" d="M256 296 V420"/><path stroke="#ffb23f" d="M316 290 V350"/>
+                </g>
+                <path fill="url(#ijDome)" d="M88 252C88 140 164 64 256 64s168 76 168 188c0 22-20 30-38 22-22-10-40 12-64 6-22-6-40 16-66 10-26 6-44-16-66-10-24 6-42-16-64-6-18 8-38 0-38-22z"/>
+                <g fill="#123a4a"><ellipse cx="214" cy="190" rx="16" ry="19"/><ellipse cx="298" cy="190" rx="16" ry="19"/></g>
+                <path d="M240 232q16 14 32 0" fill="none" stroke="#123a4a" stroke-width="9" stroke-linecap="round"/>
+            </svg>
+            <div>
+                <h1>IndexJelly</h1>
+                <div class="ij-sub" id="ijStatus" data-i18n="loading">Loading…</div>
+            </div>
         </div>
         <div class="ij-totals" id="ijTotals"></div>
         <div class="ij-actions">
-            <button type="button" class="ij-btn" id="ijRecount" data-i18n="recount">Recount</button>
-            <button type="button" class="ij-btn" id="ijScanAll" data-i18n="scan_all">Scan all libraries</button>
-            <button type="button" class="ij-btn" id="ijGear" aria-expanded="false" aria-controls="ijSettings" data-i18n="settings">Settings</button>
+            <button type="button" class="ij-btn" id="ijRecount"><span data-icon="recount"></span><span id="ijRecountLabel" data-i18n="recount">Recount</span></button>
+            <button type="button" class="ij-btn" id="ijScanAll"><span data-icon="scan"></span><span id="ijScanAllLabel" data-i18n="scan_all">Scan all libraries</span></button>
+            <button type="button" class="ij-btn" id="ijGear" aria-expanded="false" aria-controls="ijSettings"><span data-icon="gear"></span><span data-i18n="settings">Settings</span></button>
         </div>
     </header>
 
@@ -239,7 +306,7 @@
 
     <section class="ij-section">
         <h2><span data-i18n="libraries">Libraries</span></h2>
-        <div class="ij-libs" id="ijLibs"></div>
+        <div id="ijLibs"></div>
     </section>
 </div>
 </div>
@@ -250,7 +317,9 @@
     var page = document.getElementById('IndexJellyPage');
     var timer = null;
     var last = null;
-    var open = {};        // 'libId|check' -> true
+    // selected library (remembered in the browser) and the check whose missing list is open
+    var selLib = (function () { try { return localStorage.getItem('indexjelly.lib'); } catch (e) { return null; } })();
+    var selCheck = null;
     var missing = {};     // 'libId|check' -> { loading, data, error, statsAt }
     var tasksOpen = false;
     var recentOpen = false;
@@ -295,7 +364,7 @@
             },
             act: { Added: 'added', Refreshed: 'refreshed', Updated: 'updated', Removed: 'removed' },
             also_running: 'Also in progress ({n})', working_n: 'working on {n} items', working_one: 'working on 1 item', no_current: 'Jellyfin does not tell which item it is on',
-            complete: 'complete', off: 'off', new_24h: 'new in 24 h', last_added_label: 'last addition',
+            complete: 'complete', off: 'off', all_done: 'all indexed', scan_this: 'Scan library', missing_title: '{check}: missing', new_24h: 'new in 24 h', last_added_label: 'last addition',
             check: {
                 refreshed: ['Metadata refresh', 'went through a refresh at least once'],
                 mediaInfo: ['Media info', 'ffprobe: streams, codecs, run time'],
@@ -340,7 +409,7 @@
             },
             act: { Added: 'új', Refreshed: 'frissítve', Updated: 'módosítva', Removed: 'törölve' },
             also_running: 'Párhuzamosan ({n})', working_n: '{n} elem feldolgozása', working_one: '1 elem feldolgozása', no_current: 'a Jellyfin nem jelzi, melyik elemnél tart',
-            complete: 'kész', off: 'ki', new_24h: 'új 24 órán belül', last_added_label: 'legutóbbi bővülés',
+            complete: 'kész', off: 'ki', all_done: 'minden indexelve', scan_this: 'Könyvtár szkennelése', missing_title: '{check}: hiányzik', new_24h: 'új 24 órán belül', last_added_label: 'legutóbbi bővülés',
             check: {
                 refreshed: ['Metaadat-frissítés', 'legalább egyszer frissült'],
                 mediaInfo: ['Mediainfó', 'ffprobe: stream-ek, kodekek, hossz'],
@@ -553,7 +622,7 @@
         if (lead) {
             var d = it ? describe(it) : { t: baseName(lead.fileName), s: lead.fileName && lead.fileName !== baseName(lead.fileName) ? lead.fileName : '' };
             h += '<div class="ij-hero"><div class="ij-hero-bg"' + bgStyle(heroImage(it)) + '></div>'
-                + '<div class="ij-poster' + (it && SQUARE[it.type] ? ' sq' : '') + '"' + bgStyle(it && img(it.imageItemId, 'Primary', 280)) + '></div>'
+                + (it ? '<div class="ij-poster' + (SQUARE[it.type] ? ' sq' : '') + '"' + bgStyle(img(it.imageItemId, 'Primary', 280)) + '></div>' : '')
                 + '<div class="ij-heading"><div class="ij-kicker">' + esc(kicker) + (opts.note ? ' · ' + esc(opts.note) : '') + '</div>'
                 + '<h3 class="ij-name">' + (it ? linked(it, d.t) : esc(d.t)) + '</h3>'
                 + '<div class="ij-chips">' + (d.s ? '<span class="ij-chip">' + esc(d.s) + '</span>' : '')
@@ -650,11 +719,71 @@
         return h + '</article>';
     }
 
+    /* ---------- icons (inline, stroke = currentColor) ---------- */
+    var ICON_PATHS = {
+        refreshed: '<path d="M20 11a8 8 0 1 0-2.34 5.66"/><path d="M20 4v7h-7"/>',
+        mediaInfo: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/>',
+        primaryImage: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9.5" r="1.8"/><path d="m21 16-5-5-8 9"/>',
+        overview: '<path d="M5 6h14M5 10h14M5 14h14M5 18h8"/>',
+        providerIds: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.4"/>',
+        trickplay: '<rect x="2.5" y="5" width="6" height="5" rx="1"/><rect x="9.5" y="5" width="6" height="5" rx="1"/><rect x="16.5" y="5" width="5" height="5" rx="1"/><rect x="2.5" y="13" width="6" height="5" rx="1"/><rect x="9.5" y="13" width="6" height="5" rx="1"/><path d="M16.5 15.5h5"/>',
+        chapterImages: '<path d="M7 3h10v18l-5-4-5 4z"/>',
+        recount: '<path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/>',
+        scan: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
+        gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>'
+    };
+    function icon(name) {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICON_PATHS[name] || '') + '</svg>';
+    }
+
     /* ---------- libraries ---------- */
     function offReason(lib, c, data) {
         if (c.key === 'trickplay') return !lib.trickplayEnabled ? t('off_lib') : (!data.trickplayAvailable && data.statsComputedAtUtc ? t('off_api') : t('off_plugin'));
         if (c.key === 'chapterImages') return !lib.chapterImagesEnabled ? t('off_lib') : (!data.chaptersAvailable && data.statsComputedAtUtc ? t('off_api') : t('off_plugin'));
         return '';
+    }
+    /** The checks shown for a library: trickplay and chapter images only make sense where there are videos. */
+    function shownChecks(lib) {
+        var hasVideo = ['Movie', 'Episode', 'MusicVideo', 'Video'].some(function (k) { return lib.itemTypes && lib.itemTypes[k]; });
+        return (lib.checks || []).filter(function (c) { return c.applicable > 0 || (c.disabled && hasVideo); });
+    }
+    function missingTotal(lib) {
+        return activeChecks(lib).reduce(function (s, c) { return s + c.applicable - c.done; }, 0);
+    }
+    function isScanning(lib) { return lib.refreshStatus && lib.refreshStatus !== 'Idle'; }
+    function libType(lib) {
+        var ctype = t('ctype')[lib.collectionType] || lib.collectionType || '';
+        // "Movies" above a library called "Movies" says nothing
+        return ctype && ctype !== lib.name ? ctype : '';
+    }
+    function selectedLib(data) {
+        var libs = data.libraries || [];
+        return libs.filter(function (l) { return l.id === selLib; })[0] || libs[0];
+    }
+
+    /** Overview tile: library image, indexed percentage, one small bar per check, what is left. */
+    function tile(lib, data, selected) {
+        var counted = data.statsComputedAtUtc && lib.items;
+        var p = counted ? libPct(lib) : null;
+        var miss = counted ? missingTotal(lib) : 0;
+        var labels = t('check');
+        var eq = counted ? activeChecks(lib).map(function (c) {
+            var cp = pct(c.done, c.applicable);
+            return '<i class="' + (cp >= 100 ? 'done' : '') + '" title="' + esc((labels[c.key] || [c.key])[0] + ': ' + fmtPct(cp)) + '"><b style="height:' + Math.max(cp, 4).toFixed(1) + '%"></b></i>';
+        }).join('') : '';
+        var sum = !data.statsComputedAtUtc ? esc(t('not_counted'))
+            : (!lib.items ? esc(t('no_items'))
+                : (miss ? '<b class="warn">' + esc(t('missing_n', { n: num(miss) })) + '</b>' : '<b class="done">' + esc(t('all_done')) + '</b>'));
+        var sp = lib.refreshProgress;
+        return '<button type="button" class="ij-tile' + (selected ? ' sel' : '') + '" data-lib="' + esc(lib.id) + '" aria-pressed="' + (selected ? 'true' : 'false') + '">'
+            + '<div class="ij-tile-bg"' + bgStyle(img(lib.id, 'Primary', 700, true)) + '></div>'
+            + '<div class="ij-tile-top"><div><div class="ij-tile-kicker">' + esc(libType(lib) || ' ') + '</div><div class="ij-tile-name">' + esc(lib.name) + '</div></div>'
+            + (p !== null ? '<div class="ij-tile-pct' + (p >= 100 ? ' done' : '') + '">' + fmtPct(p) + '</div>' : '') + '</div>'
+            + '<div class="ij-tile-foot"><div class="ij-tile-sum">' + (isScanning(lib) ? '<span style="color:var(--ij-op)">' + esc(t('scanning')) + (sp !== null && sp !== undefined ? ' ' + fmtPct(sp) : '…') + '</span><br>' : '')
+            + esc(lib.items ? t('items_n', { n: num(lib.items) }) : '') + (lib.items ? '<br>' : '') + sum + '</div>'
+            + '<div class="ij-eq">' + eq + '</div></div>'
+            + (isScanning(lib) ? '<div class="ij-tile-scan">' + bar(sp || 0, { live: true, indet: sp === null || sp === undefined }) + '</div>' : '')
+            + '</button>';
     }
     function libStats(lib) {
         var order = ['Movie', 'Series', 'Episode', 'MusicAlbum', 'Audio', 'MusicVideo', 'Video'];
@@ -665,68 +794,69 @@
         else if (lib.lastAddedUtc) h += '<div class="ij-stat"><b>' + esc(ago(lib.lastAddedUtc)) + '</b><span>' + esc(t('last_added_label')) + '</span></div>';
         return h ? '<div class="ij-lib-stats">' + h + '</div>' : '';
     }
-    /** A library, like an expanded StreamJelly session: hero with the library image, one lane per check, numbers below. */
-    function library(lib, data) {
-        // trickplay and chapter images only make sense in libraries with videos
-        var hasVideo = ['Movie', 'Episode', 'MusicVideo', 'Video'].some(function (k) { return lib.itemTypes && lib.itemTypes[k]; });
-        var checks = (lib.checks || []).filter(function (c) { return c.applicable > 0 || (c.disabled && hasVideo); });
-        var counted = data.statsComputedAtUtc && lib.items;
-        var p = counted ? libPct(lib) : null;
-        var scanning = lib.refreshStatus && lib.refreshStatus !== 'Idle';
-        var labels = t('check');
-        // the type is only shown when it adds something ("Movies" above a library called "Movies" does not)
-        var ctype = t('ctype')[lib.collectionType] || lib.collectionType || '';
-        var h = '<article class="ij-panel">';
-        h += '<div class="ij-hero short"><div class="ij-hero-bg"' + bgStyle(img(lib.id, 'Primary', 900, true)) + '></div>'
-            + '<div class="ij-heading"><div class="ij-kicker">' + esc(ctype && ctype !== lib.name ? ctype : '') + '</div>'
-            + '<h3 class="ij-name">' + esc(lib.name) + '</h3>'
-            + '<div class="ij-chips">' + (lib.items ? '<span class="ij-chip">' + esc(t('items_n', { n: num(lib.items) })) + '</span>' : '') + '</div></div>'
-            + '<div class="ij-side">' + (p !== null ? '<div><div class="ij-big' + (p >= 100 ? ' done' : '') + '">' + fmtPct(p) + '</div><div class="ij-big-note">' + esc(t('tot_indexed')) + '</div></div>' : '')
-            + '<button type="button" class="ij-pillbtn" data-scan="' + esc(lib.id) + '"' + (scanning ? ' disabled' : '') + '>' + esc(scanning ? t('scanning') + '…' : t('scan')) + '</button></div></div>';
+    /** One check as a card: icon, name, percentage, bar, counts and a "N missing" button. */
+    function checkCard(lib, c, data) {
+        var cp = c.disabled ? null : pct(c.done, c.applicable);
+        var miss = c.applicable - c.done;
+        var lab = t('check')[c.key] || [c.key, ''];
+        var selected = selCheck === c.key && !c.disabled && miss > 0;
+        var cls = 'ij-check' + (c.disabled ? ' off' : '') + (cp >= 100 ? ' complete' : '') + (selected ? ' sel' : '');
+        var foot = c.disabled ? '<span>' + esc(offReason(lib, c, data)) + '</span>'
+            : '<span>' + num(c.done) + ' / ' + num(c.applicable) + '</span>'
+              + (miss > 0 ? '<button type="button" class="ij-pill warn" data-miss="' + esc(c.key) + '" aria-expanded="' + (selected ? 'true' : 'false') + '">' + esc(t('missing_n', { n: num(miss) })) + '</button>'
+                  : '<span class="ij-pill done">' + esc(t('complete')) + '</span>');
+        return '<div class="' + cls + '"><div class="ij-check-top"><div class="ij-ico">' + icon(c.key) + '</div>'
+            + (c.disabled ? '<span class="ij-pill muted">' + esc(t('off')) + '</span>' : '<div class="ij-check-pct">' + fmtPct(cp) + '</div>') + '</div>'
+            + '<div class="ij-check-name"><b>' + esc(lab[0]) + '</b><span>' + esc(lab[1]) + '</span></div>'
+            + bar(cp) + '<div class="ij-check-foot">' + foot + '</div></div>';
+    }
+    /** The selected library in detail: header, check cards, the open missing list, item counts. */
+    function libDetail(lib, data) {
+        var scanning = isScanning(lib);
+        var h = '<article class="ij-panel"><div class="ij-detail-head"><h3>' + esc(lib.name) + '</h3>'
+            + '<div class="ij-chips">' + (libType(lib) ? '<span class="ij-chip">' + esc(libType(lib)) + '</span>' : '')
+            + (lib.items ? '<span class="ij-chip">' + esc(t('items_n', { n: num(lib.items) })) + '</span>' : '')
+            + (lib.addedLast24h ? '<span class="ij-chip new">' + esc(t('added_24h', { n: num(lib.addedLast24h) })) + '</span>' : '') + '</div>'
+            + '<button type="button" class="ij-pillbtn" data-scan="' + esc(lib.id) + '"' + (scanning ? ' disabled' : '') + '>' + esc(scanning ? t('scanning') + '…' : t('scan_this')) + '</button></div>';
         if (scanning) {
             var sp = lib.refreshProgress;
-            h += '<div class="ij-time"><span>' + esc(t('scanning')) + '</span>' + bar(sp || 0, { live: true, indet: sp === null || sp === undefined }) + '<span>' + (sp === null || sp === undefined ? '…' : fmtPct(sp)) + '</span></div>';
+            h += '<div class="ij-time" style="padding-top:1em"><span>' + esc(t('scanning')) + '</span>' + bar(sp || 0, { live: true, indet: sp === null || sp === undefined }) + '<span>' + (sp === null || sp === undefined ? '…' : fmtPct(sp)) + '</span></div>';
         }
         if (!data.statsComputedAtUtc) return h + '<div class="ij-placeholder">' + esc(t('not_counted')) + '</div></article>';
         if (!lib.items) return h + '<div class="ij-placeholder">' + esc(t('no_items')) + '</div></article>';
-
-        h += '<div class="ij-lanes">';
-        checks.forEach(function (c) {
-            var cp = c.disabled ? null : pct(c.done, c.applicable);
-            var miss = c.applicable - c.done;
-            var key = lib.id + '|' + c.key;
-            var lab = labels[c.key] || [c.key, ''];
-            var st = c.disabled ? '<span class="ij-pill muted">' + esc(t('off')) + '</span>'
-                : (miss > 0 ? '<button type="button" class="ij-pill warn" data-miss="' + esc(key) + '" aria-expanded="' + (open[key] ? 'true' : 'false') + '">' + esc(t('missing_n', { n: num(miss) })) + '</button>'
-                    : '<span class="ij-pill done">' + esc(t('complete')) + '</span>');
-            h += '<div class="ij-lane' + (c.disabled ? ' off' : '') + '"><div class="ij-lane-row">'
-                + '<div class="k" title="' + esc(lab[1]) + '"><b>' + esc(lab[0]) + '</b>' + (c.disabled ? '<span>' + esc(offReason(lib, c, data)) + '</span>' : '') + '</div>'
-                + bar(cp)
-                + '<div class="v">' + (c.disabled ? '' : '<b>' + fmtPct(cp) + '</b><span>' + num(c.done) + ' / ' + num(c.applicable) + '</span>') + '</div>'
-                + '<div class="st">' + st + '</div></div>'
-                + (open[key] && !c.disabled && miss > 0 ? '<div class="ij-missing">' + missingList(key) + '</div>' : '')
-                + '</div>';
-        });
-        return h + '</div>' + libStats(lib) + '</article>';
+        var checks = shownChecks(lib);
+        h += '<div class="ij-checks">' + checks.map(function (c) { return checkCard(lib, c, data); }).join('') + '</div>';
+        var sel = checks.filter(function (c) { return c.key === selCheck && !c.disabled && c.applicable > c.done; })[0];
+        if (sel) h += missingPanel(lib, sel);
+        return h + libStats(lib) + '</article>';
     }
-    function missingList(key) {
+    function missingPanel(lib, c) {
+        var key = lib.id + '|' + c.key;
+        var lab = t('check')[c.key] || [c.key, ''];
+        var h = '<div class="ij-missing"><div class="ij-missing-head"><div class="ij-ico">' + icon(c.key) + '</div>'
+            + '<b>' + esc(t('missing_title', { check: lab[0] })) + '<span>' + esc(t('items_n', { n: num(c.applicable - c.done) })) + '</span></b>'
+            + '<button type="button" class="ij-x" data-miss-close="1" aria-label="' + esc(t('hide_missing')) + '" title="' + esc(t('hide_missing')) + '">×</button></div>';
         var m = missing[key];
-        if (!m || m.loading) return '<div class="ij-note">' + esc(t('loading')) + '</div>';
-        if (m.error) return '<div class="ij-note">' + esc(m.error) + '</div>';
-        var d = m.data, showPath = d.items.some(function (i) { return i.path; });
-        var h = '<div class="ij-table-wrap"><table><thead><tr><th></th><th>' + esc(t('th_name')) + '</th><th>' + esc(t('th_added')) + '</th>'
-            + (showPath ? '<th class="path">' + esc(t('th_path')) + '</th>' : '') + '</tr></thead><tbody>';
-        d.items.forEach(function (it) {
+        if (!m || m.loading) return h + '<div class="ij-note">' + esc(t('loading')) + '</div></div>';
+        if (m.error) return h + '<div class="ij-note">' + esc(m.error) + '</div></div>';
+        var d = m.data;
+        h += '<div class="ij-mlist">' + d.items.map(function (it) {
             var desc = describe(it);
-            h += '<tr><td class="cov"><i' + bgStyle(img(it.id, 'Primary', 80)) + '></i></td>'
-                + '<td>' + linked(it, desc.t) + (desc.s ? '<span class="sub">' + esc(desc.s) + '</span>' : '') + '</td>'
-                + '<td class="when">' + esc(shortDate(it.dateCreatedUtc)) + '</td>'
-                + (showPath ? '<td class="path">' + esc(it.path || '') + '</td>' : '') + '</tr>';
-        });
-        h += '</tbody></table></div>';
+            return '<div class="ij-mrow"><i' + bgStyle(img(it.id, 'Primary', 90)) + '></i>'
+                + '<div style="min-width:0"><div class="t">' + linked(it, desc.t) + '</div>'
+                + (desc.s ? '<div class="s">' + esc(desc.s) + '</div>' : '')
+                + (it.path ? '<div class="s path" title="' + esc(it.path) + '">' + esc(it.path) + '</div>' : '') + '</div>'
+                + '<div class="when">' + esc(shortDate(it.dateCreatedUtc)) + '</div></div>';
+        }).join('') + '</div>';
         if (d.truncated) h += '<div class="ij-note">' + esc(t('truncated', { n: num(d.items.length), total: num(d.total) })) + '</div>';
         if (last && m.statsAt !== last.statsComputedAtUtc) h += '<div class="ij-note">' + esc(t('stale_list')) + '</div>';
-        return h;
+        return h + '</div>';
+    }
+    function libraries(data) {
+        var libs = data.libraries || [];
+        if (!libs.length) return '<div class="ij-empty"><b>' + esc(t('empty_title')) + '</b>' + esc(t('empty_text')) + '</div>';
+        var cur = selectedLib(data);
+        return '<div class="ij-tiles">' + libs.map(function (l) { return tile(l, data, l === cur); }).join('') + '</div>' + libDetail(cur, data);
     }
     function loadMissing(key) {
         var parts = key.split('|');
@@ -748,16 +878,13 @@
         page.querySelector('#ijStatus').innerHTML = statusLine(data);
         page.querySelector('#ijTotals').innerHTML = totals(data);
         page.querySelector('#ijRecount').disabled = !!data.statsComputing;
-        page.querySelector('#ijRecount').textContent = data.statsComputing ? t('recounting') : t('recount');
+        page.querySelector('#ijRecountLabel').textContent = data.statsComputing ? t('recounting') : t('recount');
         page.querySelector('#ijError').innerHTML = data.statsError ? '<div class="ij-warn">' + esc(t('stats_error', { e: data.statsError })) + '</div>' : '';
         page.querySelector('#ijActivity').innerHTML = activity(data);
         page.querySelector('#ijHistory').innerHTML = history(data);
         // The library cards only change with a new count or a scan; rebuilding them on every poll
         // would close hover states and make the images flicker.
-        var libs = data.libraries || [];
-        var libHtml = libs.length
-            ? libs.map(function (l) { return library(l, data); }).join('')
-            : '<div class="ij-empty" style="grid-column:1/-1"><b>' + esc(t('empty_title')) + '</b>' + esc(t('empty_text')) + '</div>';
+        var libHtml = libraries(data);
         if (libHtml !== lastLibHtml) {
             page.querySelector('#ijLibs').innerHTML = libHtml;
             lastLibHtml = libHtml;
@@ -774,8 +901,9 @@
             var prevAt = last && last.statsComputedAtUtc;
             last = data;
             // a new count finished: reload the open missing lists
-            if (prevAt && prevAt !== data.statsComputedAtUtc) {
-                Object.keys(open).forEach(function (k) { if (open[k]) loadMissing(k); });
+            if (prevAt && prevAt !== data.statsComputedAtUtc && selCheck) {
+                var cur = selectedLib(data);
+                if (cur) loadMissing(cur.id + '|' + selCheck);
             }
             render();
             schedule();
@@ -829,6 +957,7 @@
     }
 
     page.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+    page.querySelectorAll('[data-icon]').forEach(function (el) { el.outerHTML = icon(el.getAttribute('data-icon')); });
 
     page.querySelector('#ijGear').addEventListener('click', function () {
         var p = page.querySelector('#ijSettings'), isOpen = !p.classList.contains('open');
@@ -854,7 +983,7 @@
     page.querySelector('#ijRecount').addEventListener('click', function () { this.disabled = true; load(true); });
     page.querySelector('#ijScanAll').addEventListener('click', function () {
         var btn = this;
-        post('Library/Refresh').then(function () { flash(btn, 'scan_started', 'scan_all'); load(false); });
+        post('Library/Refresh').then(function () { flash(page.querySelector('#ijScanAllLabel'), 'scan_started', 'scan_all'); load(false); });
     });
     page.querySelector('#ijAuto').addEventListener('change', start);
     page.querySelector('#ijInterval').addEventListener('change', start);
@@ -878,11 +1007,20 @@
                 .then(function () { s.textContent = t('scan_started'); load(false); });
             return;
         }
+        var l = e.target.closest('[data-lib]');
+        if (l) {
+            selLib = l.getAttribute('data-lib');
+            selCheck = null;
+            try { localStorage.setItem('indexjelly.lib', selLib); } catch (err) { /* private mode */ }
+            render();
+            return;
+        }
+        if (e.target.closest('[data-miss-close]')) { selCheck = null; render(); return; }
         var m = e.target.closest('[data-miss]');
-        if (!m) return;
-        var key = m.getAttribute('data-miss');
-        open[key] = !open[key];
-        if (open[key]) loadMissing(key); else render();
+        if (!m || !last) return;
+        var check = m.getAttribute('data-miss');
+        selCheck = selCheck === check ? null : check;
+        if (selCheck) loadMissing(selectedLib(last).id + '|' + selCheck); else render();
     });
 
     page.addEventListener('pageshow', function () { loadConfig().then(start); });
