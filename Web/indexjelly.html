@@ -8,17 +8,23 @@
 <div id="IndexJellyPage" data-role="page" class="page type-interior pluginConfigurationPage" data-title="IndexJelly">
 <style>
 #IndexJellyPage {
-    --ij-text: #eceef1;
-    --ij-muted: #9198a1;
-    --ij-soft: #c9ced4;
+    --ij-text: #f2f5f7;
+    --ij-muted: rgba(235,240,245,.64);
+    --ij-soft: rgba(235,240,245,.82);
     --ij-faint: rgba(255,255,255,.07);
     --ij-line: rgba(255,255,255,.10);
-    --ij-surface: rgba(255,255,255,.035);
+    --ij-line-hi: rgba(255,255,255,.22);
+    --ij-surface: rgba(28,33,38,.58);
+    --ij-accent: #3FE0F7;
+    --ij-accent-ink: #061f33;
+    --ij-gradient: linear-gradient(100deg, #8B3FF0 0%, #E57CF7 35%, #3FE0F7 70%, #1F7CF0 100%);
+    --ij-focus: linear-gradient(135deg, #8B3FF0, #1F7CF0);
+    --ij-ease: cubic-bezier(.2, .8, .2, 1);
     --ij-done: #3fd68f;
-    --ij-warn: #ffb23f;
-    --ij-fail: #ff6f61;
-    --ij-op: #7fc8ff;
-    --ij-brand: #00a4dc;
+    --ij-warn: #f0a24a;
+    --ij-fail: #ff6b6b;
+    --ij-op: #3FE0F7;
+    --ij-brand: #3FE0F7;
     --ij-bg: #101216;
 }
 #IndexJellyPage .ij { max-width: 1280px; margin: 0 auto; padding: 1.6em 1.6em 4em; color: var(--ij-text); font-variant-numeric: tabular-nums; }
@@ -219,6 +225,115 @@
 #IndexJellyPage .ij-warn { padding: .8em 1.2em; border-radius: 10px; background: rgba(255,178,63,.1); color: #ffd08a; margin-bottom: 1.5em; font-size: .88em; }
 #IndexJellyPage button:focus-visible, #IndexJellyPage summary:focus-visible, #IndexJellyPage input:focus-visible, #IndexJellyPage a:focus-visible { outline: 2px solid var(--ij-brand); outline-offset: 2px; }
 
+/* ================= SeeJelly look (as in StreamJelly 1.8+): glass panels on a soft violet / cyan glow ================= */
+#IndexJellyPage .ij { position: relative; isolation: isolate; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+#IndexJellyPage .ij-glow { position: absolute; inset: -2em 0 0; z-index: -1; pointer-events: none; overflow: hidden; border-radius: 0 0 40px 40px; }
+#IndexJellyPage .ij-glow::before { content: ""; position: absolute; inset: -20%;
+    background:
+        radial-gradient(38% 30% at 12% 6%, rgba(139,63,240,.38), transparent 70%),
+        radial-gradient(34% 28% at 92% 14%, rgba(63,224,247,.20), transparent 70%),
+        radial-gradient(40% 34% at 55% 70%, rgba(31,124,240,.22), transparent 70%);
+    animation: ij-drift 40s ease-in-out infinite alternate; }
+@keyframes ij-drift { to { transform: translate(3%, 2%) scale(1.06); } }
+
+/* page header: mark, gradient wordmark, totals as glass tiles, pill buttons */
+#IndexJellyPage .ij-logo { width: 2.9em; height: 2.9em; filter: drop-shadow(0 6px 18px rgba(63,224,247,.35)); }
+#IndexJellyPage .ij-bar h1 { font-size: 2.1em; font-weight: 800; letter-spacing: -.035em; background: var(--ij-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#IndexJellyPage .ij-totals { gap: .6em; }
+#IndexJellyPage .ij-total { padding: .55em 1.1em .6em; border-radius: 18px; background: var(--ij-surface); border: 1px solid var(--ij-line); backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
+#IndexJellyPage .ij-total b { font-weight: 750; letter-spacing: -.02em; }
+#IndexJellyPage .ij-btn { border-radius: 999px; padding: .55em 1.1em; background: rgba(255,255,255,.08); border-color: var(--ij-line); color: var(--ij-text); font-weight: 600; transition: background .25s var(--ij-ease), color .25s var(--ij-ease); }
+#IndexJellyPage .ij-btn:hover { background: rgba(255,255,255,.14); color: var(--ij-text); }
+#IndexJellyPage .ij-btn[aria-expanded="true"] { background: #fff; color: #000; border-color: #fff; }
+#IndexJellyPage .ij-pillbtn { background: rgba(255,255,255,.10); border: 1px solid var(--ij-line); font-weight: 600; padding: .45em 1em; transition: background .25s var(--ij-ease), color .25s var(--ij-ease); }
+#IndexJellyPage .ij-pillbtn:hover:not(:disabled) { background: #fff; color: #000; }
+
+/* settings: glass, switches, round fields */
+#IndexJellyPage .ij-settings { border-radius: 22px; padding: 1.1em 1.4em; background: var(--ij-surface); border-color: var(--ij-line); backdrop-filter: blur(28px) saturate(1.5); -webkit-backdrop-filter: blur(28px) saturate(1.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 20px 50px rgba(0,0,0,.3); }
+#IndexJellyPage .ij-settings label { color: var(--ij-text); gap: .6em; cursor: pointer; }
+#IndexJellyPage .ij-settings input[type=checkbox] { appearance: none; -webkit-appearance: none; width: 2.4em; height: 1.4em; margin: 0; border-radius: 999px; background: rgba(255,255,255,.16); position: relative; cursor: pointer; transition: background .25s var(--ij-ease); flex: none; }
+#IndexJellyPage .ij-settings input[type=checkbox]::after { content: ""; position: absolute; top: .15em; left: .15em; width: 1.1em; height: 1.1em; border-radius: 50%; background: #fff; transition: transform .25s var(--ij-ease); box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+#IndexJellyPage .ij-settings input[type=checkbox]:checked { background: var(--ij-focus); }
+#IndexJellyPage .ij-settings input[type=checkbox]:checked::after { transform: translateX(1em); }
+#IndexJellyPage .ij-settings input[type=number] { border-radius: 999px; text-align: center; background: rgba(255,255,255,.08); }
+#IndexJellyPage .ij-save { border-radius: 999px; background: var(--ij-focus); padding: .55em 1.4em; }
+
+/* glass panels */
+#IndexJellyPage .ij-panel { border-radius: 28px; background: var(--ij-surface); border-color: var(--ij-line); backdrop-filter: blur(30px) saturate(1.5); -webkit-backdrop-filter: blur(30px) saturate(1.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 30px 80px rgba(0,0,0,.35); }
+#IndexJellyPage .ij-hero-bg { opacity: .5; }
+#IndexJellyPage .ij-hero-bg::after { background: linear-gradient(90deg, rgba(14,16,20,.94) 0%, rgba(14,16,20,.7) 45%, rgba(14,16,20,.35) 100%), linear-gradient(0deg, rgba(22,26,30,1) 0%, rgba(22,26,30,0) 65%); }
+#IndexJellyPage .ij-poster { border-radius: 14px; box-shadow: 0 14px 34px rgba(0,0,0,.5); }
+#IndexJellyPage .ij-name { font-size: 1.75em; font-weight: 800; letter-spacing: -.03em; }
+#IndexJellyPage .ij-hero.short .ij-name { font-size: 1.3em; }
+#IndexJellyPage .ij-chip { background: rgba(255,255,255,.10); border: 1px solid var(--ij-line); color: var(--ij-text); }
+#IndexJellyPage .ij-chip.op { color: var(--ij-accent); background: rgba(63,224,247,.10); border-color: rgba(63,224,247,.30); }
+#IndexJellyPage .ij-chip.new { border-color: rgba(63,214,143,.30); }
+#IndexJellyPage .ij-section > h2 { font-size: 1.25em; font-weight: 750; letter-spacing: -.015em; color: var(--ij-text); }
+#IndexJellyPage .ij-big { font-weight: 800; letter-spacing: -.03em; }
+
+/* labels: filled, with a ring of their own colour */
+#IndexJellyPage .ij-pill { border: 0; background: color-mix(in srgb, currentColor 16%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 45%, transparent); padding: .25em .8em; }
+#IndexJellyPage .ij-pill.run { color: var(--ij-accent); }
+#IndexJellyPage button.ij-pill:hover, #IndexJellyPage button.ij-pill[aria-expanded="true"] { background: var(--ij-warn); color: #2a1600; box-shadow: none; }
+
+/* progress: the brand gradient, green once complete */
+#IndexJellyPage .ij-track { background: rgba(255,255,255,.12); }
+#IndexJellyPage .ij-track b { background: var(--ij-gradient); background-size: 100vw 100%; }
+#IndexJellyPage .ij-track.done b { background: var(--ij-done); }
+/* running: the gradient with a light running over it */
+#IndexJellyPage .ij-track.live b { background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 100%), var(--ij-gradient);
+    background-size: 200% 100%, 100vw 100%; background-repeat: no-repeat, no-repeat; animation: ij-shine2 1.6s linear infinite; }
+@keyframes ij-shine2 { from { background-position: 200% 0, 0 0; } to { background-position: -200% 0, 0 0; } }
+#IndexJellyPage .ij-eq i { background: rgba(255,255,255,.12); }
+#IndexJellyPage .ij-eq i b { background: linear-gradient(0deg, #8B3FF0, #3FE0F7); }
+#IndexJellyPage .ij-eq i.done b { background: var(--ij-done); }
+
+/* cards and tiles lift with a sheen, like SeeJelly's focus */
+#IndexJellyPage .ij-card, #IndexJellyPage .ij-tile, #IndexJellyPage .ij-check {
+    border-radius: 22px; background: var(--ij-surface); border-color: var(--ij-line);
+    backdrop-filter: blur(28px) saturate(1.5); -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 18px 44px rgba(0,0,0,.28); position: relative; overflow: hidden;
+    transition: transform .35s var(--ij-ease), box-shadow .35s var(--ij-ease), border-color .35s var(--ij-ease); }
+#IndexJellyPage .ij-card::after, #IndexJellyPage .ij-tile::after, #IndexJellyPage .ij-check::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .35s var(--ij-ease);
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.10) 48%, transparent 66%); }
+#IndexJellyPage .ij-card:hover, #IndexJellyPage .ij-tile:hover, #IndexJellyPage .ij-tile:focus-visible, #IndexJellyPage .ij-check:hover {
+    transform: translateY(-3px) scale(1.01); border-color: var(--ij-line-hi); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 26px 60px rgba(0,0,0,.4); }
+#IndexJellyPage .ij-card:hover::after, #IndexJellyPage .ij-tile:hover::after, #IndexJellyPage .ij-tile:focus-visible::after, #IndexJellyPage .ij-check:hover::after { opacity: 1; }
+#IndexJellyPage .ij-cover { border-radius: 12px; }
+#IndexJellyPage .ij-tile { border-radius: 24px; min-height: 176px; }
+#IndexJellyPage .ij-tile-bg { opacity: .42; }
+#IndexJellyPage .ij-tile-pct { font-weight: 800; letter-spacing: -.035em; }
+/* the selected library: a ring in the focus gradient */
+#IndexJellyPage .ij-tile.sel { border-color: transparent; box-shadow: 0 0 0 2px #3FE0F7, 0 0 34px rgba(63,224,247,.22), 0 26px 60px rgba(0,0,0,.4); }
+#IndexJellyPage .ij-tile.sel::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 2px; pointer-events: none;
+    background: var(--ij-focus); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+#IndexJellyPage .ij-check { background: rgba(255,255,255,.045); }
+#IndexJellyPage .ij-check.sel { border-color: rgba(240,162,74,.6); background: rgba(240,162,74,.08); box-shadow: inset 0 0 0 1px rgba(240,162,74,.35), 0 18px 44px rgba(0,0,0,.28); }
+#IndexJellyPage .ij-check.off:hover { transform: none; }
+#IndexJellyPage .ij-ico { border-radius: 14px; background: rgba(63,224,247,.12); color: var(--ij-accent); box-shadow: inset 0 0 0 1px rgba(63,224,247,.3); }
+#IndexJellyPage .ij-check.complete .ij-ico { box-shadow: inset 0 0 0 1px rgba(63,214,143,.35); }
+#IndexJellyPage .ij-check.off .ij-ico { box-shadow: inset 0 0 0 1px var(--ij-line); }
+#IndexJellyPage .ij-check-pct { font-weight: 800; letter-spacing: -.03em; }
+
+/* folded panels, missing list, stats */
+#IndexJellyPage details.ij-more-d > summary { font-weight: 600; }
+#IndexJellyPage details.ij-more-d[open] > summary { color: var(--ij-text); }
+#IndexJellyPage .ij-missing { border-radius: 22px; border-color: rgba(240,162,74,.4); background: rgba(10,12,15,.45); box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
+#IndexJellyPage .ij-missing-head .ij-ico { box-shadow: inset 0 0 0 1px rgba(240,162,74,.35); }
+#IndexJellyPage .ij-mrow i { border-radius: 6px; }
+#IndexJellyPage .ij-x { border-radius: 50%; }
+#IndexJellyPage .ij-x:hover { background: #fff; color: #000; }
+#IndexJellyPage .ij-stat b { font-weight: 750; letter-spacing: -.02em; }
+#IndexJellyPage .ij-idle-dot { background: var(--ij-accent); box-shadow: 0 0 0 5px rgba(63,224,247,.14), 0 0 18px rgba(63,224,247,.5); }
+#IndexJellyPage .ij-empty { border-radius: 28px; background: var(--ij-surface); border: 1px solid var(--ij-line); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); }
+#IndexJellyPage .ij-error, #IndexJellyPage .ij-warn { border-radius: 20px; }
+#IndexJellyPage button:focus-visible, #IndexJellyPage summary:focus-visible, #IndexJellyPage input:focus-visible, #IndexJellyPage a:focus-visible { outline: 2px solid var(--ij-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+    #IndexJellyPage .ij-glow::before, #IndexJellyPage .ij-track.live b { animation: none; }
+    #IndexJellyPage .ij-card, #IndexJellyPage .ij-tile, #IndexJellyPage .ij-check, #IndexJellyPage .ij-card::after, #IndexJellyPage .ij-tile::after, #IndexJellyPage .ij-check::after { transition: none; }
+    #IndexJellyPage .ij-card:hover, #IndexJellyPage .ij-tile:hover, #IndexJellyPage .ij-tile:focus-visible, #IndexJellyPage .ij-check:hover { transform: none; }
+}
+
 @media (max-width: 760px) {
     #IndexJellyPage .ij { padding: 1em .8em 3em; }
     #IndexJellyPage .ij-totals { margin-left: 0; gap: 1.6em; }
@@ -251,24 +366,21 @@
     #IndexJellyPage .ij-check.off .ij-check-foot > span:first-child { display: inline; }
     #IndexJellyPage .ij-check-foot { justify-content: flex-start; }
     #IndexJellyPage .ij-logo { width: 38px; height: 38px; }
+    #IndexJellyPage .ij-totals { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    #IndexJellyPage .ij-total { padding: .5em .8em; }
+    #IndexJellyPage .ij-total b { font-size: 1.3em; white-space: nowrap; }
+    #IndexJellyPage .ij-btn { padding: .45em .85em; font-size: .8em; }
+    #IndexJellyPage .ij-bar h1 { font-size: 1.8em; }
 }
 </style>
 
 <div data-role="content">
 <div class="content-primary ij">
+    <div class="ij-glow" aria-hidden="true"></div>
 
     <header class="ij-bar">
         <div class="ij-brand">
-            <svg class="ij-logo" viewBox="0 0 512 512" aria-hidden="true">
-                <defs><radialGradient id="ijDome" cx="38%" cy="28%" r="78%"><stop offset="0" stop-color="#e2fffb"/><stop offset=".38" stop-color="#7fe6dc"/><stop offset=".78" stop-color="#2ec4c4"/><stop offset="1" stop-color="#1f8fb0"/></radialGradient></defs>
-                <g fill="none" stroke-linecap="round" stroke-width="30">
-                    <path stroke="#ffffff" stroke-opacity=".14" d="M196 290 V480M256 296 V490M316 290 V480"/>
-                    <path stroke="#3fd68f" d="M196 290 V480"/><path stroke="#5aa9ff" d="M256 296 V420"/><path stroke="#ffb23f" d="M316 290 V350"/>
-                </g>
-                <path fill="url(#ijDome)" d="M88 252C88 140 164 64 256 64s168 76 168 188c0 22-20 30-38 22-22-10-40 12-64 6-22-6-40 16-66 10-26 6-44-16-66-10-24 6-42-16-64-6-18 8-38 0-38-22z"/>
-                <g fill="#123a4a"><ellipse cx="214" cy="190" rx="16" ry="19"/><ellipse cx="298" cy="190" rx="16" ry="19"/></g>
-                <path d="M240 232q16 14 32 0" fill="none" stroke="#123a4a" stroke-width="9" stroke-linecap="round"/>
-            </svg>
+            <svg class="ij-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" focusable="false"> <defs> <radialGradient id="ij-dome" cx="38%" cy="28%" r="78%"> <stop offset="0" stop-color="#e2fffb"/> <stop offset=".38" stop-color="#7fe6dc"/> <stop offset=".78" stop-color="#2ec4c4"/> <stop offset="1" stop-color="#1f8fb0"/> </radialGradient> <linearGradient id="ij-rim" x1="0" y1="0" x2="0" y2="1"> <stop offset="0" stop-color="#ffffff" stop-opacity="0"/> <stop offset="1" stop-color="#145f86" stop-opacity=".35"/> </linearGradient> <linearGradient id="ij-tP" gradientUnits="userSpaceOnUse" x1="0" y1="280" x2="0" y2="470"> <stop offset="0" stop-color="#d6fff8" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/> </linearGradient> <filter id="ij-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter> </defs> <g fill="none" stroke="url(#ij-tP)" stroke-width="7" stroke-linecap="round"> <path d="M150 272 C138 320 166 350 150 395 C138 430 156 450 146 470"/> <path d="M362 272 C374 320 346 350 362 395 C374 430 356 450 366 470"/> </g> <g fill="none" stroke-linecap="round" stroke-width="22"> <path stroke="#ffffff" stroke-opacity=".12" d="M196 280 V488"/> <path stroke="#ffffff" stroke-opacity=".12" d="M256 288 V496"/> <path stroke="#ffffff" stroke-opacity=".12" d="M316 280 V488"/> <path stroke="#3fd68f" d="M196 280 V488"/> <path stroke="#5aa9ff" d="M256 288 V430"/> <path stroke="#ffb23f" d="M316 280 V350"/> </g> <path fill="url(#ij-dome)" d="M88 252 C88 140 164 64 256 64 C348 64 424 140 424 252 C424 274 404 282 386 274 C364 264 346 286 322 280 C300 274 282 296 256 290 C230 296 212 274 190 280 C166 286 148 264 126 274 C108 282 88 274 88 252 Z"/> <path fill="url(#ij-rim)" d="M88 252 C88 140 164 64 256 64 C348 64 424 140 424 252 C424 274 404 282 386 274 C364 264 346 286 322 280 C300 274 282 296 256 290 C230 296 212 274 190 280 C166 286 148 264 126 274 C108 282 88 274 88 252 Z"/> <ellipse cx="186" cy="124" rx="62" ry="30" fill="#fff" opacity=".55" transform="rotate(-24 186 124)" filter="url(#ij-soft)"/> <ellipse cx="170" cy="120" rx="20" ry="9" fill="#fff" opacity=".9" transform="rotate(-28 170 120)"/> <ellipse cx="200" cy="216" rx="20" ry="11" fill="#ff8fb8" opacity=".4"/> <ellipse cx="312" cy="216" rx="20" ry="11" fill="#ff8fb8" opacity=".4"/> <g fill="#123a4a"> <ellipse cx="214" cy="184" rx="14" ry="17"/> <ellipse cx="298" cy="184" rx="14" ry="17"/> </g> <g fill="#fff"> <circle cx="219" cy="178" r="5"/><circle cx="303" cy="178" r="5"/> </g> <g fill="none" stroke="#123a4a" stroke-width="6"> <circle cx="214" cy="184" r="30"/> <circle cx="298" cy="184" r="30"/> <path d="M244 180 Q256 172 268 180" stroke-linecap="round"/> </g> <path d="M242 226 Q256 240 270 226" fill="none" stroke="#123a4a" stroke-width="6" stroke-linecap="round"/> </svg>
             <div>
                 <h1>IndexJelly</h1>
                 <div class="ij-sub" id="ijStatus" data-i18n="loading">Loading…</div>

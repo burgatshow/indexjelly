@@ -8,6 +8,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 
 ## English
 
+### [0.5.0] – 2026-11-22
+#### Changed
+- New look, borrowed from SeeJelly as in StreamJelly 1.8: glass panels with soft blur and rounded corners on a slowly drifting violet / cyan glow, the IndexJelly jellyfish and a gradient wordmark in the page header, totals as glass tiles, pill-shaped buttons (an open one is white), switches instead of checkboxes in the settings, cyan accent.
+- Progress bars and the small bars on the library tiles in the brand gradient (violet → pink → cyan → blue), green once complete; running bars have a light running over them.
+- Library tiles, check cards and item cards lift and get a light sheen when hovered; the selected library has a gradient ring.
+- Labels are filled with a ring of their own colour; *N missing* turns solid when its list is open.
+- On a phone the totals sit side by side and the buttons are smaller.
+- Motion is off when the system asks for reduced motion.
+
 ### [0.4.0] – 2026-11-21
 #### Changed
 - Libraries: an overview row of tiles, one per library, with its image, the indexed percentage, a small bar per check and how many are missing; a running scan shows on the tile. Clicking a tile opens that library below. The selected library is remembered in the browser.
@@ -57,6 +66,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 ---
 
 ## Magyar
+
+### [0.5.0] – 2026-11-22
+#### Változott
+- Új megjelenés a SeeJelly mintájára, ahogy a StreamJelly 1.8-ban: üvegpanelek lágy elmosással és lekerekített sarkokkal, lassan mozgó lila–cián fényen; a fejlécben az IndexJelly medúza és színátmenetes felirat, az összesítők üvegcsempéken, pill alakú gombok (a nyitott fehér), kapcsolók a beállításokban jelölőnégyzetek helyett, cián kiemelőszín.
+- A haladásjelzők és a könyvtár-csempék kis sávjai a márka színátmenetében (lila → rózsaszín → cián → kék), készre zöldek; a futó sávokon fény fut végig.
+- A könyvtár-csempék, az ellenőrzés- és elemkártyák rámutatáskor kissé megemelkednek és felcsillannak; a kiválasztott könyvtárat színátmenetes keret jelöli.
+- A címkék kitöltöttek, saját színű kerettel; az *N hiányzik* teli színű lesz, amikor a listája nyitva van.
+- Telefonon az összesítők egymás mellett vannak, a gombok kisebbek.
+- Ha a rendszer csökkentett mozgást kér, az animációk kikapcsolnak.
 
 ### [0.4.0] – 2026-11-21
 #### Változott

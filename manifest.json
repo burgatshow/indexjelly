@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/burgatshow/indexjelly/main/assets/thumb.png",
     "versions": [
       {
+        "version": "0.5.0.0",
+        "changelog": "#### Changed\n- New look, borrowed from SeeJelly as in StreamJelly 1.8: glass panels with soft blur and rounded corners on a slowly drifting violet / cyan glow, the IndexJelly jellyfish and a gradient wordmark in the page header, totals as glass tiles, pill-shaped buttons (an open one is white), switches instead of checkboxes in the settings, cyan accent.\n- Progress bars and the small bars on the library tiles in the brand gradient (violet → pink → cyan → blue), green once complete; running bars have a light running over them.\n- Library tiles, check cards and item cards lift and get a light sheen when hovered; the selected library has a gradient ring.\n- Labels are filled with a ring of their own colour; *N missing* turns solid when its list is open.\n- On a phone the totals sit side by side and the buttons are smaller.\n- Motion is off when the system asks for reduced motion.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/burgatshow/indexjelly/releases/download/v0.5.0/indexjelly_0.5.0.0.zip",
+        "checksum": "35d2fd9bc439ca3b04a807dea1748711",
+        "timestamp": "2026-11-22T06:55:22.0000000Z"
+      },
+      {
         "version": "0.4.0.0",
         "changelog": "#### Changed\n- Libraries: an overview row of tiles, one per library, with its image, the indexed percentage, a small bar per check and how many are missing; a running scan shows on the tile. Clicking a tile opens that library below. The selected library is remembered in the browser.\n- The checks of the selected library are cards with an icon, a large percentage, a bar, the counts and a *complete* or *N missing* label, in a grid instead of rows.\n- The missing list opens as a framed panel under the cards, with the check's icon and name, a close button, posters, titles with season / episode, the date added and the file path.\n- Header: IndexJelly logo and icons on the buttons.\n- On a phone: two tiles and two check cards per row, more compact.\n- A job without a matching library item no longer shows an empty poster.",
         "targetAbi": "12.4.0.0",

@@ -12,7 +12,7 @@
 
 IndexJelly is a Jellyfin server plugin that shows **how far the server is with indexing your libraries**: which scans and library tasks are running right now, and for every library how many items already have media info, metadata, images, trickplay and chapter images. You can open a list of the items that are still missing any of these.
 
-The page lives in the Jellyfin dashboard (left menu → *IndexJelly*). Only administrators can see it. The interface follows the Jellyfin display language: Hungarian for Hungarian, English for everything else.
+The page lives in the Jellyfin dashboard (left menu → *IndexJelly*) and shares its look with StreamJelly and SeeJelly: glass panels on a soft violet / cyan glow. Only administrators can see it. The interface follows the Jellyfin display language: Hungarian for Hungarian, English for everything else.
 
 ### Features
 
@@ -97,7 +97,7 @@ Copy the `IndexJelly_<version>` folder (or the unzipped release) into the Jellyf
 
 Az IndexJelly egy Jellyfin szerver plugin, amely megmutatja, **hol tart a szerver a könyvtárak indexelésével**: milyen szkennelés és könyvtári feladat fut éppen, és könyvtáranként hány elemnél van már mediainfó, metaadat, kép, trickplay és fejezetkép. Ami még hiányzik, azt listában is meg tudod nézni.
 
-Az oldal a Jellyfin vezérlőpultján érhető el (bal oldali menü → *IndexJelly*), és csak rendszergazda látja. A felület a Jellyfin megjelenítési nyelvét követi: magyar nyelvnél magyarul, minden más nyelvnél angolul jelenik meg.
+Az oldal a Jellyfin vezérlőpultján érhető el (bal oldali menü → *IndexJelly*), a megjelenése a StreamJelly-é és a SeeJelly-é: üvegpanelek lágy lila–cián fényen. Csak rendszergazda látja. A felület a Jellyfin megjelenítési nyelvét követi: magyar nyelvnél magyarul, minden más nyelvnél angolul jelenik meg.
 
 ### Funkciók
 
