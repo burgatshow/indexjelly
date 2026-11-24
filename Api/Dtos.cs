@@ -29,6 +29,9 @@ public static class CheckKeys
 
     /// <summary>Order in which the checks are listed.</summary>
     public static readonly string[] All = { Refreshed, MediaInfo, PrimaryImage, Overview, ProviderIds, Trickplay, ChapterImages };
+
+    /// <summary>The checks decided from the item itself, without a lookup.</summary>
+    public static readonly string[] Basic = { Refreshed, MediaInfo, PrimaryImage, Overview, ProviderIds };
 }
 
 public class StatusResponse
@@ -53,6 +56,9 @@ public class StatusResponse
 
     /// <summary>Gets or sets a value indicating whether a count is running right now.</summary>
     public bool StatsComputing { get; set; }
+
+    /// <summary>Gets or sets when the running count started.</summary>
+    public DateTime? StatsRunningSinceUtc { get; set; }
 
     public string? StatsError { get; set; }
 
@@ -158,6 +164,9 @@ public class MissingResponse
 
     /// <summary>Gets or sets a value indicating whether the list was cut at the configured limit.</summary>
     public bool Truncated { get; set; }
+
+    /// <summary>Gets or sets how many items of the counted list pass the check by now; they are left out of <see cref="Items"/>.</summary>
+    public int ResolvedSinceCount { get; set; }
 
     public List<MissingItem> Items { get; set; } = new();
 }

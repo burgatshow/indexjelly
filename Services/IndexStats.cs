@@ -46,6 +46,9 @@ internal sealed class Snapshot
 
     public bool ChaptersAvailable { get; set; }
 
+    /// <summary>Gets or sets how many check results were corrected by reading the item again (see <see cref="IndexStats"/>).</summary>
+    public int CorrectedOnReread { get; set; }
+
     public Dictionary<string, LibraryCounts> Libraries { get; } = new(StringComparer.OrdinalIgnoreCase);
 }
 
@@ -56,14 +59,22 @@ internal sealed class Snapshot
 /// </summary>
 internal static class IndexStats
 {
+    /// <summary>A count running longer than this is taken as stuck, and a new one may start.</summary>
+    private static readonly TimeSpan _stuckAfter = TimeSpan.FromMinutes(20);
+
     private static readonly object _sync = new();
     private static Snapshot? _current;
     private static Task? _running;
+    private static DateTime? _runningSinceUtc;
+    private static int _generation;
     private static string? _lastError;
 
     public static Snapshot? Current => _current;
 
     public static bool Computing => _running is { IsCompleted: false };
+
+    /// <summary>Gets when the running count started (null when none runs).</summary>
+    public static DateTime? RunningSinceUtc => Computing ? _runningSinceUtc : null;
 
     public static string? LastError => _lastError;
 
@@ -77,7 +88,15 @@ internal static class IndexStats
         {
             if (Computing)
             {
-                return;
+                // A count that hangs (e.g. a lookup that never answers) must not freeze the numbers forever:
+                // after a while a new count may start, and the late result of the old one is thrown away.
+                var limit = _current is null ? _stuckAfter : TimeSpan.FromMilliseconds(Math.Max(_stuckAfter.TotalMilliseconds, _current.DurationMs * 10));
+                if (_runningSinceUtc is null || DateTime.UtcNow - _runningSinceUtc.Value < limit)
+                {
+                    return;
+                }
+
+                logger.LogWarning("IndexJelly: the count started at {Start:u} has not finished, starting a new one", _runningSinceUtc);
             }
 
             var maxAge = TimeSpan.FromMinutes(Math.Clamp(config.StatsCacheMinutes, 1, 1440));
@@ -99,16 +118,26 @@ internal static class IndexStats
             // The request scope ends before the count does, so the count gets its own scope for the looked-up services.
             var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var lookups = ReflectedLookups.Create(scope.ServiceProvider, logger);
+            var generation = ++_generation;
+            _runningSinceUtc = DateTime.UtcNow;
             _running = Task.Run(async () =>
             {
                 try
                 {
-                    _current = await ComputeAsync(libraryManager, mediaSourceManager, lookups, logger, config).ConfigureAwait(false);
-                    _lastError = null;
+                    var result = await ComputeAsync(libraryManager, mediaSourceManager, lookups, logger, config).ConfigureAwait(false);
+                    if (generation == _generation)
+                    {
+                        _current = result;
+                        _lastError = null;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    _lastError = ex.Message;
+                    if (generation == _generation)
+                    {
+                        _lastError = ex.Message;
+                    }
+
                     logger.LogError(ex, "IndexJelly: counting the libraries failed");
                 }
                 finally
@@ -194,26 +223,40 @@ internal static class IndexStats
                 }
 
                 var isVideo = item is Video;
-                var isAudio = item is AudioItem;
-                var described = kind is "Movie" or "Episode" or "Series";
-                var identified = kind is "Movie" or "Episode" or "Series" or "MusicAlbum" or "MusicVideo";
+                BaseItem? reread = null;
+                var rereadDone = false;
 
-                Count(counts, CheckKeys.Refreshed, item, kind, config, limit, item.DateLastRefreshed != default);
-
-                if (isVideo || isAudio)
+                // The bulk list and the item the web client shows can differ: the web reads the item through
+                // the library's item cache, which holds the latest refreshed instance. A failed check is
+                // therefore checked once more on that instance, so the numbers match what the item page shows.
+                bool Check(string key)
                 {
-                    Count(counts, CheckKeys.MediaInfo, item, kind, config, limit, HasMediaInfo(item, isVideo, mediaSourceManager, logger));
+                    if (Evaluate(key, item, mediaSourceManager, logger) is not false)
+                    {
+                        return true;
+                    }
+
+                    if (!rereadDone)
+                    {
+                        rereadDone = true;
+                        reread = Reread(libraryManager, item, logger);
+                    }
+
+                    if (reread is not null && Evaluate(key, reread, mediaSourceManager, logger) is true)
+                    {
+                        snapshot.CorrectedOnReread++;
+                        return true;
+                    }
+
+                    return false;
                 }
 
-                if (identified)
+                foreach (var key in CheckKeys.Basic)
                 {
-                    Count(counts, CheckKeys.PrimaryImage, item, kind, config, limit, item.HasImage(ImageType.Primary, 0));
-                    Count(counts, CheckKeys.ProviderIds, item, kind, config, limit, item.ProviderIds is { } ids && ids.Values.Any(v => !string.IsNullOrWhiteSpace(v)));
-                }
-
-                if (described)
-                {
-                    Count(counts, CheckKeys.Overview, item, kind, config, limit, !string.IsNullOrWhiteSpace(item.Overview));
+                    if (AppliesTo(key, item, kind))
+                    {
+                        Count(counts, key, item, kind, config, limit, Check(key));
+                    }
                 }
 
                 if (isVideo && trickplayOn)
@@ -259,7 +302,7 @@ internal static class IndexStats
 
         snapshot.ComputedAtUtc = DateTime.UtcNow;
         snapshot.DurationMs = sw.ElapsedMilliseconds;
-        logger.LogInformation("IndexJelly: counted {Libraries} libraries in {Ms} ms", snapshot.Libraries.Count, snapshot.DurationMs);
+        logger.LogInformation("IndexJelly: counted {Libraries} libraries in {Ms} ms ({Corrected} results corrected by re-reading the item)", snapshot.Libraries.Count, snapshot.DurationMs, snapshot.CorrectedOnReread);
         return snapshot;
     }
 
@@ -280,11 +323,53 @@ internal static class IndexStats
         }
     }
 
+    /// <summary>Whether a basic check (everything but trickplay and chapter images) applies to an item of this kind.</summary>
+    internal static bool AppliesTo(string key, BaseItem item, string kind)
+    {
+        return key switch
+        {
+            CheckKeys.Refreshed => true,
+            CheckKeys.MediaInfo => item is Video || item is AudioItem,
+            CheckKeys.PrimaryImage or CheckKeys.ProviderIds => kind is "Movie" or "Episode" or "Series" or "MusicAlbum" or "MusicVideo",
+            CheckKeys.Overview => kind is "Movie" or "Episode" or "Series",
+            _ => false
+        };
+    }
+
+    /// <summary>Result of a basic check on one item; null for the checks that need a lookup (trickplay, chapters).</summary>
+    internal static bool? Evaluate(string key, BaseItem item, IMediaSourceManager mediaSourceManager, ILogger logger)
+    {
+        return key switch
+        {
+            CheckKeys.Refreshed => item.DateLastRefreshed != default,
+            CheckKeys.MediaInfo => HasMediaInfo(item, item is Video, mediaSourceManager, logger),
+            CheckKeys.PrimaryImage => item.HasImage(ImageType.Primary, 0),
+            CheckKeys.ProviderIds => item.ProviderIds is { } ids && ids.Values.Any(v => !string.IsNullOrWhiteSpace(v)),
+            CheckKeys.Overview => !string.IsNullOrWhiteSpace(item.Overview),
+            _ => null
+        };
+    }
+
+    /// <summary>The item as the library hands it out to everyone else (its cached, latest instance).</summary>
+    internal static BaseItem? Reread(ILibraryManager libraryManager, BaseItem item, ILogger logger)
+    {
+        try
+        {
+            var fresh = libraryManager.GetItemById(item.Id);
+            return fresh is null || ReferenceEquals(fresh, item) ? null : fresh;
+        }
+        catch (Exception ex)
+        {
+            logger.LogDebug(ex, "IndexJelly: could not re-read item {Id}", item.Id);
+            return null;
+        }
+    }
+
     /// <summary>
     /// ffprobe writes the media streams; metadata providers only fill in the run time. So an item counts as
     /// probed when it has a video height (videos) or when the database holds a stream of the right type.
     /// </summary>
-    private static bool HasMediaInfo(BaseItem item, bool isVideo, IMediaSourceManager mediaSourceManager, ILogger logger)
+    internal static bool HasMediaInfo(BaseItem item, bool isVideo, IMediaSourceManager mediaSourceManager, ILogger logger)
     {
         if (isVideo && ReflectedLookups.GetHeight(item) is > 0)
         {
@@ -303,7 +388,7 @@ internal static class IndexStats
         }
     }
 
-    private static string? KindOf(BaseItem item)
+    internal static string? KindOf(BaseItem item)
     {
         return item switch
         {

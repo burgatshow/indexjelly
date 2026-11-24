@@ -106,6 +106,7 @@ public class IndexJellyController : ControllerBase
             StatsComputedAtUtc = snapshot?.ComputedAtUtc,
             StatsDurationMs = snapshot?.DurationMs,
             StatsComputing = IndexStats.Computing,
+            StatsRunningSinceUtc = IndexStats.RunningSinceUtc,
             StatsError = IndexStats.LastError,
             TrickplayAvailable = snapshot?.TrickplayAvailable ?? false,
             ChaptersAvailable = snapshot?.ChaptersAvailable ?? false,
@@ -170,16 +171,58 @@ public class IndexJellyController : ControllerBase
             return NotFound();
         }
 
+        // The list comes from the last count; an item may have been fixed since. Basic checks are cheap,
+        // so each listed item is checked again on its current state and left out when it passes by now.
+        var items = list;
+        var resolved = 0;
+        if (CheckKeys.Basic.Contains(check))
+        {
+            items = new List<MissingItem>(list.Count);
+            foreach (var m in list)
+            {
+                if (Guid.TryParse(m.Id, out var itemId) && StillMissing(itemId, check))
+                {
+                    items.Add(m);
+                }
+                else
+                {
+                    resolved++;
+                }
+            }
+        }
+
         var total = status.Applicable - status.Done;
         var response = new MissingResponse
         {
             LibraryId = id,
             Check = check,
-            Total = total,
+            Total = Math.Max(0, total - resolved),
             Truncated = total > list.Count,
-            Items = list
+            ResolvedSinceCount = resolved,
+            Items = items
         };
         return new JsonResult(response, _jsonOptions);
+    }
+
+    /// <summary>Checks an item again on its current state (as the item page shows it).</summary>
+    private bool StillMissing(Guid itemId, string check)
+    {
+        try
+        {
+            var item = _libraryManager.GetItemById(itemId);
+            if (item is null)
+            {
+                // deleted since the count
+                return false;
+            }
+
+            return IndexStats.Evaluate(check, item, _mediaSourceManager, _logger) is false;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "IndexJelly: could not check item {Id} again", itemId);
+            return true;
+        }
     }
 
     private List<TaskStatusInfo> GetTasks()

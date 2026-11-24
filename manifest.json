@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/burgatshow/indexjelly/main/assets/thumb.png",
     "versions": [
       {
+        "version": "0.5.1.0",
+        "changelog": "#### Fixed\n- Items listed as missing something (e.g. an overview) while their page in Jellyfin shows it. The count reads all items of a library in one database query; an item that fails a check there is now checked once more on the instance Jellyfin itself hands out (the one the item page shows), and counts as done when that has it. The server log says how many results were corrected this way.\n- A missing list no longer shows items that have been fixed since the last count: each listed item is checked again on its current state when the list opens. How many were left out is shown under the list, and a recount starts so the numbers catch up.\n- A count that never finishes no longer freezes the numbers: after 20 minutes (or ten times the last count's duration) a new count may start, and the late result of the old one is thrown away. A trickplay lookup that does not answer within 10 seconds is skipped.\n- The header says how long a running count has been going when it takes more than a minute.",
+        "targetAbi": "12.4.0.0",
+        "sourceUrl": "https://github.com/burgatshow/indexjelly/releases/download/v0.5.1/indexjelly_0.5.1.0.zip",
+        "checksum": "cd81c04e8aeb0fb679c75cc1ae41087b",
+        "timestamp": "2026-11-24T00:55:14.0000000Z"
+      },
+      {
         "version": "0.5.0.0",
         "changelog": "#### Changed\n- New look, borrowed from SeeJelly as in StreamJelly 1.8: glass panels with soft blur and rounded corners on a slowly drifting violet / cyan glow, the IndexJelly jellyfish and a gradient wordmark in the page header, totals as glass tiles, pill-shaped buttons (an open one is white), switches instead of checkboxes in the settings, cyan accent.\n- Progress bars and the small bars on the library tiles in the brand gradient (violet → pink → cyan → blue), green once complete; running bars have a light running over them.\n- Library tiles, check cards and item cards lift and get a light sheen when hovered; the selected library has a gradient ring.\n- Labels are filled with a ring of their own colour; *N missing* turns solid when its list is open.\n- On a phone the totals sit side by side and the buttons are smaller.\n- Motion is off when the system asks for reduced motion.",
         "targetAbi": "12.4.0.0",

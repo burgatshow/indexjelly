@@ -101,6 +101,12 @@ internal sealed class ReflectedLookups
         var result = _trickplayMethod.Invoke(_trickplayService, new object[] { itemId });
         if (result is Task task)
         {
+            // a lookup that never answers must not hold up the whole count
+            if (await Task.WhenAny(task, Task.Delay(TimeSpan.FromSeconds(10))).ConfigureAwait(false) != task)
+            {
+                return null;
+            }
+
             await task.ConfigureAwait(false);
             result = task.GetType().GetProperty("Result")?.GetValue(task);
         }

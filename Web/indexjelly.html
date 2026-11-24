@@ -432,6 +432,7 @@
     // selected library (remembered in the browser) and the check whose missing list is open
     var selLib = (function () { try { return localStorage.getItem('indexjelly.lib'); } catch (e) { return null; } })();
     var selCheck = null;
+    var recountedFor = null;
     var missing = {};     // 'libId|check' -> { loading, data, error, statsAt }
     var tasksOpen = false;
     var recentOpen = false;
@@ -451,7 +452,7 @@
             show_paths: 'Show file paths', check_trickplay: 'Check trickplay', check_chapters: 'Check chapter images', save: 'Save', saved: 'Saved',
             activity: 'Activity', libraries: 'Libraries',
             tot_indexed: 'indexed', tot_items: 'items', tot_missing: 'to do',
-            status: 'Jellyfin {v}', counted: 'counted {ago} ago in {dur}', counting_first: 'counting the libraries…', counting: 'recounting…',
+            status: 'Jellyfin {v}', counted: 'counted {ago} ago in {dur}', counting_for: 'counting for {x}…', all_resolved: 'Everything in this list is fine by now.', resolved_n: '{n} items of the last count are fine by now and are left out; the numbers update after the recount that has just started.', counting_first: 'counting the libraries…', counting: 'recounting…',
             idle: 'Nothing is being indexed', last_scan: 'Last library scan: {ago} ago, {res}.', never_scanned: 'The library scan has not run yet.',
             scanning: 'Scanning', queued: 'queued', library_tasks: 'Library tasks ({n})', run: 'Run', running: 'running',
             never: 'never run', ago: '{x} ago',
@@ -496,7 +497,7 @@
             show_paths: 'Fájlútvonalak mutatása', check_trickplay: 'Trickplay ellenőrzése', check_chapters: 'Fejezetképek ellenőrzése', save: 'Mentés', saved: 'Mentve',
             activity: 'Folyamatban', libraries: 'Könyvtárak',
             tot_indexed: 'indexelve', tot_items: 'elem', tot_missing: 'hátravan',
-            status: 'Jellyfin {v}', counted: 'számolva {ago} ezelőtt, {dur} alatt', counting_first: 'a könyvtárak számolása folyik…', counting: 'újraszámolás…',
+            status: 'Jellyfin {v}', counted: 'számolva {ago} ezelőtt, {dur} alatt', counting_for: 'számolás fut {x} óta…', all_resolved: 'A listában szereplő elemek mind rendben vannak már.', resolved_n: 'Az előző számolásból {n} elem azóta rendbe jött, ezért nem szerepel a listában; a számok a most indult újraszámolás után frissülnek.', counting_first: 'a könyvtárak számolása folyik…', counting: 'újraszámolás…',
             idle: 'Most nem fut indexelés', last_scan: 'Utolsó könyvtárszkennelés: {ago} ezelőtt, {res}.', never_scanned: 'A könyvtárszkennelés még nem futott.',
             scanning: 'Szkennelés', queued: 'sorban áll', library_tasks: 'Könyvtári feladatok ({n})', run: 'Futtatás', running: 'fut',
             never: 'még nem futott', ago: '{x} ezelőtt',
@@ -626,7 +627,10 @@
     function statusLine(data) {
         var parts = [esc(t('status', { v: data.serverVersion || '' }))];
         if (data.statsComputedAtUtc) parts.push(esc(t('counted', { ago: ago(data.statsComputedAtUtc), dur: duration(data.statsDurationMs) })));
-        if (data.statsComputing) parts.push('<span class="busy">' + esc(t(data.statsComputedAtUtc ? 'counting' : 'counting_first')) + '</span>');
+        if (data.statsComputing) {
+            var long = data.statsRunningSinceUtc && Date.now() - new Date(data.statsRunningSinceUtc).getTime() > 60000;
+            parts.push('<span class="busy">' + esc(long ? t('counting_for', { x: ago(data.statsRunningSinceUtc) }) : t(data.statsComputedAtUtc ? 'counting' : 'counting_first')) + '</span>');
+        }
         return parts.join(', ');
     }
 
@@ -946,7 +950,7 @@
         var key = lib.id + '|' + c.key;
         var lab = t('check')[c.key] || [c.key, ''];
         var h = '<div class="ij-missing"><div class="ij-missing-head"><div class="ij-ico">' + icon(c.key) + '</div>'
-            + '<b>' + esc(t('missing_title', { check: lab[0] })) + '<span>' + esc(t('items_n', { n: num(c.applicable - c.done) })) + '</span></b>'
+            + '<b>' + esc(t('missing_title', { check: lab[0] })) + '<span>' + esc(t('items_n', { n: num(missing[key] && missing[key].data ? missing[key].data.total : c.applicable - c.done) })) + '</span></b>'
             + '<button type="button" class="ij-x" data-miss-close="1" aria-label="' + esc(t('hide_missing')) + '" title="' + esc(t('hide_missing')) + '">×</button></div>';
         var m = missing[key];
         if (!m || m.loading) return h + '<div class="ij-note">' + esc(t('loading')) + '</div></div>';
@@ -960,6 +964,8 @@
                 + (it.path ? '<div class="s path" title="' + esc(it.path) + '">' + esc(it.path) + '</div>' : '') + '</div>'
                 + '<div class="when">' + esc(shortDate(it.dateCreatedUtc)) + '</div></div>';
         }).join('') + '</div>';
+        if (!d.items.length) h += '<div class="ij-note">' + esc(t('all_resolved')) + '</div>';
+        if (d.resolvedSinceCount) h += '<div class="ij-note">' + esc(t('resolved_n', { n: num(d.resolvedSinceCount) })) + '</div>';
         if (d.truncated) h += '<div class="ij-note">' + esc(t('truncated', { n: num(d.items.length), total: num(d.total) })) + '</div>';
         if (last && m.statsAt !== last.statsComputedAtUtc) h += '<div class="ij-note">' + esc(t('stale_list')) + '</div>';
         return h + '</div>';
@@ -977,6 +983,11 @@
         ApiClient.getJSON(ApiClient.getUrl('IndexJelly/Missing', { libraryId: parts[0], check: parts[1] })).then(function (d) {
             missing[key] = { data: d, statsAt: last && last.statsComputedAtUtc };
             render();
+            // items fixed since the count: count again so the numbers catch up (once per count)
+            if (d.resolvedSinceCount && last && !last.statsComputing && recountedFor !== last.statsComputedAtUtc) {
+                recountedFor = last.statsComputedAtUtc;
+                load(true);
+            }
         }, function (err) {
             missing[key] = { error: t('error', { e: err && err.status ? 'HTTP ' + err.status : String(err) }) };
             render();

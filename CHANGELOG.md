@@ -8,6 +8,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 
 ## English
 
+### [0.5.1] – 2026-11-24
+#### Fixed
+- Items listed as missing something (e.g. an overview) while their page in Jellyfin shows it. The count reads all items of a library in one database query; an item that fails a check there is now checked once more on the instance Jellyfin itself hands out (the one the item page shows), and counts as done when that has it. The server log says how many results were corrected this way.
+- A missing list no longer shows items that have been fixed since the last count: each listed item is checked again on its current state when the list opens. How many were left out is shown under the list, and a recount starts so the numbers catch up.
+- A count that never finishes no longer freezes the numbers: after 20 minutes (or ten times the last count's duration) a new count may start, and the late result of the old one is thrown away. A trickplay lookup that does not answer within 10 seconds is skipped.
+- The header says how long a running count has been going when it takes more than a minute.
+
 ### [0.5.0] – 2026-11-22
 #### Changed
 - New look, borrowed from SeeJelly as in StreamJelly 1.8: glass panels with soft blur and rounded corners on a slowly drifting violet / cyan glow, the IndexJelly jellyfish and a gradient wordmark in the page header, totals as glass tiles, pill-shaped buttons (an open one is white), switches instead of checkboxes in the settings, cyan accent.
@@ -66,6 +73,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/). Versions follow the plu
 ---
 
 ## Magyar
+
+### [0.5.1] – 2026-11-24
+#### Javítva
+- Előfordult, hogy egy elem hiányzóként szerepelt valamire (például leírásra), miközben a Jellyfin adatlapja mutatta. A számolás egy könyvtár összes elemét egyetlen adatbázis-lekérdezéssel olvassa be. Ha egy elem ott nem felel meg egy ellenőrzésnek, a plugin most még egyszer megnézi azon a példányon, amelyet a Jellyfin maga ad ki (az adatlap is ezt mutatja), és ha ott megvan, késznek számolja. A szerver naplója jelzi, hány eredményt javított így.
+- A hiánylista már nem mutatja azokat az elemeket, amelyek a legutóbbi számolás óta rendbe jöttek: megnyitáskor minden listázott elemet újra ellenőriz a jelenlegi állapota szerint. Hogy hányat hagyott ki, az a lista alatt látszik, és újraszámolás indul, hogy a számok is utolérjék.
+- Egy soha be nem fejeződő számolás nem fagyasztja be többé a számokat: 20 perc után (vagy ha az több, az előző számolás idejének tízszerese után) új számolás indulhat, a régi késői eredménye pedig elvész. A 10 másodpercen belül nem válaszoló trickplay-lekérdezést kihagyja.
+- Ha egy számolás egy percnél tovább tart, a fejléc kiírja, mióta fut.
 
 ### [0.5.0] – 2026-11-22
 #### Változott
